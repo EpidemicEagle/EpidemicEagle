@@ -156,7 +156,7 @@ def finds_report_by_id(report_id):
     return [{}]
 
 
-@app.get("/api/search", response_model=ListSearchResult, tags=["api"])
+@app.get("/api/search", tags=["api"])
 def list_search_results(model: SearchTerms = Depends()):
     """
     Lists all the search results specified within the parameters: start_date to end_date, key_terms and location.
@@ -169,7 +169,7 @@ def list_search_results(model: SearchTerms = Depends()):
     # AND location=location
     # OFFSET 10*page_number
     return [{
-        "results": [],
+        "results": [{"a":"c"}],
         "num_pages": 1,
         "page_number": 1
     }]   
