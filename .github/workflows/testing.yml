@@ -38,5 +38,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install fastapi
           pip install pytest
+          pip install requests
       - name: Run unit tests
         run: python -m pytest --import-mode=append PHASE_1/
