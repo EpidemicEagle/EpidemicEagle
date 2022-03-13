@@ -15,6 +15,12 @@ date_range = r"^(\d{4})-(\d\d|xx)-(\d\d|xx) (\ d\d|xx):(\d\d|xx):(\d\d|xx) to (\
 # create your own json model, which is identical to the class
 
 
+from starlette.responses import FileResponse 
+
+@app.get("/")
+async def read_index():
+    return FileResponse('index.html')
+
 # Query Parameter Models
 
 class SearchTerms(BaseModel):
