@@ -1,11 +1,15 @@
-from fastapi import FastAPI, HTTPException, Query, Path, Depends
+from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request
 from fastapi.openapi.utils import get_openapi
 from typing import List,Optional, Union
 from pydantic import BaseModel
-import datetime
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 import requests
 app = FastAPI(openapi_url="/api/v1/openapi.json")
-
+# add stylesheet
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 # Global Constants for regex
 date_exact = r"^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$"
 date_range = r"^(\d{4})-(\d\d|xx)-(\d\d|xx) (\ d\d|xx):(\d\d|xx):(\d\d|xx) to (\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$"
@@ -13,13 +17,6 @@ date_range = r"^(\d{4})-(\d\d|xx)-(\d\d|xx) (\ d\d|xx):(\d\d|xx):(\d\d|xx) to (\
 # TODO: Don't return the class for json element
 # E.G. Dont return Report(syndromes=""..)
 # create your own json model, which is identical to the class
-
-
-from starlette.responses import FileResponse 
-
-@app.get("/")
-async def read_index():
-    return FileResponse('index.html')
 
 # Query Parameter Models
 
@@ -73,10 +70,13 @@ class ListReport(Pagination):
 # to make class a dict, dic = object.dic()
 
 # TEST FUNCTIONS
-@app.get("/covid")
-def covid_cases():
-    return [{"cases": 192082}]
 
+# returns html
+@app.get("/items/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, id: str):
+    return templates.TemplateResponse("item.html", {"request": request, "id": id})
+
+# returns data from url api
 @app.post("/covid/{item_id}")
 def covid_cases(item_id: int):
     
@@ -86,6 +86,7 @@ def covid_cases(item_id: int):
         "id": item_id
         }]
 
+# optional parameter checked
 @app.get("/items/{item_id}")
 async def read_items(
     item_id: int = Path(..., title="The ID of the item to get"),
@@ -95,15 +96,6 @@ async def read_items(
     if q:
         results.update({"q": q})
     return results
-
-@app.get("/api/analyse")
-async def read_item_for_analyse(
-    start_date: str = Query(..., regex=r"[\d]{4}-[\d]{1,2}-[\d]{1,2}"),
-    end_date: str = Query(..., regex=r"[\d]{4}-[\d]{1,2}-[\d]{1,2}", description="Test description"),
-    increment: int = None,
-):
-    return [{"cases": 192082}]
-
 
 # REAL FUNCTIONS
 
