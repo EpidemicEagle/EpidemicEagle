@@ -1,9 +1,10 @@
 # EpidemicEagle
 
 # SETUP
+```
 chmod +x setup.sh
 ./setup.sh
-
+```
 # PHASE_1
 How to run the backend
 ## Backend Localhosting
