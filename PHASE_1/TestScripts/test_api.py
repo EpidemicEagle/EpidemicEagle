@@ -11,6 +11,14 @@ a = "2018-xx-xx xx:xx:xx"
 b = "2018-11-01 xx:xx:xx"
 c = "2018-11-xx 17:00:xx"
 
+
+# /api/articles
+# /api/articles/{article_id}
+# /api/reports
+# /api/reports/{report_id}
+# /api/search
+
+
 def test_covid():
     response = client.get("/covid", params={"abc":"abc"})
     assert response.status_code == 200

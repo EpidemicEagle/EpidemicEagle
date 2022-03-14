@@ -135,6 +135,8 @@ def list_reports(model: SearchTerms = Depends()):
     """
     #    if item_id not in items:
     #    raise HTTPException(status_code=404, detail="Item not found")
+    print(model)
+
 
     return [{
         "reports": [],
@@ -155,12 +157,29 @@ def finds_report_by_id(report_id):
 
 
 @app.get("/api/search", tags=["api"])
-def list_search_results(model: SearchTerms = Depends()):
+def list_search_results(
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
+):
     """
     Lists all the search results specified within the parameters: start_date to end_date, key_terms and location.
     page_number can be specified to go to the corresponding page.
     """
     # check input is valid
+    resp = SearchResult(article_id=1,url="www.google.com",date_of_publication="2018-xx-xx xx:xx:xx", headline="Covid Hits Sydney")
+    # HARD-CODED RESPONSE
+
+    if "covid" in key_terms.lower() and "sydney" in location.lower():
+        return [{
+            "results": [resp],
+            "num_pages": 1,
+            "page_number": 1
+        }]           
+
+
 
     # TODO: GET id, url, date, heading from articles
     # WHERE word in keywords
