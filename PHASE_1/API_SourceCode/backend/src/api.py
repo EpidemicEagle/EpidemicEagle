@@ -169,7 +169,7 @@ def finds_report_by_id(report_id : int):
     return [{}]
 
 
-@app.get("/api/search", tags=["api"])
+@app.get("/api/search", response_model=ListSearchResult, tags=["api"])
 def list_search_results(
     key_terms: str,
     location: str,
