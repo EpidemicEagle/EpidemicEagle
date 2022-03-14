@@ -14,10 +14,6 @@ templates = Jinja2Templates(directory="templates")
 date_exact = r"^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$"
 date_range = r"^(\d{4})-(\d\d|xx)-(\d\d|xx) (\ d\d|xx):(\d\d|xx):(\d\d|xx) to (\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$"
 
-# TODO: Don't return the class for json element
-# E.G. Dont return Report(syndromes=""..)
-# create your own json model, which is identical to the class
-
 # Query Parameter Models
 
 class SearchTerms(BaseModel):
@@ -66,8 +62,6 @@ class ListArticle(Pagination):
 
 class ListReport(Pagination):
     reports: List[Report]
-
-# to make class a dict, dic = object.dic()
 
 # TEST FUNCTIONS
 
@@ -169,7 +163,7 @@ def list_search_results(
     page_number can be specified to go to the corresponding page.
     """
     # check input is valid
-    resp = SearchResult(article_id=1,url="www.google.com",date_of_publication="2018-xx-xx xx:xx:xx", headline="Covid Hits Sydney")
+
     # HARD-CODED RESPONSE
 
     if "covid" in key_terms.lower() and "sydney" in location.lower():
