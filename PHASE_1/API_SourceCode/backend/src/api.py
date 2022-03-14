@@ -169,7 +169,7 @@ def finds_report_by_id(report_id : int):
     return [{}]
 
 
-@app.get("/api/search", response_model=ListSearchResult, tags=["api"])
+@app.get("/api/search", tags=["api"])
 def list_search_results(
     key_terms: str,
     location: str,
@@ -185,12 +185,12 @@ def list_search_results(
 
     # HARD-CODED RESPONSE
 
-    # if "covid" in key_terms.lower() and "sydney" in location.lower():
-    #     return [{
-    #         "results": [SearchResult(article_id=1, url="www.promed.com/mail",date_of_publication="2018-12-02", headline="Covid Strikes Sydney")],
-    #         "num_pages": 1,
-    #         "page_number": 1
-    #     }]           
+    if "covid" in key_terms.lower() and "sydney" in location.lower():
+        return [{
+            "results": [SearchResult(article_id=1, url="www.promed.com/mail",date_of_publication="2018-12-02", headline="Covid Strikes Sydney")],
+            "num_pages": 1,
+            "page_number": 1
+        }]           
 
 
 
