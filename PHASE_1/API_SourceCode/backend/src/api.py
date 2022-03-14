@@ -63,46 +63,59 @@ class ListArticle(Pagination):
 class ListReport(Pagination):
     reports: List[Report]
 
+
+
+responses = {
+    404: {"description": "Item not found"}
+}
+
 # TEST FUNCTIONS
 
 # returns html
-@app.get("/items/{id}", response_class=HTMLResponse)
-async def read_item(request: Request, id: str):
-    return templates.TemplateResponse("item.html", {"request": request, "id": id})
+# @app.get("/items/{id}", response_class=HTMLResponse)
+# async def read_item(request: Request, id: str):
+#     return templates.TemplateResponse("item.html", {"request": request, "id": id})
 
-# returns data from url api
-@app.post("/covid/{item_id}")
-def covid_cases(item_id: int):
+# # returns data from url api
+# @app.post("/covid/{item_id}")
+# def covid_cases(item_id: int):
     
-    r = requests.get("https://corona.lmao.ninja/v2/continents")
-    return [{
-        "cases": r.json()[0]['cases'],
-        "id": item_id
-        }]
+#     r = requests.get("https://corona.lmao.ninja/v2/continents")
+#     return [{
+#         "cases": r.json()[0]['cases'],
+#         "id": item_id
+#         }]
 
-# optional parameter checked
-@app.get("/items/{item_id}")
-async def read_items(
-    item_id: int = Path(..., title="The ID of the item to get"),
-    q: Optional[str] = Query(None, alias="item-query"),
-):
-    results = {"item_id": item_id}
-    if q:
-        results.update({"q": q})
-    return results
+# # optional parameter checked
+# @app.get("/items/{item_id}")
+# async def read_items(
+#     item_id: int = Path(..., title="The ID of the item to get"),
+#     q: Optional[str] = Query(None, alias="item-query"),
+# ):
+#     results = {"item_id": item_id}
+#     if q:
+#         results.update({"q": q})
+#     return results
 
 # REAL FUNCTIONS
 
 
 @app.get("/api/articles", response_model=ListArticle, tags=["api"])
-def list_all_articles_with_params(model: SearchTerms = Depends()):
+def list_all_articles_with_params(
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
+):
     """
     Lists all the articles specified within the parameters: start_date to end_date, key_terms and location.
     page_number can be specified to go to the corresponding page.
     """
 
-    #    if item_id not in items:
-    #    raise HTTPException(status_code=404, detail="Item not found")
+    # if len(results) == 0:
+    # return No results found.
+
 
     return [{
         "articles": [],
@@ -111,18 +124,24 @@ def list_all_articles_with_params(model: SearchTerms = Depends()):
 
     }]
 
-@app.get("/api/articles/{article_id}", response_model=Article, tags=["api"])
-def finds_article_by_id(article_id):
+@app.get("/api/articles/{article_id}", response_model=Article, tags=["api"], responses={**responses})
+def finds_article_by_id(article_id : int):
     """
     Lists all the information about an article from given id.
     """
-    #    if item_id not in items:
-    #    raise HTTPException(status_code=404, detail="Item not found")
+    if report_id > 1000:
+       raise HTTPException(status_code=404, detail="Article not found")
 
     return [{}]
 
 @app.get("/api/reports", response_model=ListReport, tags=["api"])
-def list_reports(model: SearchTerms = Depends()):
+def list_reports(
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
+):
     """
     Lists all the reports specified within the parameters: start_date to end_date, key_terms and location.
     page_number can be specified to go to the corresponding page.
@@ -139,18 +158,18 @@ def list_reports(model: SearchTerms = Depends()):
 
     }]
 
-@app.get("/api/reports/{report_id}", response_model=Report, tags=["api"])
-def finds_report_by_id(report_id):
+@app.get("/api/reports/{report_id}", response_model=Report, tags=["api"], responses={**responses})
+def finds_report_by_id(report_id : int):
     """
     Lists all the information about a report from given id.
     """
-    #    if item_id not in items:
-    #    raise HTTPException(status_code=404, detail="Item not found")
+    if report_id > 1000:
+       raise HTTPException(status_code=404, detail="Report not found")
 
     return [{}]
 
 
-@app.get("/api/search", tags=["api"])
+@app.get("/api/search", response_model=ListSearchResult, tags=["api"])
 def list_search_results(
     key_terms: str,
     location: str,
@@ -168,7 +187,7 @@ def list_search_results(
 
     if "covid" in key_terms.lower() and "sydney" in location.lower():
         return [{
-            "results": [resp],
+            "results": [SearchResult(article_id=1, url="www.promed.com/mail",date_of_publication="2018-12-02", headline="Covid Strikes Sydney")],
             "num_pages": 1,
             "page_number": 1
         }]           
@@ -194,7 +213,13 @@ def custom_openapi():
     openapi_schema = get_openapi(
         title="EpidemicEagle API",
         version="v1",
-        description="This is an API to get news articles, reports and search results for diseases",
+        description="""
+        This is an API to get news articles, reports and search results for diseases.
+        Sample dates:
+        - 2018-xx-xx xx:xx:xx
+        - 2018-11-01 xx:xx:xx
+        - 2018-11-xx 17:00:xx
+        """,
         routes=app.routes,
     )
     openapi_schema["info"]["x-logo"] = {
