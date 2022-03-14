@@ -199,7 +199,7 @@ def list_search_results(
     # AND location=location
     # OFFSET 10*page_number
     return [{
-        "results": [{"a":"c"}],
+        "results": [],
         "num_pages": 1,
         "page_number": 1
     }]   
