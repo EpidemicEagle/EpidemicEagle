@@ -1,9 +1,0 @@
-============================= test session starts ==============================
-platform linux -- Python 3.8.10, pytest-7.0.1, pluggy-1.0.0
-rootdir: /mnt/c/Users/selfa/Desktop/GITHUB/EpidemicEagle, configfile: pytest.ini
-plugins: anyio-3.5.0
-collected 2 items
-
-PHASE_1/API_SourceCode/backend/src/test_old.py ..                        [100%]
-
-============================== 2 passed in 19.32s ==============================

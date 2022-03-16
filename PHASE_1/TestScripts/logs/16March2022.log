@@ -1,0 +1,200 @@
+2022-03-15T01:58:00.034701+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T01:58:00.034701+00:00 app[web.1]: await getter
+2022-03-15T01:58:00.034701+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T01:58:00.034702+00:00 app[web.1]: 
+2022-03-15T01:58:00.035291+00:00 app[web.1]: [2022-03-15 01:58:00 +0000] [11] [INFO] Worker exiting (pid: 11)
+2022-03-15T01:58:00.046180+00:00 app[web.1]: [2022-03-15 01:58:00 +0000] [9] [INFO] Finished server process [9]
+2022-03-15T01:58:00.050858+00:00 app[web.1]: [2022-03-15 01:58:00 +0000] [9] [ERROR] Traceback (most recent call last):
+2022-03-15T01:58:00.050859+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T01:58:00.050860+00:00 app[web.1]: await receive()
+2022-03-15T01:58:00.050860+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T01:58:00.050861+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T01:58:00.050861+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T01:58:00.050862+00:00 app[web.1]: await getter
+2022-03-15T01:58:00.050862+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T01:58:00.050862+00:00 app[web.1]: 
+2022-03-15T01:58:00.056216+00:00 app[web.1]: [2022-03-15 01:58:00 +0000] [9] [INFO] Worker exiting (pid: 9)
+2022-03-15T01:58:00.288572+00:00 app[web.1]: [2022-03-15 01:58:00 +0000] [4] [INFO] Shutting down: Master
+2022-03-15T01:58:00.463389+00:00 heroku[web.1]: Process exited with status 0
+2022-03-15T03:22:17.613848+00:00 heroku[web.1]: Unidling
+2022-03-15T03:22:17.623433+00:00 heroku[web.1]: State changed from down to starting
+2022-03-15T03:22:24.192421+00:00 heroku[web.1]: Starting process with command `gunicorn -w 4 -k uvicorn.workers.UvicornWorker api:app`
+2022-03-15T03:22:25.624236+00:00 app[web.1]: [2022-03-15 03:22:25 +0000] [4] [INFO] Starting gunicorn 20.1.0
+2022-03-15T03:22:25.624663+00:00 app[web.1]: [2022-03-15 03:22:25 +0000] [4] [INFO] Listening at: http://0.0.0.0:45554 (4)
+2022-03-15T03:22:25.624720+00:00 app[web.1]: [2022-03-15 03:22:25 +0000] [4] [INFO] Using worker: uvicorn.workers.UvicornWorker
+2022-03-15T03:22:25.628832+00:00 app[web.1]: [2022-03-15 03:22:25 +0000] [9] [INFO] Booting worker with pid: 9
+2022-03-15T03:22:25.636079+00:00 app[web.1]: [2022-03-15 03:22:25 +0000] [10] [INFO] Booting worker with pid: 10
+2022-03-15T03:22:25.663983+00:00 app[web.1]: [2022-03-15 03:22:25 +0000] [11] [INFO] Booting worker with pid: 11
+2022-03-15T03:22:25.768498+00:00 app[web.1]: [2022-03-15 03:22:25 +0000] [12] [INFO] Booting worker with pid: 12
+2022-03-15T03:22:26.012936+00:00 heroku[web.1]: State changed from starting to up
+2022-03-15T03:22:28.468955+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [11] [INFO] Started server process [11]
+2022-03-15T03:22:28.469014+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [11] [INFO] Waiting for application startup.
+2022-03-15T03:22:28.469220+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [11] [INFO] Application startup complete.
+2022-03-15T03:22:28.469773+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [10] [INFO] Started server process [10]
+2022-03-15T03:22:28.469836+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [10] [INFO] Waiting for application startup.
+2022-03-15T03:22:28.470069+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [10] [INFO] Application startup complete.
+2022-03-15T03:22:28.471086+00:00 app[web.1]: 1.42.190.60:0 - "GET /docs HTTP/1.1" 200
+2022-03-15T03:22:28.471874+00:00 heroku[router]: at=info method=GET path="/docs" host=epidemic-eagle.herokuapp.com request_id=6d384de3-5ffa-4c52-b5ed-9606aa3fbdca fwd="1.42.190.60" dyno=web.1 connect=0ms service=1800ms status=200 bytes=1091 protocol=https
+2022-03-15T03:22:28.472905+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [9] [INFO] Started server process [9]
+2022-03-15T03:22:28.472954+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [12] [INFO] Started server process [12]
+2022-03-15T03:22:28.472955+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [9] [INFO] Waiting for application startup.
+2022-03-15T03:22:28.473016+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [12] [INFO] Waiting for application startup.
+2022-03-15T03:22:28.473202+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [9] [INFO] Application startup complete.
+2022-03-15T03:22:28.473243+00:00 app[web.1]: [2022-03-15 03:22:28 +0000] [12] [INFO] Application startup complete.
+2022-03-15T03:22:49.992102+00:00 app[web.1]: 129.94.8.207:0 - "GET /docs HTTP/1.1" 200
+2022-03-15T03:22:49.993585+00:00 heroku[router]: at=info method=GET path="/docs" host=epidemic-eagle.herokuapp.com request_id=8b97cd91-fe18-459f-9dc4-856d2fe84575 fwd="129.94.8.207" dyno=web.1 connect=0ms service=1ms status=200 bytes=1091 protocol=https
+2022-03-15T03:22:50.529795+00:00 app[web.1]: 129.94.8.207:0 - "GET /api/v1/openapi.json HTTP/1.1" 200
+2022-03-15T03:22:50.531376+00:00 heroku[router]: at=info method=GET path="/api/v1/openapi.json" host=epidemic-eagle.herokuapp.com request_id=abe02bee-584e-48ae-ba13-223ac9c126ed fwd="129.94.8.207" dyno=web.1 connect=0ms service=17ms status=200 bytes=9712 protocol=https
+2022-03-15T03:23:46.104133+00:00 app[web.1]: 129.94.8.207:0 - "GET /api/search?key_terms=covid&location=sydney&start_date=2018-xx-xx%20xx%3Axx%3Axx&end_date=2019-xx-xx%20xx%3Axx%3Axx HTTP/1.1" 200
+2022-03-15T03:23:46.105648+00:00 heroku[router]: at=info method=GET path="/api/search?key_terms=covid&location=sydney&start_date=2018-xx-xx%20xx%3Axx%3Axx&end_date=2019-xx-xx%20xx%3Axx%3Axx" host=epidemic-eagle.herokuapp.com request_id=aeabd195-f1e3-4f85-b1b1-a13f3a4725b0 fwd="129.94.8.207" dyno=web.1 connect=0ms service=37ms status=200 bytes=302 protocol=https
+2022-03-15T03:23:56.030735+00:00 app[web.1]: 129.94.8.207:0 - "GET /api/search?key_terms=measles&location=sydney&start_date=2018-xx-xx%20xx%3Axx%3Axx&end_date=2019-xx-xx%20xx%3Axx%3Axx HTTP/1.1" 200
+2022-03-15T03:23:56.032279+00:00 heroku[router]: at=info method=GET path="/api/search?key_terms=measles&location=sydney&start_date=2018-xx-xx%20xx%3Axx%3Axx&end_date=2019-xx-xx%20xx%3Axx%3Axx" host=epidemic-eagle.herokuapp.com request_id=460b1f9f-ae80-4fe1-bdcf-050a2a3b5f0d fwd="129.94.8.207" dyno=web.1 connect=0ms service=7ms status=200 bytes=188 protocol=https
+2022-03-15T03:43:29.453940+00:00 heroku[router]: at=info method=GET path="/docs" host=epidemic-eagle.herokuapp.com request_id=204839ce-5995-42d7-8418-a0a39f118662 fwd="129.94.8.207" dyno=web.1 connect=0ms service=1ms status=200 bytes=1091 protocol=https
+2022-03-15T03:43:29.455616+00:00 app[web.1]: 129.94.8.207:0 - "GET /docs HTTP/1.1" 200
+2022-03-15T03:43:30.077056+00:00 heroku[router]: at=info method=GET path="/api/v1/openapi.json" host=epidemic-eagle.herokuapp.com request_id=039b507f-33a3-45ca-9868-338b913cb335 fwd="129.94.8.207" dyno=web.1 connect=0ms service=19ms status=200 bytes=9712 protocol=https
+2022-03-15T03:43:30.078645+00:00 app[web.1]: 129.94.8.207:0 - "GET /api/v1/openapi.json HTTP/1.1" 200
+2022-03-15T03:43:40.300847+00:00 app[web.1]: 52.114.32.28:0 - "GET /docs HTTP/1.1" 200
+2022-03-15T03:43:40.301094+00:00 heroku[router]: at=info method=GET path="/docs" host=epidemic-eagle.herokuapp.com request_id=afb99749-1ead-412e-860f-2d7c6d9d6fb6 fwd="52.114.32.28" dyno=web.1 connect=0ms service=1ms status=200 bytes=1091 protocol=https
+2022-03-15T04:07:50.264324+00:00 app[web.1]: 120.151.212.251:0 - "GET /docs HTTP/1.1" 200
+2022-03-15T04:07:50.265574+00:00 heroku[router]: at=info method=GET path="/docs" host=epidemic-eagle.herokuapp.com request_id=234a5bdd-6bc2-45c7-9438-298979d7dcf2 fwd="120.151.212.251" dyno=web.1 connect=0ms service=1ms status=200 bytes=1091 protocol=https
+2022-03-15T04:07:50.774786+00:00 app[web.1]: 120.151.212.251:0 - "GET /api/v1/openapi.json HTTP/1.1" 200
+2022-03-15T04:07:50.776043+00:00 heroku[router]: at=info method=GET path="/api/v1/openapi.json" host=epidemic-eagle.herokuapp.com request_id=7890b25c-bb49-44f1-b63e-0fb7e576c456 fwd="120.151.212.251" dyno=web.1 connect=0ms service=1ms status=200 bytes=9712 protocol=https
+2022-03-15T04:07:59.256430+00:00 app[web.1]: 120.151.212.251:0 - "GET /?item=1 HTTP/1.1" 200
+2022-03-15T04:07:59.257573+00:00 heroku[router]: at=info method=GET path="/?item=1" host=epidemic-eagle.herokuapp.com request_id=2d5f6cc6-c5cb-4b3e-854b-d2c910139681 fwd="120.151.212.251" dyno=web.1 connect=0ms service=1ms status=200 bytes=154 protocol=https
+2022-03-15T04:41:48.171373+00:00 heroku[web.1]: Idling
+2022-03-15T04:41:48.207979+00:00 heroku[web.1]: State changed from up to down
+2022-03-15T04:41:51.000740+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2022-03-15T04:41:51.079339+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [4] [INFO] Handling signal: term
+2022-03-15T04:41:51.093849+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [10] [INFO] Shutting down
+2022-03-15T04:41:51.148946+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [11] [INFO] Shutting down
+2022-03-15T04:41:51.152939+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [9] [INFO] Shutting down
+2022-03-15T04:41:51.175951+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [12] [INFO] Shutting down
+2022-03-15T04:41:51.194324+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [10] [INFO] Finished server process [10]
+2022-03-15T04:41:51.195127+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [10] [ERROR] Traceback (most recent call last):
+2022-03-15T04:41:51.195128+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T04:41:51.195129+00:00 app[web.1]: await receive()
+2022-03-15T04:41:51.195129+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T04:41:51.195130+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T04:41:51.195130+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T04:41:51.195130+00:00 app[web.1]: await getter
+2022-03-15T04:41:51.195130+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T04:41:51.195131+00:00 app[web.1]: 
+2022-03-15T04:41:51.195675+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [10] [INFO] Worker exiting (pid: 10)
+2022-03-15T04:41:51.249974+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [11] [INFO] Finished server process [11]
+2022-03-15T04:41:51.251752+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [11] [ERROR] Traceback (most recent call last):
+2022-03-15T04:41:51.251753+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T04:41:51.251754+00:00 app[web.1]: await receive()
+2022-03-15T04:41:51.251754+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T04:41:51.251755+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T04:41:51.251755+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T04:41:51.251756+00:00 app[web.1]: await getter
+2022-03-15T04:41:51.251756+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T04:41:51.251757+00:00 app[web.1]: 
+2022-03-15T04:41:51.253515+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [11] [INFO] Worker exiting (pid: 11)
+2022-03-15T04:41:51.253874+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [9] [INFO] Finished server process [9]
+2022-03-15T04:41:51.262897+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [9] [ERROR] Traceback (most recent call last):
+2022-03-15T04:41:51.262899+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T04:41:51.262900+00:00 app[web.1]: await receive()
+2022-03-15T04:41:51.262900+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T04:41:51.262901+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T04:41:51.262901+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T04:41:51.262902+00:00 app[web.1]: await getter
+2022-03-15T04:41:51.262902+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T04:41:51.262902+00:00 app[web.1]: 
+2022-03-15T04:41:51.263785+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [9] [INFO] Worker exiting (pid: 9)
+2022-03-15T04:41:51.276847+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [12] [INFO] Finished server process [12]
+2022-03-15T04:41:51.278277+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [12] [ERROR] Traceback (most recent call last):
+2022-03-15T04:41:51.278279+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T04:41:51.278279+00:00 app[web.1]: await receive()
+2022-03-15T04:41:51.278280+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T04:41:51.278281+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T04:41:51.278281+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T04:41:51.278281+00:00 app[web.1]: await getter
+2022-03-15T04:41:51.278282+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T04:41:51.278282+00:00 app[web.1]: 
+2022-03-15T04:41:51.280036+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [12] [INFO] Worker exiting (pid: 12)
+2022-03-15T04:41:51.482033+00:00 app[web.1]: [2022-03-15 04:41:51 +0000] [4] [INFO] Shutting down: Master
+2022-03-15T04:41:51.716770+00:00 heroku[web.1]: Process exited with status 0
+2022-03-15T08:10:12.925524+00:00 heroku[web.1]: Unidling
+2022-03-15T08:10:12.946841+00:00 heroku[web.1]: State changed from down to starting
+2022-03-15T08:10:20.902937+00:00 heroku[web.1]: Starting process with command `gunicorn -w 4 -k uvicorn.workers.UvicornWorker api:app`
+2022-03-15T08:10:22.081431+00:00 app[web.1]: [2022-03-15 08:10:22 +0000] [4] [INFO] Starting gunicorn 20.1.0
+2022-03-15T08:10:22.081769+00:00 app[web.1]: [2022-03-15 08:10:22 +0000] [4] [INFO] Listening at: http://0.0.0.0:26742 (4)
+2022-03-15T08:10:22.081812+00:00 app[web.1]: [2022-03-15 08:10:22 +0000] [4] [INFO] Using worker: uvicorn.workers.UvicornWorker
+2022-03-15T08:10:22.085493+00:00 app[web.1]: [2022-03-15 08:10:22 +0000] [9] [INFO] Booting worker with pid: 9
+2022-03-15T08:10:22.158770+00:00 app[web.1]: [2022-03-15 08:10:22 +0000] [10] [INFO] Booting worker with pid: 10
+2022-03-15T08:10:22.205969+00:00 app[web.1]: [2022-03-15 08:10:22 +0000] [11] [INFO] Booting worker with pid: 11
+2022-03-15T08:10:22.293975+00:00 app[web.1]: [2022-03-15 08:10:22 +0000] [12] [INFO] Booting worker with pid: 12
+2022-03-15T08:10:22.557211+00:00 heroku[web.1]: State changed from starting to up
+2022-03-15T08:10:24.265999+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [12] [INFO] Started server process [12]
+2022-03-15T08:10:24.266043+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [12] [INFO] Waiting for application startup.
+2022-03-15T08:10:24.266253+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [12] [INFO] Application startup complete.
+2022-03-15T08:10:24.267971+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [9] [INFO] Started server process [9]
+2022-03-15T08:10:24.268030+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [9] [INFO] Waiting for application startup.
+2022-03-15T08:10:24.268305+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [9] [INFO] Application startup complete.
+2022-03-15T08:10:24.268415+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [10] [INFO] Started server process [10]
+2022-03-15T08:10:24.268443+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [11] [INFO] Started server process [11]
+2022-03-15T08:10:24.268478+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [10] [INFO] Waiting for application startup.
+2022-03-15T08:10:24.268504+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [11] [INFO] Waiting for application startup.
+2022-03-15T08:10:24.268713+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [10] [INFO] Application startup complete.
+2022-03-15T08:10:24.268713+00:00 app[web.1]: [2022-03-15 08:10:24 +0000] [11] [INFO] Application startup complete.
+2022-03-15T08:10:24.998280+00:00 app[web.1]: 58.164.25.1:0 - "GET /docs HTTP/1.1" 200
+2022-03-15T08:10:25.000426+00:00 heroku[router]: at=info method=GET path="/docs" host=epidemic-eagle.herokuapp.com request_id=01d3e027-acea-4651-89b8-14ccdcfd42b5 fwd="58.164.25.1" dyno=web.1 connect=0ms service=2ms status=200 bytes=1091 protocol=https
+2022-03-15T08:10:25.627898+00:00 app[web.1]: 58.164.25.1:0 - "GET /api/v1/openapi.json HTTP/1.1" 200
+2022-03-15T08:10:25.629101+00:00 heroku[router]: at=info method=GET path="/api/v1/openapi.json" host=epidemic-eagle.herokuapp.com request_id=44037a0f-5bac-4072-bdfc-97297b3ad267 fwd="58.164.25.1" dyno=web.1 connect=0ms service=17ms status=200 bytes=9712 protocol=https
+2022-03-15T08:10:50.805938+00:00 app[web.1]: 58.164.25.1:0 - "GET /api/search?key_terms=covid&location=sydney&start_date=2018-xx-xx%20xx%3Axx%3Axx&end_date=2019-xx-xx%20xx%3Axx%3Axx HTTP/1.1" 200
+2022-03-15T08:10:50.807155+00:00 heroku[router]: at=info method=GET path="/api/search?key_terms=covid&location=sydney&start_date=2018-xx-xx%20xx%3Axx%3Axx&end_date=2019-xx-xx%20xx%3Axx%3Axx" host=epidemic-eagle.herokuapp.com request_id=3abe47c8-9423-4091-9e1e-5143acdb827e fwd="58.164.25.1" dyno=web.1 connect=0ms service=20ms status=200 bytes=302 protocol=https
+2022-03-15T08:45:53.310834+00:00 heroku[web.1]: Idling
+2022-03-15T08:45:53.322159+00:00 heroku[web.1]: State changed from up to down
+2022-03-15T08:45:56.598907+00:00 heroku[web.1]: Stopping all processes with SIGTERM
+2022-03-15T08:45:56.698009+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [4] [INFO] Handling signal: term
+2022-03-15T08:45:56.729727+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [9] [INFO] Shutting down
+2022-03-15T08:45:56.733634+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [12] [INFO] Shutting down
+2022-03-15T08:45:56.733682+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [11] [INFO] Shutting down
+2022-03-15T08:45:56.752715+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [10] [INFO] Shutting down
+2022-03-15T08:45:56.830293+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [9] [INFO] Finished server process [9]
+2022-03-15T08:45:56.831087+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [9] [ERROR] Traceback (most recent call last):
+2022-03-15T08:45:56.831088+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T08:45:56.831089+00:00 app[web.1]: await receive()
+2022-03-15T08:45:56.831090+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T08:45:56.831090+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T08:45:56.831091+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T08:45:56.831091+00:00 app[web.1]: await getter
+2022-03-15T08:45:56.831091+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T08:45:56.831092+00:00 app[web.1]: 
+2022-03-15T08:45:56.831687+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [9] [INFO] Worker exiting (pid: 9)
+2022-03-15T08:45:56.834140+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [12] [INFO] Finished server process [12]
+2022-03-15T08:45:56.834316+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [11] [INFO] Finished server process [11]
+2022-03-15T08:45:56.835181+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [12] [ERROR] Traceback (most recent call last):
+2022-03-15T08:45:56.835182+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T08:45:56.835182+00:00 app[web.1]: await receive()
+2022-03-15T08:45:56.835183+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T08:45:56.835183+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T08:45:56.835183+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T08:45:56.835184+00:00 app[web.1]: await getter
+2022-03-15T08:45:56.835184+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T08:45:56.835185+00:00 app[web.1]: 
+2022-03-15T08:45:56.835240+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [11] [ERROR] Traceback (most recent call last):
+2022-03-15T08:45:56.835241+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T08:45:56.835242+00:00 app[web.1]: await receive()
+2022-03-15T08:45:56.835242+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T08:45:56.835243+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T08:45:56.835243+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T08:45:56.835244+00:00 app[web.1]: await getter
+2022-03-15T08:45:56.835244+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T08:45:56.835244+00:00 app[web.1]: 
+2022-03-15T08:45:56.835989+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [11] [INFO] Worker exiting (pid: 11)
+2022-03-15T08:45:56.836029+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [12] [INFO] Worker exiting (pid: 12)
+2022-03-15T08:45:56.853362+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [10] [INFO] Finished server process [10]
+2022-03-15T08:45:56.855602+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [10] [ERROR] Traceback (most recent call last):
+2022-03-15T08:45:56.855604+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/starlette/routing.py", line 624, in lifespan
+2022-03-15T08:45:56.855604+00:00 app[web.1]: await receive()
+2022-03-15T08:45:56.855605+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/site-packages/uvicorn/lifespan/on.py", line 135, in receive
+2022-03-15T08:45:56.855605+00:00 app[web.1]: return await self.receive_queue.get()
+2022-03-15T08:45:56.855606+00:00 app[web.1]: File "/app/.heroku/python/lib/python3.9/asyncio/queues.py", line 166, in get
+2022-03-15T08:45:56.855606+00:00 app[web.1]: await getter
+2022-03-15T08:45:56.855607+00:00 app[web.1]: asyncio.exceptions.CancelledError
+2022-03-15T08:45:56.855607+00:00 app[web.1]: 
+2022-03-15T08:45:56.856590+00:00 app[web.1]: [2022-03-15 08:45:56 +0000] [10] [INFO] Worker exiting (pid: 10)
+2022-03-15T08:45:57.099206+00:00 app[web.1]: [2022-03-15 08:45:57 +0000] [4] [INFO] Shutting down: Master
+2022-03-15T08:45:57.256404+00:00 heroku[web.1]: Process exited with status 0
