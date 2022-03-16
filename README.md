@@ -2,17 +2,23 @@
 
 # SETUP
 ```
-chmod +x setup.sh
-./setup.sh
+pip install -r requirements.txt
 ```
+
 # PHASE_1
-How to run the backend
 ## Backend Localhosting
 ```
-cd PHASE_1/API_SourceCode/backend/src && uvicorn api:app --reload
+./phase1.sh
 ```
-
 ## Swagger
-
 http://127.0.0.1:8000/docs
 
+## Testing
+```
+python -m pytest
+```
+## Logs
+logs are currently generated using
+```
+heroku logs -n 200 app=epidemic-eagle > PHASE_1/TestScripts/logs
+```
