@@ -35,8 +35,13 @@ def test_report():
 
 def test_report_id():
     id = 1
-    response = client.get("/api/reports/{id}", params={"report_id": "1"})
+    response = client.get(f"/api/reports/{id}")
     assert response.status_code == 200
+
+def test_report_id_too_big():
+    id = 1200
+    response = client.get(f"/api/reports/{id}")
+    assert response.status_code == 404
 
 def test_article():
     params = {"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2018-xx-xx xx:xx:xx", "key_terms":"wow,no", "location":"somewhere"}
@@ -47,5 +52,17 @@ def test_article():
 
 def test_article_id():
     id = 1
-    response = client.get("/api/articles/{id}", params={"article_id": "1"})
+    response = client.get(f"/api/articles/{id}")
     assert response.status_code == 200
+
+def test_article_id_too_big():
+    id = 1200
+    response = client.get(f"/api/articles/{id}")
+    assert response.status_code == 404
+
+def test_search():
+    params = {"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2018-xx-xx xx:xx:xx", "key_terms":"wow,no", "location":"somewhere"}
+    response = client.get("/api/search", params=params)
+    assert response.status_code == 200
+    # assert keys exist in the response
+    assert {'page_number', 'num_pages', 'results'} == set(response.json().keys())
