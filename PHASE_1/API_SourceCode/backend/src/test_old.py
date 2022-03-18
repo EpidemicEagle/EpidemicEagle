@@ -11,47 +11,58 @@ a = "2018-xx-xx xx:xx:xx"
 b = "2018-11-01 xx:xx:xx"
 c = "2018-11-xx 17:00:xx"
 
-# def test_article():
-#     response = client.get("/api/articles/1")
-#     print(response.json())
-#     assert response.status_code == 200
-#     print(response.json())
-#     assert response.json()[0] == {}
+
+# /api/articles
+# /api/articles/{article_id}
+# /api/reports
+# /api/reports/{report_id}
+# /api/search
 
 def test_search():
     params = {"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2018-xx-xx xx:xx:xx", "key_terms":"wow,no", "location":"somewhere"}
-    response = client.get("/api/search", params={"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2018-xx-xx xx:xx:xx", "key_terms":"wow,no", 'location':'sydney'})
+    response = client.get("/api/search", params=params)
     assert response.status_code == 200
     # assert keys exist in the response
     assert {'page_number', 'num_pages', 'results'} == set(response.json().keys())
 
 
-def test_wrong_args():
-    arg_test("/api/search")
+def test_report():
+    params = {"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2018-xx-xx xx:xx:xx", "key_terms":"wow,no", "location":"somewhere"}
+    response = client.get("/api/reports", params=params)
+    assert response.status_code == 200
+    # assert keys exist in the response
+    assert {'page_number', 'num_pages', 'reports'} == set(response.json().keys())
 
-def arg_test(url):
-    params={"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2019-xx-xx xx:xx:xx", "key_terms":"covid, measles", "location":"Shanghai"}
+def test_report_id():
+    id = 1
+    response = client.get(f"/api/reports/{id}")
+    assert response.status_code == 200
 
-    response = client.get(url, params =  {"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2019-xx-xx xx:xx:xx", "key_terms":"covid, measles"})
-    assert response.status_code == 422
+def test_report_id_too_big():
+    id = 1200
+    response = client.get(f"/api/reports/{id}")
+    assert response.status_code == 404
 
-    response = client.get(url, params =  {"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2019-xx-xx xx:xx:xx",  "location":"Shanghai"})
-    assert response.status_code == 422
+def test_article():
+    params = {"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2018-xx-xx xx:xx:xx", "key_terms":"wow,no", "location":"somewhere"}
+    response = client.get("/api/articles", params=params)
+    assert response.status_code == 200
+    # assert keys exist in the response
+    assert {'page_number', 'num_pages', 'articles'} == set(response.json().keys())
 
-    response = client.get(url, params =  {"end_date":"2019-xx-xx xx:xx:xx", "key_terms":"covid, measles", "location":"Shanghai"})
-    assert response.status_code == 422
+def test_article_id():
+    id = 1
+    response = client.get(f"/api/articles/{id}")
+    assert response.status_code == 200
 
-    response = client.get(url, params =  {"start_date":"2018-xx-xx xx:xx:xx", "key_terms":"covid, measles", "location":"Shanghai"})
-    assert response.status_code == 422
+def test_article_id_too_big():
+    id = 1200
+    response = client.get(f"/api/articles/{id}")
+    assert response.status_code == 404
 
-    response = client.get(url, params = {**params, 'start_date': 'two days from now'})
-    assert response.status_code == 422
-
-    response = client.get(url, params = {**params, 'end_date': 'today'})
-    assert response.status_code == 422
-
-    response = client.get(url, params = {**params, 'start_date': '2019-20-20'})
-    assert response.status_code == 422
-
-    response = client.get(url, params = {**params, 'end_date': '2019-20-20'})
-    assert response.status_code == 422
+def test_search():
+    params = {"start_date":"2018-xx-xx xx:xx:xx", "end_date":"2018-xx-xx xx:xx:xx", "key_terms":"wow,no", "location":"somewhere"}
+    response = client.get("/api/search", params=params)
+    assert response.status_code == 200
+    # assert keys exist in the response
+    assert {'page_number', 'num_pages', 'results'} == set(response.json().keys())
