@@ -146,7 +146,17 @@ def finds_article_by_id(article_id : int):
     if article_id > 1000:
        raise HTTPException(status_code=404, detail="Article not found")
 
-    return {}
+    return Article(
+        url="sample_url",
+        date_of_publication="2018-xx-xx xx:xx:xx",
+        headline="sample headline",
+        main_text="sample text",
+        reports=[Report(diseases=[],
+                        syndromes=[],
+                        event_date="2018-xx-xx xx:xx:xx to 2018-xx-xx xx:xx:xx",
+                        locations=[]
+                )]
+        )
 
 @app.get("/api/reports", response_model=ListReport, tags=["api"])
 def list_reports(
@@ -180,7 +190,12 @@ def finds_report_by_id(report_id : int):
     if report_id > 1000:
        raise HTTPException(status_code=404, detail="Report not found")
 
-    return {}
+    # report format has to be sent
+    return Report(diseases=[],
+                    syndromes=[],
+                    event_date="2018-xx-xx xx:xx:xx to 2018-xx-xx xx:xx:xx",
+                    locations=[]
+                )
 
 
 @app.get("/api/search", response_model=ListSearchResult, tags=["api"])
