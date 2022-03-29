@@ -87,29 +87,26 @@ responses = {
 # TEST FUNCTIONS
 
 # returns html
-# @app.get("/items/{id}", response_class=HTMLResponse)
-# async def read_item(request: Request, id: str):
-#     return templates.TemplateResponse("item.html", {"request": request, "id": id})
+@app.get("/items/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, id: str):
+    return templates.TemplateResponse("item.html", {"request": request, "id": id})
 
 # # returns data from url api
-class Example(BaseModel):
-    name: int 
-
-    
-@app.get("/", response_model=Example)
-async def example(item : int):
-    return Example(name=item)
-
+# class Example(BaseModel):
+#     name: int 
+# @app.get("/", response_model=Example)
+# async def example(item : int):
+#     return Example(name=item)
 # # optional parameter checked
-@app.get("/items/{item_id}")
-async def read_items(
-    item_id: int = Path(..., title="The ID of the item to get"),
-    q: Optional[str] = Query(None, alias="item-query"),
-):
-    results = {"item_id": item_id}
-    if q:
-        results.update({"q": q})
-    return results
+# @app.get("/items/{item_id}")
+# async def read_items(
+#     item_id: int = Path(..., title="The ID of the item to get"),
+#     q: Optional[str] = Query(None, alias="item-query"),
+# ):
+#     results = {"item_id": item_id}
+#     if q:
+#         results.update({"q": q})
+#     return results
 
 # REAL FUNCTIONS
 
@@ -127,15 +124,47 @@ def list_all_articles_with_params(
     page_number can be specified to go to the corresponding page.
     """
 
+    # query to get num results
+    # num_pages = result_num_results
+
+    # if page_number != 1:
+    # query = """
+    # ...
+    # OFFSET 10*(page_number - 1)
+    # LIMIT 10
+    # """
+    # else:
+    # query = """
+    # SELECT 
+    # """
+
+    # conn = c.cursor()
+
+    # results = conn.exec(query)
+
     # if len(results) == 0:
-    # return No results found.
+    # return {
+    #   "articles": [],
+    #   "num_pages": 1,
+    #   "page_number": 1
+    # }
+
+
+    #   articles = []
+    # for line in query:
+    #   articles.append(Article(url=line[0],date_of_publication=line[1],....))
+
+    #    return {
+    #     "articles": [],
+    #     "num_pages": 1,
+    #     "page_number": 1
+    # }
 
 
     return {
         "articles": [],
         "num_pages": 1,
         "page_number": 1
-
     }
 
 @app.get("/api/articles/{article_id}", response_model=Article, tags=["api"], responses={**responses})
