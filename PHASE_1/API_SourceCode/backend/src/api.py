@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
+import json
 app = FastAPI(openapi_url="/api/v1/v1/openapi.json")
 # add stylesheet
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -88,14 +89,12 @@ responses = {
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/items/{id}", response_class=HTMLResponse)
-async def read_item(request: Request, id: str):
-    return templates.TemplateResponse("item.html", {"request": request, "id": id})
-
+# search get
 @app.get("/search", response_class=HTMLResponse)
 async def search(request: Request):
     return templates.TemplateResponse("search_get.html", {"request": request})
 
+# search post
 @app.post("/search", response_class=HTMLResponse)
 async def search_post(request: Request,
     key_terms: str,
@@ -104,20 +103,33 @@ async def search_post(request: Request,
     end_date: str = Query(..., regex=date_exact),
     page_number: Optional[int] = None  
 ):
+
+    f = open('articles.json')
+    data= json.load(f)
+    l = []
+    for i in range(10):
+        # print(data["articles"][i])
+        l.append(data['articles'][i])
+    f.close()
+
     return templates.TemplateResponse("search_post.html", 
     {
         "key_terms": key_terms,
         "location": location,
         "start_date": start_date,
         "end_date": end_date,
-        "page_number": page_number
+        "page_number": page_number,
+        "request": request,
+        "l": l
     }
     )
 
+#qsearch get
 @app.get("/quicksearch", response_class=HTMLResponse)
 async def quicksearch(request: Request):
     return templates.TemplateResponse("quicksearch.html", {"request": request})
 
+#qsearch post
 @app.post("/quicksearch", response_class=HTMLResponse)
 async def quicksearch_post(request: Request,
     key_terms: str,
@@ -126,20 +138,33 @@ async def quicksearch_post(request: Request,
     end_date: str = Query(..., regex=date_exact),
     page_number: Optional[int] = None  
 ):
+
+    f = open('articles.json')
+    data= json.load(f)
+    l = []
+    for i in range(10):
+        # print(data["articles"][i])
+        l.append(data['articles'][i])
+    f.close()
+
     return templates.TemplateResponse("quicksearch_post.html", 
     {
         "key_terms": key_terms,
         "location": location,
         "start_date": start_date,
         "end_date": end_date,
-        "page_number": page_number
+        "page_number": page_number,
+        "request": request,
+        "l": l
     }
     )
 
+# reports get
 @app.get("/reports", response_class=HTMLResponse)
 async def reports(request: Request):
     return templates.TemplateResponse("reports_get.html", {"request": request})
 
+# reports post
 @app.post("/reports", response_class=HTMLResponse)
 async def reports_post(request: Request,
     key_terms: str,
@@ -148,23 +173,38 @@ async def reports_post(request: Request,
     end_date: str = Query(..., regex=date_exact),
     page_number: Optional[int] = None  
 ):
+
+    f = open('reports.json')
+    data= json.load(f)
+    l = []
+    for i in range(10):
+        # print(data["articles"][i])
+        l.append(data['reports'][i])
+    f.close()
+
     return templates.TemplateResponse("reports_post.html", 
     {
         "key_terms": key_terms,
         "location": location,
         "start_date": start_date,
         "end_date": end_date,
-        "page_number": page_number
+        "page_number": page_number,
+        "request": request,
+        "l": l
     }
     )
 
+# reports id get
 @app.get("/reports/{id}", response_class=HTMLResponse)
-async def read_item(request: Request, id: str):
-    return templates.TemplateResponse("entry_report.html", {"request": request, "id": id})
+async def id_reports(request: Request, id: str):
+    report = {}
+    return templates.TemplateResponse("entry_report.html", {"request": request, "id": id, 'report' : report})
 
+# articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
-async def read_item(request: Request, id: str):
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
+async def id_articles(request: Request, id: str):
+    article = {}
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : article})
 
 
 @app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
