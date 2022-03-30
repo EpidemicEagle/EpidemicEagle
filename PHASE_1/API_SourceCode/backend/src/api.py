@@ -6,7 +6,8 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
-app = FastAPI(openapi_url="/api/v1/openapi.json")
+import json
+app = FastAPI(openapi_url="/api/v1/v1/openapi.json")
 # add stylesheet
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -84,37 +85,129 @@ responses = {
     404: {"description": "Item not found"}
 }
 
-# TEST FUNCTIONS
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
-# returns html
-# @app.get("/items/{id}", response_class=HTMLResponse)
-# async def read_item(request: Request, id: str):
-#     return templates.TemplateResponse("item.html", {"request": request, "id": id})
+# search get
+@app.get("/search", response_class=HTMLResponse)
+async def search(request: Request):
+    return templates.TemplateResponse("search_get.html", {"request": request})
 
-# # returns data from url api
-class Example(BaseModel):
-    name: int 
-
-    
-@app.get("/", response_model=Example)
-async def example(item : int):
-    return Example(name=item)
-
-# # optional parameter checked
-@app.get("/items/{item_id}")
-async def read_items(
-    item_id: int = Path(..., title="The ID of the item to get"),
-    q: Optional[str] = Query(None, alias="item-query"),
+# search post
+@app.post("/search", response_class=HTMLResponse)
+async def search_post(request: Request,
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
 ):
-    results = {"item_id": item_id}
-    if q:
-        results.update({"q": q})
-    return results
 
-# REAL FUNCTIONS
+    f = open('articles.json')
+    data= json.load(f)
+    l = []
+    for i in range(10):
+        # print(data["articles"][i])
+        l.append(data['articles'][i])
+    f.close()
+
+    return templates.TemplateResponse("search_post.html", 
+    {
+        "key_terms": key_terms,
+        "location": location,
+        "start_date": start_date,
+        "end_date": end_date,
+        "page_number": page_number,
+        "request": request,
+        "l": l
+    }
+    )
+
+#qsearch get
+@app.get("/quicksearch", response_class=HTMLResponse)
+async def quicksearch(request: Request):
+    return templates.TemplateResponse("quicksearch.html", {"request": request})
+
+#qsearch post
+@app.post("/quicksearch", response_class=HTMLResponse)
+async def quicksearch_post(request: Request,
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
+):
+
+    f = open('articles.json')
+    data= json.load(f)
+    l = []
+    for i in range(10):
+        # print(data["articles"][i])
+        l.append(data['articles'][i])
+    f.close()
+
+    return templates.TemplateResponse("quicksearch_post.html", 
+    {
+        "key_terms": key_terms,
+        "location": location,
+        "start_date": start_date,
+        "end_date": end_date,
+        "page_number": page_number,
+        "request": request,
+        "l": l
+    }
+    )
+
+# reports get
+@app.get("/reports", response_class=HTMLResponse)
+async def reports(request: Request):
+    return templates.TemplateResponse("reports_get.html", {"request": request})
+
+# reports post
+@app.post("/reports", response_class=HTMLResponse)
+async def reports_post(request: Request,
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
+):
+
+    f = open('reports.json')
+    data= json.load(f)
+    l = []
+    for i in range(10):
+        # print(data["articles"][i])
+        l.append(data['reports'][i])
+    f.close()
+
+    return templates.TemplateResponse("reports_post.html", 
+    {
+        "key_terms": key_terms,
+        "location": location,
+        "start_date": start_date,
+        "end_date": end_date,
+        "page_number": page_number,
+        "request": request,
+        "l": l
+    }
+    )
+
+# reports id get
+@app.get("/reports/{id}", response_class=HTMLResponse)
+async def id_reports(request: Request, id: str):
+    report = {}
+    return templates.TemplateResponse("entry_report.html", {"request": request, "id": id, 'report' : report})
+
+# articles id get
+@app.get("/articles/{id}", response_class=HTMLResponse)
+async def id_articles(request: Request, id: str):
+    article = {}
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : article})
 
 
-@app.get("/api/articles", response_model=ListArticle, tags=["api"])
+@app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
 def list_all_articles_with_params(
     key_terms: str,
     location: str,
@@ -126,19 +219,13 @@ def list_all_articles_with_params(
     Lists all the articles specified within the parameters: start_date to end_date, key_terms and location.
     page_number can be specified to go to the corresponding page.
     """
-
-    # if len(results) == 0:
-    # return No results found.
-
-
     return {
         "articles": [],
         "num_pages": 1,
         "page_number": 1
-
     }
 
-@app.get("/api/articles/{article_id}", response_model=Article, tags=["api"], responses={**responses})
+@app.get("/api/v1/articles/{article_id}", response_model=Article, tags=["api"], responses={**responses})
 def finds_article_by_id(article_id : int):
     """
     Lists all the information about an article from given id.
@@ -158,7 +245,7 @@ def finds_article_by_id(article_id : int):
                 )]
         )
 
-@app.get("/api/reports", response_model=ListReport, tags=["api"])
+@app.get("/api/v1/reports", response_model=ListReport, tags=["api"])
 def list_reports(
     key_terms: str,
     location: str,
@@ -182,7 +269,7 @@ def list_reports(
 
     }
 
-@app.get("/api/reports/{report_id}", response_model=Report, tags=["api"], responses={**responses})
+@app.get("/api/v1/reports/{report_id}", response_model=Report, tags=["api"], responses={**responses})
 def finds_report_by_id(report_id : int):
     """
     Lists all the information about a report from given id.
@@ -198,7 +285,7 @@ def finds_report_by_id(report_id : int):
                 )
 
 
-@app.get("/api/search", response_model=ListSearchResult, tags=["api"])
+@app.get("/api/v1/search", response_model=ListSearchResult, tags=["api"])
 def list_reports(
     key_terms: str,
     location: str,

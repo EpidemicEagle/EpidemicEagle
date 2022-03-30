@@ -1,2 +1,1 @@
-cd ..
-pytest > TestScripts/logs/"$(date)".log
+cd ../API_SourceCode/backend/src && pytest
