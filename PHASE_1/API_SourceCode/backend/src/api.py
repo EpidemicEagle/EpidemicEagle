@@ -93,11 +93,11 @@ async def read_item(request: Request, id: str):
     return templates.TemplateResponse("item.html", {"request": request, "id": id})
 
 @app.get("/search", response_class=HTMLResponse)
-async def read_item(request: Request):
+async def search(request: Request):
     return templates.TemplateResponse("search_get.html", {"request": request})
 
 @app.post("/search", response_class=HTMLResponse)
-async def read_item(request: Request,
+async def search_post(request: Request,
     key_terms: str,
     location: str,
     start_date: str = Query(..., regex=date_exact),
@@ -113,6 +113,58 @@ async def read_item(request: Request,
         "page_number": page_number
     }
     )
+
+@app.get("/quicksearch", response_class=HTMLResponse)
+async def quicksearch(request: Request):
+    return templates.TemplateResponse("quicksearch.html", {"request": request})
+
+@app.post("/quicksearch", response_class=HTMLResponse)
+async def quicksearch_post(request: Request,
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
+):
+    return templates.TemplateResponse("quicksearch_post.html", 
+    {
+        "key_terms": key_terms,
+        "location": location,
+        "start_date": start_date,
+        "end_date": end_date,
+        "page_number": page_number
+    }
+    )
+
+@app.get("/reports", response_class=HTMLResponse)
+async def reports(request: Request):
+    return templates.TemplateResponse("reports_get.html", {"request": request})
+
+@app.post("/reports", response_class=HTMLResponse)
+async def reports_post(request: Request,
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
+):
+    return templates.TemplateResponse("reports_post.html", 
+    {
+        "key_terms": key_terms,
+        "location": location,
+        "start_date": start_date,
+        "end_date": end_date,
+        "page_number": page_number
+    }
+    )
+
+@app.get("/reports/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, id: str):
+    return templates.TemplateResponse("entry_report.html", {"request": request, "id": id})
+
+@app.get("/articles/{id}", response_class=HTMLResponse)
+async def read_item(request: Request, id: str):
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
 
 
 @app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
