@@ -272,7 +272,7 @@ async def id_articles(request: Request, id: str):
     if url == "empty":
         return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
     else:
-        print("<SCRAPING BEGINS>")
+        print("\n"+"<SCRAPING BEGINS>")
         # scrape url.
         option = webdriver.ChromeOptions()
         option.add_argument(" — incognito")
@@ -288,11 +288,21 @@ async def id_articles(request: Request, id: str):
             print("Timed out waiting for page to load")
             browser.quit()
 
-        content = browser.find_element(By.XPATH, "//article[@class='sf-detail-body-wrapper']")
-        print("========================== Printing Content from URL ==========================")
-        print(content.text)
+        content_object = browser.find_element(By.XPATH, "//article[@class='sf-detail-body-wrapper']")
+        content = content_object.text
+        subheadings = browser.find_elements(By.XPATH, "//article[@class='sf-detail-body-wrapper']/h3")
+
+        print("\n"+"========================== Printing Content from URL ==========================")
+        print(content)
+
+        print("\n"+"========================== Subheadings ==========================")
+        subheadings_list = []
+        for s in subheadings:
+            subheadings_list.append(s.text)
+            
+        print(subheadings_list)
         
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, "content" : content.text})
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, "content" : content})
 
 
 # import re
