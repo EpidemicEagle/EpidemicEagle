@@ -226,17 +226,29 @@ async def reports_post(request: Request,
     }
     )
 
-# reports id get
-@app.get("/reports/{id}", response_class=HTMLResponse)
-async def id_reports(request: Request, id: str):
-    report = {"reportId":"a7afc633-b26c-486e-9de4-618d59551843","diseases":["poliomyelitis"],"syndromes":[],"eventDate":"2022-02-17T00:00:00.000Z","locations":["Malawi"]}
-    return templates.TemplateResponse("entry_report.html", {"request": request, "id": id, 'report' : report})
-
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
 async def id_articles(request: Request, id: str):
-    article = {"articleId":"a4fd819e-2f69-490e-b1f3-4b479e425c84","url":"https://www.who.int/emergencies/disease-outbreak-news/item/wild-poliovirus-type-1-(WPV1)-malawi","dateOfPublication":"3 March 2022","headline":"Wild poliovirus type 1 (WPV1) - Malawi","reports":[{"reportId":"a7afc633-b26c-486e-9de4-618d59551843","diseases":["poliomyelitis"],"syndromes":[],"eventDate":"2022-02-17T00:00:00.000Z","locations":["Malawi"]}]}
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : article})
+    f = open("articles.json")
+    data = json.load(f)['articles']
+    length = len(data)
+
+    # return 'no articles found if greater than num of articles"
+    if int(id) > length or int(id) < 0:
+        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
+        
+    report = data[int(id)]    
+    # TODO: 
+    # pip freeze > requirements.txt
+    # get the ['url'] form the data
+    # scrape the url
+    #   installing selenium in project foler
+    # pull relevant data (body of text)
+    # integrate it into entry_article.html
+    # match index.html style if time permits
+    # (use styles.css (font-size if necessary))
+
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report})
 
 
 @app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
