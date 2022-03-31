@@ -5,5 +5,23 @@
     </head>
     <body>
         <h1>Hello welcome to article search</h1>
+        <table>
+            <thead>
+                <th>Headline</th>
+                <th>Date of publication</th>
+                <th>Article id</th>
+                <th>url</th>
+            </thead>
+            <tbody>
+                {% for search in searches %}
+                    <tr>
+                        <td> {{ search.headline }} </td>
+                        <td> {{ search.date_of_publication }} </td>
+                        <td> {{ search.article_id }} </td>
+                        <td> {{ search.url }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </body>
 </html>

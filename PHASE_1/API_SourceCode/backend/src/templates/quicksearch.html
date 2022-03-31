@@ -5,5 +5,23 @@
     </head>
     <body>
         <h1>Search for results for quicksearch</h1>
+        <table>
+            <thead>
+                <th>Headline</th>
+                <th>Date of publication</th>
+                <th>Article id</th>
+                <th>url</th>
+            </thead>
+            <tbody>
+                {% for qs in searches %}
+                    <tr>
+                        <td> {{ qs.headline }} </td>
+                        <td> {{ qs.date_of_publication }} </td>
+                        <td> {{ qs.article_id }} </td>
+                        <td> {{ qs.url }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </body>
 </html>
