@@ -4,6 +4,9 @@
         <link href="css/styles.css" rel="stylesheet">
     </head>
     <body>
+        <div>
+            <h3><a href='/'>Back to main page</a></h3>
+        </div>
         <h1>Search for results for quicksearch</h1>
         <table>
             <thead>
@@ -13,6 +16,7 @@
                 <th>url</th>
             </thead>
             <tbody>
+                
                 {% for qs in searches %}
                     <tr>
                         <td> {{ qs.headline }} </td>
@@ -21,7 +25,29 @@
                         <td> {{ qs.url }} </td>
                     </tr>
                 {% endfor %}
+                
+                <!-- potential sample data for demonstration 
+                <tr>
+                    <td>Covid in Sydney</td>
+                    <td>10/4/2020</td>
+                    <td>1</td>
+                    <td>www.smh.com</td>
+                </tr>
+                <tr>
+                    <td>Covid runs rampant</td>
+                    <td>20/4/2020</td>
+                    <td>2</td>
+                    <td>www.smh.com</td>
+                </tr>
+            
+                <div>
+                    <h3><a href='/search'>go to search</a></h3>
+                </div>
+                -->
             </tbody>
         </table>
+        <div>
+            <h3><a href='/search'>go to search</a></h3>
+        </div>
     </body>
 </html>
