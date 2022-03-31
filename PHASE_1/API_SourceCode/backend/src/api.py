@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request, Body
+from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request, Body, Form
 from fastapi.openapi.utils import get_openapi
 from typing import List,Optional, Union
 from pydantic import BaseModel
@@ -7,9 +7,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
 import json
-app = FastAPI(openapi_url="/api/v1/v1/openapi.json")
+app = FastAPI(openapi_url="/api/v1/openapi.json")
 # add stylesheet
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/css", StaticFiles(directory="templates/css"), name="css")
+app.mount("/js", StaticFiles(directory="templates/js"), name="js")
+app.mount("/images", StaticFiles(directory="templates/images"), name="images")
+app.mount("/webfonts", StaticFiles(directory="templates/webfonts"), name="webfonts")
+
+
 templates = Jinja2Templates(directory="templates")
 # Global Constants for regex
 date_exact = r"^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$"
@@ -85,9 +90,33 @@ responses = {
     404: {"description": "Item not found"}
 }
 
+
+@app.get("/form")
+def form_post(request: Request):
+    result = "Type a number"
+    return templates.TemplateResponse('form.html', context={'request': request, 'result': result})
+
+
+@app.post("/form")
+def form_post(request: Request, num: int = Form(...)):
+    return templates.TemplateResponse('form.html', context={'request': request, 'result': num})
+
+
+
+# unify index calls
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/index.html", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/dummy", response_class=HTMLResponse)
+async def get(request: Request):
+    return templates.TemplateResponse("dummy.html", {"request": request})
+
 
 # search get
 @app.get("/search", response_class=HTMLResponse)
@@ -97,12 +126,15 @@ async def search(request: Request):
 # search post
 @app.post("/search", response_class=HTMLResponse)
 async def search_post(request: Request,
-    key_terms: str,
-    location: str,
-    start_date: str = Query(..., regex=date_exact),
-    end_date: str = Query(..., regex=date_exact),
-    page_number: Optional[int] = None  
+    key_terms: str = Form(...),
+    location: str = Form(...),
+    start_date: str = Form(...),
+    end_date: str = Form(...),
+    page_number: Optional[int] = Form(...)
 ):
+    # test dates
+    # test location
+
 
     f = open('articles.json')
     data= json.load(f)
@@ -197,13 +229,13 @@ async def reports_post(request: Request,
 # reports id get
 @app.get("/reports/{id}", response_class=HTMLResponse)
 async def id_reports(request: Request, id: str):
-    report = {}
+    report = {"reportId":"a7afc633-b26c-486e-9de4-618d59551843","diseases":["poliomyelitis"],"syndromes":[],"eventDate":"2022-02-17T00:00:00.000Z","locations":["Malawi"]}
     return templates.TemplateResponse("entry_report.html", {"request": request, "id": id, 'report' : report})
 
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
 async def id_articles(request: Request, id: str):
-    article = {}
+    article = {"articleId":"a4fd819e-2f69-490e-b1f3-4b479e425c84","url":"https://www.who.int/emergencies/disease-outbreak-news/item/wild-poliovirus-type-1-(WPV1)-malawi","dateOfPublication":"3 March 2022","headline":"Wild poliovirus type 1 (WPV1) - Malawi","reports":[{"reportId":"a7afc633-b26c-486e-9de4-618d59551843","diseases":["poliomyelitis"],"syndromes":[],"eventDate":"2022-02-17T00:00:00.000Z","locations":["Malawi"]}]}
     return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : article})
 
 

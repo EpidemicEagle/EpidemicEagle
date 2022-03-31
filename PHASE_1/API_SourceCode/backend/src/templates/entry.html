@@ -1,0 +1,21 @@
+<title>
+    Epidemic Eagle
+</title>
+<head>
+    <link href="{{ url_for('css', path='styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <header class="page-header">
+      <div class="container">
+          <h1><a href="/">Go Back to Home</a></h1>
+      </div>
+    </header>
+    <main class="container">
+        <div class="row">
+            <div class="col">
+            {% block content %}
+            {% endblock %}
+            </div>
+        </div>
+    </main>
+</body>
