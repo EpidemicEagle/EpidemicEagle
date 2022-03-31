@@ -8,6 +8,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
 import json
+
+from selenium import webdriver 
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By 
+from selenium.webdriver.support.ui import WebDriverWait 
+from selenium.webdriver.support import expected_conditions as EC 
+from selenium.common.exceptions import TimeoutException
+
 app = FastAPI(openapi_url="/api/v1/openapi.json")
 # add stylesheet
 app.mount("/css", StaticFiles(directory="templates/css"), name="css")
@@ -230,6 +238,16 @@ async def reports_post(request: Request,
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
 async def id_articles(request: Request, id: str):
+    # TODO: 
+    # pip freeze > requirements.txt
+    # get the ['url'] form the data
+    # scrape the url
+    #   installing selenium in project foler
+    # pull relevant data (body of text)
+    # integrate it into entry_article.html
+    # match index.html style if time permits
+    # (use styles.css (font-size if necessary))
+
     print("========================== Entering articles/id ==========================")
     f = open("articles.json")
     data = json.load(f)['articles']
@@ -254,21 +272,57 @@ async def id_articles(request: Request, id: str):
     if url == "empty":
         return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
     else:
-        print("<SCRAPE>")
+        print("<SCRAPING BEGINS>")
         # scrape url.
-    
-    # TODO: 
-    # pip freeze > requirements.txt
-    # get the ['url'] form the data
-    # scrape the url
-    #   installing selenium in project foler
-    # pull relevant data (body of text)
-    # integrate it into entry_article.html
-    # match index.html style if time permits
-    # (use styles.css (font-size if necessary))
+        option = webdriver.ChromeOptions()
+        option.add_argument(" — incognito")
+        s = Service('C:/Users/sbass/Downloads/chromedriver_win32/chromedriver')
+        browser = webdriver.Chrome(service=s)
+        browser.get(url)
+        # browser.maximize_window()
 
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report})
+        timeout = 20
+        try:
+            WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='sf-item-header-wrapper']")))
+        except TimeoutException:
+            print("Timed out waiting for page to load")
+            browser.quit()
 
+        content = browser.find_element(By.XPATH, "//article[@class='sf-detail-body-wrapper']")
+        print("========================== Printing Content from URL ==========================")
+        print(content.text)
+        
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, "content" : content.text})
+
+
+# import re
+# 
+# option = webdriver.ChromeOptions()
+# option.add_argument(" — incognito")
+# 
+# s = Service('C:/Users/sbass/Downloads/chromedriver_win32/chromedriver')
+# 
+# browser = webdriver.Chrome(service=s)
+# browser.get("https://promedmail.org/promed-posts/")
+# browser.maximize_window()
+# 
+# Wait 20 seconds for page to load
+# timeout = 20
+# try:
+#     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='main_inner_box']")))
+# except TimeoutException:
+#     print("Timed out waiting for page to load")
+#     browser.quit()
+
+# page = browser.find_element(By.XPATH, "//div[@class='boxes']")
+# print(page.text)
+
+# browser.find_element(By.XPATH, "//input[@class='lg_textbox']").send_keys("Zika")
+# search_box = browser.find_element(By.XPATH, "//div[@id='searchby_other']/input[@value='Search']")
+# search_box.click()
+
+# search_button = browser.find_element(By.XPATH, "//input[@name='submit' and @type='submit' and @value='Search']")
+# search_button.submit()
 
 @app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
 def list_all_articles_with_params(
