@@ -1,5 +1,7 @@
 # Test Running
+```
 ./test.sh
+```
 
 logs are currently generated using
 ```
