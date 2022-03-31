@@ -1,3 +1,4 @@
+from types import NoneType
 from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request, Body, Form
 from fastapi.openapi.utils import get_openapi
 from typing import List,Optional, Union
@@ -229,6 +230,7 @@ async def reports_post(request: Request,
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
 async def id_articles(request: Request, id: str):
+    print("========================== Entering articles/id ==========================")
     f = open("articles.json")
     data = json.load(f)['articles']
     length = len(data)
@@ -237,7 +239,24 @@ async def id_articles(request: Request, id: str):
     if int(id) > length or int(id) < 0:
         return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
         
-    report = data[int(id)]    
+    report = data[int(id)]
+    print("========================== JSON Dump ==========================")
+    print(json.dumps(report, indent=4))
+    url = "empty"
+    print("========================== Searching JSON ==========================")
+    for x in report:
+        if (x == "url"):
+            print("... url found.")
+            url = report[x]
+            print("... url saved.")
+
+    print(url)
+    if url == "empty":
+        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
+    else:
+        print("<SCRAPE>")
+        # scrape url.
+    
     # TODO: 
     # pip freeze > requirements.txt
     # get the ['url'] form the data
