@@ -106,7 +106,7 @@ def form_post(request: Request, num: int = Form(...)):
 # unify index calls
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    return templates.TemplateResponse("main.html", {"request": request})
 
 @app.get("/index.html", response_class=HTMLResponse)
 async def index(request: Request):
@@ -225,6 +225,13 @@ async def reports_post(request: Request,
         "l": l
     }
     )
+
+
+# srticles get
+@app.get("/articles", response_class=HTMLResponse)
+async def articles(request: Request):
+    return templates.TemplateResponse("articles_get.html", {"request": request})
+
 
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
