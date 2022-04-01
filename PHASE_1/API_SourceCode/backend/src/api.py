@@ -288,21 +288,40 @@ async def id_articles(request: Request, id: str):
             print("Timed out waiting for page to load")
             browser.quit()
 
+        title_object = browser.find_element(By.XPATH, "//div[@class='sf-item-header-wrapper']/h1")
+        title = title_object.text
         content_object = browser.find_element(By.XPATH, "//article[@class='sf-detail-body-wrapper']")
         content = content_object.text
         subheadings = browser.find_elements(By.XPATH, "//article[@class='sf-detail-body-wrapper']/h3")
+        content_divs = browser.find_elements(By.XPATH, "//article[@class='sf-detail-body-wrapper']/div")
 
         print("\n"+"========================== Printing Content from URL ==========================")
         print(content)
 
         print("\n"+"========================== Subheadings ==========================")
         subheadings_list = []
+        subheadings_list.append(title)
         for s in subheadings:
             subheadings_list.append(s.text)
-            
-        print(subheadings_list)
+        # print(subheadings_list)
+
+        print("\n"+"========================== Content Divided ==========================")
+        content_subparts = []
+        for c in content_divs:
+            content_subparts.append(c.text)
+        # print(content_subparts)
+
+        # set up JSON by creating dict.
+        res = []
+        for i in range(len(subheadings_list) - 1):
+            tmp = dict.fromkeys(['heading', 'content'])
+            tmp['heading'] = subheadings_list[i]
+            tmp['content'] = content_subparts[i]
+            # print(tmp)
+            res.append(tmp)
+        print(res)
         
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, "content" : content})
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, "list" : res})
 
 
 # import re
