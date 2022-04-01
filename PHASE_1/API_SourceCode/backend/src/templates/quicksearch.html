@@ -8,6 +8,13 @@
             <h3><a href='/'>Back to main page</a></h3>
         </div>
         <h1>Search for results for quicksearch</h1>
+        <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
+        <input id="diseaseInput" type="text" name="disease" placeholder="Disease" value={{disease}}>
+        <input type="datetime-local" id="start_date" name="start_date"
+           min="2000-01-01" max="2024-12-31" value={{start_date}}>
+        <input type="datetime-local" id="end_date" name="end_date"
+           min="2000-01-01" max="2024-12-31" value={{end_date}}>
+        <input type="text" name="key_terms" value={{key_terms}}>
         <table>
             <thead>
                 <th>Headline</th>
@@ -20,8 +27,8 @@
                 {% for qs in searches %}
                     <tr>
                         <td> {{ qs.headline }} </td>
-                        <td> {{ qs.date_of_publication }} </td>
-                        <td> {{ qs.article_id }} </td>
+                        <td> {{ qs.dateOfPublication }} </td>
+                        <td> {{ qs.articleId }} </td>
                         <td> {{ qs.url }} </td>
                     </tr>
                 {% endfor %}

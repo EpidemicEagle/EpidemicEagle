@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request, Body, Form
 from fastapi.openapi.utils import get_openapi
 from typing import List,Optional, Union
@@ -121,38 +122,61 @@ async def get(request: Request):
 # search get
 @app.get("/search", response_class=HTMLResponse)
 async def search(request: Request):
-    return templates.TemplateResponse("search_get.html", {"request": request})
+    return templates.TemplateResponse("dummy.html", {"request": request})
+
+def parse_report_info(keyword, article):
+    return set([_ for _ in [_[keyword] for _ in article['reports']] for _ in _])
 
 # search post
 @app.post("/search", response_class=HTMLResponse)
 async def search_post(request: Request,
     key_terms: str = Form(...),
+    disease: str = Form(...),
     location: str = Form(...),
-    start_date: str = Form(...),
-    end_date: str = Form(...),
-    page_number: Optional[int] = Form(...)
+    start_date: datetime  = Form(...),
+    end_date: datetime = Form(...),
+    page_number: Optional[int] = None  
 ):
     # test dates
     # test location
 
 
     f = open('articles.json')
-    data= json.load(f)
-    l = []
-    for i in range(10):
-        # print(data["articles"][i])
-        l.append(data['articles'][i])
+    data= json.load(f)['articles']
     f.close()
+    searches = []
+    count = 0
 
-    return templates.TemplateResponse("search_post.html", 
+    # average time is 3000 ms (3 seconds)
+    for article in data:
+        if count == 10:
+            break
+        # exclude and pagination
+        date = datetime.strptime(article['dateOfPublication'], '%d %B %Y')
+
+        # do easy comparision before hard comparision
+        if start_date < date and date < end_date:
+            # then limit by the harder values
+            diseases = parse_report_info('diseases', article)
+            locations = parse_report_info('locations', article)
+            if disease in diseases and location in locations:
+                # change response to fit html better
+                article.update(dateOfPublication=date)
+                searches.append(article)
+                count += 1
+        
+    # print(searches)
+
+    return templates.TemplateResponse("quicksearch.html", 
     {
         "key_terms": key_terms,
+        "disease": disease,
         "location": location,
         "start_date": start_date,
         "end_date": end_date,
         "page_number": page_number,
         "request": request,
-        "l": l
+        "searches": searches
     }
     )
 
@@ -164,30 +188,35 @@ async def quicksearch(request: Request):
 #qsearch post
 @app.post("/quicksearch", response_class=HTMLResponse)
 async def quicksearch_post(request: Request,
-    key_terms: str,
-    location: str,
-    start_date: str = Query(..., regex=date_exact),
-    end_date: str = Query(..., regex=date_exact),
-    page_number: Optional[int] = None  
+    # key_terms: str,
+    # location: str,
+    start_date: datetime = Form(...),
+    end_date: datetime = Form(...),
+    # page_number: Optional[int] = None  
 ):
-
     f = open('articles.json')
-    data= json.load(f)
-    l = []
-    for i in range(10):
-        # print(data["articles"][i])
-        l.append(data['articles'][i])
+    data= json.load(f)['articles']
     f.close()
+    searches = []
+    count = 0
+    for article in data:
+        if count == 10:
+            break
+        # exclude and pagination
+        searches.append(article)
+        count += 1
+
+    print(searches)
 
     return templates.TemplateResponse("quicksearch_post.html", 
     {
-        "key_terms": key_terms,
-        "location": location,
+        # "key_terms": key_terms,
+        # "location": location,
         "start_date": start_date,
         "end_date": end_date,
-        "page_number": page_number,
+        # "page_number": page_number,
         "request": request,
-        "l": l
+        "searches": searches
     }
     )
 
