@@ -1,9 +1,18 @@
-<html>
-    <head>
-        <title>Item Details</title>
-        <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
-    </head>
-    <body>
-        <h1>Article found with id of {{id}}</h1>
-    </body>
-</html>
+{% extends 'entry.html' %}
+
+{% block content %}
+    <h1>Checking if article exists with id of {{id}}</h1>
+
+    {% if article %}
+
+        <h1>Article found with id of {{article.articleId}}</h1>
+
+        {% for x in list %}
+            <h2>{{x.heading}}</h2>
+            <p>{{x.content}}</p>
+        {% endfor %}
+    {% else %}
+        <h1>No articles found</h1>
+    {% endif %}
+
+{% endblock %}

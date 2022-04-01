@@ -1,4 +1,5 @@
-from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request, Body
+from types import NoneType
+from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request, Body, Form
 from fastapi.openapi.utils import get_openapi
 from typing import List,Optional, Union
 from pydantic import BaseModel
@@ -7,9 +8,22 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
 import json
-app = FastAPI(openapi_url="/api/v1/v1/openapi.json")
+
+from selenium import webdriver 
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By 
+from selenium.webdriver.support.ui import WebDriverWait 
+from selenium.webdriver.support import expected_conditions as EC 
+from selenium.common.exceptions import TimeoutException
+
+app = FastAPI(openapi_url="/api/v1/openapi.json")
 # add stylesheet
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/css", StaticFiles(directory="templates/css"), name="css")
+app.mount("/js", StaticFiles(directory="templates/js"), name="js")
+app.mount("/images", StaticFiles(directory="templates/images"), name="images")
+app.mount("/webfonts", StaticFiles(directory="templates/webfonts"), name="webfonts")
+
+
 templates = Jinja2Templates(directory="templates")
 # Global Constants for regex
 date_exact = r"^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$"
@@ -85,9 +99,33 @@ responses = {
     404: {"description": "Item not found"}
 }
 
+
+@app.get("/form")
+def form_post(request: Request):
+    result = "Type a number"
+    return templates.TemplateResponse('form.html', context={'request': request, 'result': result})
+
+
+@app.post("/form")
+def form_post(request: Request, num: int = Form(...)):
+    return templates.TemplateResponse('form.html', context={'request': request, 'result': num})
+
+
+
+# unify index calls
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/index.html", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/dummy", response_class=HTMLResponse)
+async def get(request: Request):
+    return templates.TemplateResponse("dummy.html", {"request": request})
+
 
 # search get
 @app.get("/search", response_class=HTMLResponse)
@@ -97,12 +135,15 @@ async def search(request: Request):
 # search post
 @app.post("/search", response_class=HTMLResponse)
 async def search_post(request: Request,
-    key_terms: str,
-    location: str,
-    start_date: str = Query(..., regex=date_exact),
-    end_date: str = Query(..., regex=date_exact),
-    page_number: Optional[int] = None  
+    key_terms: str = Form(...),
+    location: str = Form(...),
+    start_date: str = Form(...),
+    end_date: str = Form(...),
+    page_number: Optional[int] = Form(...)
 ):
+    # test dates
+    # test location
+
 
     f = open('articles.json')
     data= json.load(f)
@@ -194,18 +235,123 @@ async def reports_post(request: Request,
     }
     )
 
-# reports id get
-@app.get("/reports/{id}", response_class=HTMLResponse)
-async def id_reports(request: Request, id: str):
-    report = {}
-    return templates.TemplateResponse("entry_report.html", {"request": request, "id": id, 'report' : report})
-
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
 async def id_articles(request: Request, id: str):
-    article = {}
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : article})
+    # TODO: 
+    # pip freeze > requirements.txt
+    # get the ['url'] form the data
+    # scrape the url
+    #   installing selenium in project foler
+    # pull relevant data (body of text)
+    # integrate it into entry_article.html
+    # match index.html style if time permits
+    # (use styles.css (font-size if necessary))
 
+    print("========================== Entering articles/id ==========================")
+    f = open("articles.json")
+    data = json.load(f)['articles']
+    length = len(data)
+
+    # return 'no articles found if greater than num of articles"
+    if int(id) > length or int(id) < 0:
+        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
+        
+    report = data[int(id)]
+    print("========================== JSON Dump ==========================")
+    print(json.dumps(report, indent=4))
+    url = "empty"
+    print("========================== Searching JSON ==========================")
+    for x in report:
+        if (x == "url"):
+            print("... url found.")
+            url = report[x]
+            print("... url saved.")
+
+    print(url)
+    if url == "empty":
+        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
+    else:
+        print("\n"+"<SCRAPING BEGINS>")
+        # scrape url.
+        option = webdriver.ChromeOptions()
+        option.add_argument(" — incognito")
+        s = Service('C:/Users/sbass/Downloads/chromedriver_win32/chromedriver')
+        browser = webdriver.Chrome(service=s)
+        browser.get(url)
+        # browser.maximize_window()
+
+        timeout = 20
+        try:
+            WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='sf-item-header-wrapper']")))
+        except TimeoutException:
+            print("Timed out waiting for page to load")
+            browser.quit()
+
+        title_object = browser.find_element(By.XPATH, "//div[@class='sf-item-header-wrapper']/h1")
+        title = title_object.text
+        content_object = browser.find_element(By.XPATH, "//article[@class='sf-detail-body-wrapper']")
+        content = content_object.text
+        subheadings = browser.find_elements(By.XPATH, "//article[@class='sf-detail-body-wrapper']/h3")
+        content_divs = browser.find_elements(By.XPATH, "//article[@class='sf-detail-body-wrapper']/div")
+
+        print("\n"+"========================== Printing Content from URL ==========================")
+        print(content)
+
+        print("\n"+"========================== Subheadings ==========================")
+        subheadings_list = []
+        subheadings_list.append(title)
+        for s in subheadings:
+            subheadings_list.append(s.text)
+        # print(subheadings_list)
+
+        print("\n"+"========================== Content Divided ==========================")
+        content_subparts = []
+        for c in content_divs:
+            content_subparts.append(c.text)
+        # print(content_subparts)
+
+        # set up JSON by creating dict.
+        res = []
+        for i in range(len(subheadings_list) - 1):
+            tmp = dict.fromkeys(['heading', 'content'])
+            tmp['heading'] = subheadings_list[i]
+            tmp['content'] = content_subparts[i]
+            # print(tmp)
+            res.append(tmp)
+        print(res)
+        
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, "list" : res})
+
+
+# import re
+# 
+# option = webdriver.ChromeOptions()
+# option.add_argument(" — incognito")
+# 
+# s = Service('C:/Users/sbass/Downloads/chromedriver_win32/chromedriver')
+# 
+# browser = webdriver.Chrome(service=s)
+# browser.get("https://promedmail.org/promed-posts/")
+# browser.maximize_window()
+# 
+# Wait 20 seconds for page to load
+# timeout = 20
+# try:
+#     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='main_inner_box']")))
+# except TimeoutException:
+#     print("Timed out waiting for page to load")
+#     browser.quit()
+
+# page = browser.find_element(By.XPATH, "//div[@class='boxes']")
+# print(page.text)
+
+# browser.find_element(By.XPATH, "//input[@class='lg_textbox']").send_keys("Zika")
+# search_box = browser.find_element(By.XPATH, "//div[@id='searchby_other']/input[@value='Search']")
+# search_box.click()
+
+# search_button = browser.find_element(By.XPATH, "//input[@name='submit' and @type='submit' and @value='Search']")
+# search_button.submit()
 
 @app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
 def list_all_articles_with_params(
