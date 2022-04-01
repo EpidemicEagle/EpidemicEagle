@@ -235,123 +235,17 @@ async def reports_post(request: Request,
     }
     )
 
+# reports id get
+@app.get("/reports/{id}", response_class=HTMLResponse)
+async def id_reports(request: Request, id: str):
+    report = {"reportId":"a7afc633-b26c-486e-9de4-618d59551843","diseases":["poliomyelitis"],"syndromes":[],"eventDate":"2022-02-17T00:00:00.000Z","locations":["Malawi"]}
+    return templates.TemplateResponse("entry_report.html", {"request": request, "id": id, 'report' : report})
+
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
 async def id_articles(request: Request, id: str):
-    # TODO: 
-    # pip freeze > requirements.txt
-    # get the ['url'] form the data
-    # scrape the url
-    #   installing selenium in project foler
-    # pull relevant data (body of text)
-    # integrate it into entry_article.html
-    # match index.html style if time permits
-    # (use styles.css (font-size if necessary))
-
-    print("========================== Entering articles/id ==========================")
-    f = open("articles.json")
-    data = json.load(f)['articles']
-    length = len(data)
-
-    # return 'no articles found if greater than num of articles"
-    if int(id) > length or int(id) < 0:
-        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
-        
-    report = data[int(id)]
-    print("========================== JSON Dump ==========================")
-    print(json.dumps(report, indent=4))
-    url = "empty"
-    print("========================== Searching JSON ==========================")
-    for x in report:
-        if (x == "url"):
-            print("... url found.")
-            url = report[x]
-            print("... url saved.")
-
-    print(url)
-    if url == "empty":
-        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
-    else:
-        print("\n"+"<SCRAPING BEGINS>")
-        # scrape url.
-        option = webdriver.ChromeOptions()
-        option.add_argument(" — incognito")
-        s = Service('C:/Users/sbass/Downloads/chromedriver_win32/chromedriver')
-        browser = webdriver.Chrome(service=s)
-        browser.get(url)
-        # browser.maximize_window()
-
-        timeout = 20
-        try:
-            WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='sf-item-header-wrapper']")))
-        except TimeoutException:
-            print("Timed out waiting for page to load")
-            browser.quit()
-
-        title_object = browser.find_element(By.XPATH, "//div[@class='sf-item-header-wrapper']/h1")
-        title = title_object.text
-        content_object = browser.find_element(By.XPATH, "//article[@class='sf-detail-body-wrapper']")
-        content = content_object.text
-        subheadings = browser.find_elements(By.XPATH, "//article[@class='sf-detail-body-wrapper']/h3")
-        content_divs = browser.find_elements(By.XPATH, "//article[@class='sf-detail-body-wrapper']/div")
-
-        print("\n"+"========================== Printing Content from URL ==========================")
-        print(content)
-
-        print("\n"+"========================== Subheadings ==========================")
-        subheadings_list = []
-        subheadings_list.append(title)
-        for s in subheadings:
-            subheadings_list.append(s.text)
-        # print(subheadings_list)
-
-        print("\n"+"========================== Content Divided ==========================")
-        content_subparts = []
-        for c in content_divs:
-            content_subparts.append(c.text)
-        # print(content_subparts)
-
-        # set up JSON by creating dict.
-        res = []
-        for i in range(len(subheadings_list) - 1):
-            tmp = dict.fromkeys(['heading', 'content'])
-            tmp['heading'] = subheadings_list[i]
-            tmp['content'] = content_subparts[i]
-            # print(tmp)
-            res.append(tmp)
-        print(res)
-        
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, "list" : res})
-
-
-# import re
-# 
-# option = webdriver.ChromeOptions()
-# option.add_argument(" — incognito")
-# 
-# s = Service('C:/Users/sbass/Downloads/chromedriver_win32/chromedriver')
-# 
-# browser = webdriver.Chrome(service=s)
-# browser.get("https://promedmail.org/promed-posts/")
-# browser.maximize_window()
-# 
-# Wait 20 seconds for page to load
-# timeout = 20
-# try:
-#     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='main_inner_box']")))
-# except TimeoutException:
-#     print("Timed out waiting for page to load")
-#     browser.quit()
-
-# page = browser.find_element(By.XPATH, "//div[@class='boxes']")
-# print(page.text)
-
-# browser.find_element(By.XPATH, "//input[@class='lg_textbox']").send_keys("Zika")
-# search_box = browser.find_element(By.XPATH, "//div[@id='searchby_other']/input[@value='Search']")
-# search_box.click()
-
-# search_button = browser.find_element(By.XPATH, "//input[@name='submit' and @type='submit' and @value='Search']")
-# search_button.submit()
+    article = {"articleId":"a4fd819e-2f69-490e-b1f3-4b479e425c84","url":"https://www.who.int/emergencies/disease-outbreak-news/item/wild-poliovirus-type-1-(WPV1)-malawi","dateOfPublication":"3 March 2022","headline":"Wild poliovirus type 1 (WPV1) - Malawi","reports":[{"reportId":"a7afc633-b26c-486e-9de4-618d59551843","diseases":["poliomyelitis"],"syndromes":[],"eventDate":"2022-02-17T00:00:00.000Z","locations":["Malawi"]}]}
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : article})
 
 @app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
 def list_all_articles_with_params(
