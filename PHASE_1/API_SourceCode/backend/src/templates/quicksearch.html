@@ -1,60 +1,96 @@
-<html>
-    <head>
-        <title>Item Details</title>
-        <link href="css/styles.css" rel="stylesheet">
-    </head>
-    <body>
-        <div>
-            <h3><a href='/'>Back to main page</a></h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Create a stylish landing page for your business startup and get leads for the offered services with this HTML landing page template.">
+    <meta name="author" content="Inovatik">
+
+    <!-- OG Meta Tags to improve the way the post looks when you share the page on LinkedIn, Facebook, Google+ -->
+	<meta property="og:site_name" content="" /> <!-- website name -->
+	<meta property="og:site" content="" /> <!-- website link -->
+	<meta property="og:title" content=""/> <!-- title shown in the actual shared post -->
+	<meta property="og:description" content="" /> <!-- description shown in the actual shared post -->
+	<meta property="og:image" content="" /> <!-- image link, make sure it's jpg -->
+	<meta property="og:url" content="" /> <!-- where do you want your post to link to -->
+	<meta property="og:type" content="article" />
+
+    <!-- Website Title -->
+    <title>Evolo - StartUp HTML Landing Page Template</title>
+    
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,600,700,700i&amp;subset=latin-ext" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/fontawesome-all.css" rel="stylesheet">
+    <link href="css/swiper.css" rel="stylesheet">
+	<link href="css/magnific-popup.css" rel="stylesheet">
+	<link href="css/styles.css" rel="stylesheet">
+	
+	<!-- Favicon  -->
+    <link rel="icon" href="images/favicon.png">
+</head>
+<body data-spy="scroll" data-target=".fixed-top">
+    
+    <!-- Preloader -->
+	<!-- <div class="spinner-wrapper">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
         </div>
-        <h1>Search for results for quicksearch</h1>
-        <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
-        <input id="diseaseInput" type="text" name="disease" placeholder="Disease" value={{disease}}>
-        <input type="datetime-local" id="start_date" name="start_date"
-           min="2000-01-01" max="2024-12-31" value={{start_date}}>
-        <input type="datetime-local" id="end_date" name="end_date"
-           min="2000-01-01" max="2024-12-31" value={{end_date}}>
-        <input type="text" name="key_terms" value={{key_terms}}>
-        <table>
-            <thead>
-                <th>Headline</th>
-                <th>Date of publication</th>
-                <th>Article id</th>
-                <th>url</th>
-            </thead>
-            <tbody>
-                
-                {% for qs in searches %}
-                    <tr>
-                        <td> {{ qs.headline }} </td>
-                        <td> {{ qs.dateOfPublication }} </td>
-                        <td> {{ qs.articleId }} </td>
-                        <td> {{ qs.url }} </td>
-                    </tr>
-                {% endfor %}
-                
-                <!-- potential sample data for demonstration 
-                <tr>
-                    <td>Covid in Sydney</td>
-                    <td>10/4/2020</td>
-                    <td>1</td>
-                    <td>www.smh.com</td>
-                </tr>
-                <tr>
-                    <td>Covid runs rampant</td>
-                    <td>20/4/2020</td>
-                    <td>2</td>
-                    <td>www.smh.com</td>
-                </tr>
-            
-                <div>
-                    <h3><a href='/search'>go to search</a></h3>
-                </div>
-                -->
-            </tbody>
-        </table>
-        <div>
-            <h3><a href='/search'>go to search</a></h3>
+    </div> -->
+    <!-- end of preloader -->
+    
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+        <!-- Text Logo - Use this if you don't have a graphic logo -->
+        <a class="navbar-brand logo-text page-scroll" href="index.html">Epidemic Eagle</a>
+
+        <!-- Image Logo -->
+        <!-- <a class="navbar-brand logo-image" href="index.html"><img src="images/logo.svg" alt="alternative"></a> -->
+        
+        <!-- Mobile Menu Toggle Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-awesome fas fa-bars"></span>
+            <span class="navbar-toggler-awesome fas fa-times"></span>
+        </button>
+        <!-- end of mobile menu toggle button -->
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link page-scroll" href="#header">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
         </div>
-    </body>
+    </nav> <!-- end of navbar -->
+    <!-- end of navigation -->
+
+
+    <!-- Header -->
+    <header id="header" class="header">
+        <div class="header-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="text-container">
+                            <h1><span class="turquoise">Search and find</span> disease information early, before it spreads.</h1>
+                            <p class="p-large">Find accurate and specific information from highly recommended sources and websites</p>
+                            <a class="btn-solid-lg page-scroll" href="#services">START</a>
+                        </div> <!-- end of text-container -->
+                    </div> <!-- end of col -->
+                    <div class="col-lg-6">
+                        <div class="image-container">
+                            <img class="img-fluid" src="images/header-teamwork.svg" alt="alternative">
+                        </div> <!-- end of image-container -->
+                    </div> <!-- end of col -->
+                </div> <!-- end of row -->
+            </div> <!-- end of container -->
+        </div> <!-- end of header-content -->
+    </header> <!-- end of header -->
+    <!-- end of header -->
+</body>
 </html>
