@@ -5,12 +5,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,600,700,700i&amp;subset=latin-ext" rel="stylesheet">
-  <link href="css/bootstrap.css" rel="stylesheet">
-  <link href="css/fontawesome-all.css" rel="stylesheet">
-  <link href="css/swiper.css" rel="stylesheet">
-<link href="css/magnific-popup.css" rel="stylesheet">
-<link href="css/styles.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <style>
@@ -23,14 +17,15 @@
 <div class="container">
     <h4>Inline Form</h4>
     <br>
-  <form class="form-inline" action="/search" method="post">
-    <input id="countryInput" type="text" name="location" placeholder="Country" required>
-    <input id="diseaseInput" type="text" name="disease" placeholder="Disease" required>
+  <form class="form-inline" action="/action_page.php">
+    <input id="countryInput" type="text" name="location" placeholder="Country">
+    <input id="diseaseInput" type="text" name="disease" placeholder="Disease">
     <input type="datetime-local" id="start_date" name="start_date">
     <input type="datetime-local" id="end_date" name="end_date">
     <input type="text" name="key_terms" value="">
     <input type="text" name="page_number" value="1">
-    <input type="submit">
+    <button type="button" class="btn btn-danger">Login</button>
+    <button type="button" class="btn btn-secondary">Register</button>
 
   </form>
               

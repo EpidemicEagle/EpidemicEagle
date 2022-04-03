@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request, Body, Form
 from fastapi.openapi.utils import get_openapi
 from typing import List,Optional, Union
@@ -107,7 +107,7 @@ def form_post(request: Request, num: int = Form(...)):
 # unify index calls
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("main.html", {"request": request})
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/index.html", response_class=HTMLResponse)
 async def index(request: Request):
@@ -128,6 +128,54 @@ def parse_report_info(keyword, article):
     return set([_ for _ in [_[keyword] for _ in article['reports']] for _ in _])
 
 # search post
+@app.get("/qsearch", response_class=HTMLResponse)
+async def q(request: Request):
+    return templates.TemplateResponse("qsearch.html", {"request": request})
+
+
+# search post
+@app.post("/qsearch", response_class=HTMLResponse)
+async def q(request: Request,
+    location: Optional[str] = Form(...),
+):
+    f = open('sample_file.json')
+    data= json.load(f)['articles']
+    f.close()
+    searches = []
+    count = 0
+    start_date = datetime.now() - timedelta(days=90)
+    end_date = datetime.now()
+
+    # average time is 3000 ms (3 seconds)
+    for article in data:
+        if count == 10:
+            break
+        # exclude and pagination
+        date = datetime.strptime(article['dateOfPublication'], '%d %B %Y')
+
+        if start_date < date and date < end_date:
+            locations = parse_report_info('locations', article)
+            if location in locations:
+                searches.append(article)
+                count += 1
+        count += 1
+    
+        
+    print(searches)
+
+    return templates.TemplateResponse("qsearch.html", 
+    {
+        "location": location,
+        "start_date": start_date,
+        "end_date": end_date,
+        "request": request,
+        "searches": searches,
+    }
+    )
+
+
+
+# search post
 @app.post("/search", response_class=HTMLResponse)
 async def search_post(request: Request,
     key_terms: str = Form(...),
@@ -141,7 +189,7 @@ async def search_post(request: Request,
     # test location
 
 
-    f = open('articles.json')
+    f = open('sample_file.json')
     data= json.load(f)['articles']
     f.close()
     searches = []
@@ -194,7 +242,7 @@ async def quicksearch_post(request: Request,
     end_date: datetime = Form(...),
     # page_number: Optional[int] = None  
 ):
-    f = open('articles.json')
+    f = open('sample_file.json')
     data= json.load(f)['articles']
     f.close()
     searches = []
