@@ -8,5 +8,33 @@
             <h3><a href='/'>Back to main page</a></h3>
         </div>
         <h1>Search for reports</h1>
+        {% if reports %}
+        <table class="styled-table">
+            <thead>
+                <th>Disease</th>
+                <th>Syndrome</th> 
+                <th>Date</th>
+                <th>Location</th>
+            </thead>
+            <tbody>
+                
+                {% for report in reports %}
+                    <tr>
+                      <!--
+                        <td>
+                        <a href="/articles/{{ qs.articleId }}">
+                          {{ report.reportId }}
+                        </a>
+                      </td>
+                      -->
+                      <td> {{ report.disease }} </td>
+                      <td> {{ report.syndrome }} </td>
+                      <td> {{report.eventDate }} </td> 
+                      <td> {{ report.location }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     </body>
 </html>
