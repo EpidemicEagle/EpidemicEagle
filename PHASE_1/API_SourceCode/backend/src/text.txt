@@ -1,0 +1,53 @@
+
+
+From 15 October to 27 November 2021, 202 suspected cases of Yellow Fever (YF) including 70 confirmed cases and 35 deaths [Case Fatality Ratio (CFR): 17%] have been reported in four regions in Ghana (Savannah, Upper West, Bono and Oti regions). YF is endemic in Ghana and is associated with severe disease in approximately 15% of cases and a high CFR. YF cases were reported mostly from nomadic populations who had moved from Nigeria into a forest reserve in Ghana’s Savannah region which is visited by tourists. The region shares porous borders with Cote d’lvoire and Burkina Faso, highlighting the potential for spread outside of Ghana. The cases, age ranging from 4 months to 70 years, presented with symptoms of body pain, fever, abdominal pain, vomiting, jaundice and bleeding from the gums. Females accounted for 52% (105/202) of the cases. A YF outbreak was confirmed after three samples tested positive for YF by PCR (negative for Ebola virus disease, dengue and other viral hemorrhagic fevers) at Institute Pasteur Dakar in Senegal, the regional reference laboratory. As of 27 November, 70 out of 196 samples collected have tested positive for YF by IgM and/or polymerase chain reaction (PCR), and results are pending for 68 samples. Plaque reduction neutralization testing was positive in 5 samples at the regional reference laboratory.
+
+Although there is high overall population immunity against YF in Ghana (88% in 2020 according to WHO-UNICEF estimates), pockets of the population, including unvaccinated nomadic people, remain at risk for YF which could result in continued YF transmission. The current outbreak investigation found settlements of newcomer populations who had arrived after the last mass campaign and were largely unvaccinated.
+Public health response
+
+Surveillance and laboratory
+
+    Ghana Health Services has been following the regional algorithm for testing of suspected YF cases, by sending samples that test positive in-country to the regional reference laboratory for confirmation. Laboratory testing of suspected cases has been accelerated in Ghana.
+    Field investigations were conducted to determine the vaccination status, exposure history and identification of contacts of suspected YF cases that tested positive in the national laboratory.
+    Health care workers in the affected regions have been trained on YF, particularly on the importance of reporting, how to investigate suspected cases, and how to clinically manage them.
+    Health care facilities in affected regions have used the standardized case definition to enhance passive surveillance within health care facilities and community-based surveillance. Enhanced surveillance has facilitated the identification of suspected cases. 
+
+Vaccination
+
+    Since 6 November 2021, a focused vaccination activity targeting 54 964 people aged 6 months to 60 years (excluding pregnant women) is being conducted in over 80 communities in West and North Gonja districts, Savannah region.
+
+    The International Coordinating Group on Vaccine Provision for Yellow Fever (ICG), which oversees the global emergency stockpile for YF outbreak response, has approved a larger scale vaccination campaign targeting 361 165 people (9 months - 60 years) in five affected districts.
+    A catch-up vaccination campaign of unvaccinated individuals is also being organized as part of routine immunization strengthening. 
+
+Vector Control
+
+    Strengthening of vector control activities against mosquito larvae is ongoing.
+
+Risk communication
+
+    Risk communication and community engagement to inform the public about YF transmission and prevention are ongoing. Various platforms are leveraged, including town criers, mobile vans, trusted community members, and church and mosque announcements.
+    WHO is alerting all states in Ghana and supporting the strengthening of surveillance at points of entry.
+
+WHO risk assessment
+
+The overall risk of YF from this event at the national, regional and global levels are assessed as moderate, moderate and low, respectively. YF is an acute viral disease transmitted by infected mosquitoes (including Aedes spp. and Haemogogus spp.). A subset of people who become infected with YF experience severe symptoms. Approximately 15% of the cases enter the second toxic phase within 24 hours of the initial remission. The second toxic phase may be characterized by fever, jaundice, with or without abdominal pain, vomiting haemorrhage and kidney failure. Of these, 20-50% die within 10 to 14 days. Vaccination offers lifelong immunity and is considered to be the most important means of preventing YF, while other strategies such as vector control are complementary. There is no specific treatment for YF, and cases receive supportive care for complications such as dehydration, renal failure and fever.
+
+The national risk was assessed as moderate due to the following reasons:
+
+    Suboptimal vaccination coverage in some nomadic settlements could result in continued transmission;
+
+    The outbreak is marked by predominantly affecting communities of nomadic settlers, a mobile and migratory population who may be unvaccinated, or move from areas with low population immunity and YF transmission;
+
+    Large portions of affected districts are in the forest reserve, and some of the affected communities are located on the fringes of the Mole National Park where there is a presence of animals including non-human primates, the primary wild hosts of YF virus, and Aedes mosquitos, the vector for YF in Africa. These hosts and vectors are involved in the savannah transmission cycle that connects the sylvatic and urban cycles of humans and monkeys; and
+    The COVID-19 pandemic may impact response activities for YF.
+
+The regional risk was assessed as moderate due to the favorable ecosystem in the neighboring countries and porous borders. The global risk was assessed as low, however, the Mole National Park which is located in both North and West Gonja Districts is visited by tourists, therefore there could be a risk of exportation of the virus.
+WHO advice
+
+Ghana is a high priority country for the Eliminate Yellow Fever Epidemic (EYE) strategy. Vaccination is the primary means for prevention and control of YF. In 1992, the Government of Ghana introduced YF vaccine into the routine immunization programme for children at 9 months as part of the national YF control and elimination programme. In urban centers, targeted vector control measures are also helpful to interrupt transmission. WHO and partners will continue to support local authorities to implement these interventions to control the current outbreak.
+
+WHO recommends vaccination against YF for all international travellers to Ghana, aged 9 months or older. YF vaccination is safe, highly effective and provides life-long protection. In accordance with the International Health Regulations (2005), the validity of the international certificate of vaccination against YF extends to the life of the person vaccinated. A booster dose of YF vaccine cannot be required for international travellers as a condition of entry.
+
+WHO encourages its Member States to take all actions necessary to keep travellers well informed of risks and preventive measures including vaccination. Travellers should also be made aware of YF signs and symptoms, and instructed to promptly seek medical advice when presenting signs. Returning travellers who are viraemic may pose a risk for establishing local transmission cycles of YF where the competent vector is present.
+
+WHO does not recommend any restrictions on travel and trade to Ghana in relation to this event, based on available information.
