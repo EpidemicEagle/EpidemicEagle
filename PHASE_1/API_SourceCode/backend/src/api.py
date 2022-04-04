@@ -1,13 +1,11 @@
 from datetime import datetime, timedelta
-from fastapi import FastAPI, HTTPException, Query, Path, Depends, Request, Body, Form
+from fastapi import FastAPI, HTTPException, Query, Request, Form
 from fastapi.openapi.utils import get_openapi
-from typing import List,Optional, Union
+from typing import List,Optional
 from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import requests
-from dateutil import parser
 import json
 app = FastAPI(openapi_url="/api/v1/openapi.json")
 # add stylesheet
@@ -286,17 +284,16 @@ async def search_post(request: Request,
 
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
-async def id_articles(request: Request, id: str):
-    f = open("articles.json")
-    data = json.load(f)['articles']
-    length = len(data)
+async def id_articles(request: Request, id):
+    # f = open("articles.json")
+    # data = json.load(f)['articles']
+    # length = len(data)
 
     # return 'no articles found if greater than num of articles"
-    if int(id) > length or int(id) < 0:
-        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
-        
-    report = data[int(id)]    
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report})
+    # if int(id) > length or int(id) < 0:
+    #     return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
+    # report = data[int(id)]    
+    return templates.TemplateResponse("entry.html", {"request": request, "id": id})
 
 ## API functions
 
