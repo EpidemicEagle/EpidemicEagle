@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Item Details</title>
+        <link href="css/fontawesome-all.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet">
       <style>
 
@@ -9,7 +10,7 @@
       border-collapse: collapse;
       margin: 25px 0;
       font-size: 0.9em;
-      font-family: sans-serif;
+      font-family: "Raleway", sans-serif;
       min-width: 400px;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
       }
@@ -44,15 +45,15 @@
     </head>
     <body>
         <div>
-            <h3><a href='/'>Back to main page</a></h3>
+            <h3><a class="btn-solid-lg page-scroll" href='index.html'>BACK TO MAIN PAGE</a></h3>
         </div>
-        <h1>Search results</h1>
+        <h1><span class="turquoise">Search results</span></h1>
         <form class="form-inline" action="/qsearch" method="post">
           <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
           <input type="submit">
         </form>
 
-        {% if searches %}
+        <!--{% if searches %} -->
         <table class="styled-table">
             <thead>
                 <th>Headline</th>
@@ -62,7 +63,7 @@
             </thead>
             <tbody>
                 
-                {% for qs in searches %}
+                <!--{% for qs in searches %} -->
                     <tr>
                       <td>
                         <a href="/articles/{{ qs.articleId }}">
@@ -77,9 +78,9 @@
                         </a>
                       </td>
                     </tr>
-                {% endfor %}
+                <!-- {% endfor %}
                 
-                <!-- potential sample data for demonstration 
+                 potential sample data for demonstration 
                 <tr>
                     <td>Covid in Sydney</td>
                     <td>10/4/2020</td>
@@ -99,9 +100,9 @@
                 -->
             </tbody>
         </table>
-        {% endif %}
+        <!--{% endif %}-->
         <div>
-            <h3><a href='/search'>go to search</a></h3>
+            <h3><a class="btn-solid-lg page-scroll" href='/search'>GO TO SEARCH</a></h3>
         </div>
     </body>
 </html>
