@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import json
+
 app = FastAPI(openapi_url="/api/v1/openapi.json")
 # add stylesheet
 app.mount("/css", StaticFiles(directory="templates/css"), name="css")
