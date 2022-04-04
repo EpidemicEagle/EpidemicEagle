@@ -25,7 +25,6 @@
   font-family: "Raleway", sans-serif;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  padding-left: 20px;
   }
 
   .styled-table thead tr {
@@ -57,47 +56,42 @@
 </style>
 </head>
 <body>
-  <!-- Header -->
-  <div class="shadow header" style="height: 240px;">
+    <!-- Header -->
+    <div class="shadow header" style="height: 240px;">
     <div style="padding-left: 1.5em;">
-      <a class="navbar-brand logo-image" href="index.html" style="padding-left: 20px;"><img src="images/crop_logo.svg" alt="alternative" style="width:150px;height:150px;"></a>
-      <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
+        <a class="navbar-brand logo-image" href="index.html" style="padding-left: 20px;"><img src="images/crop_logo.svg" alt="alternative" style="width:150px;height:150px;"></a>
+        <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
     </div>
-  </div>
-  <h1>Quick Search</h1>
-  <form class="form-inline" action="/qsearch" method="post">
-    <label for="countryInput">Enter a Country</label>
-    <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
-    <input type="submit">
-  </form>
-  {% if searches %}
-  <h1 class="mx-auto" style="color:red;padding-left: 1.5em;">Found reports for {{location}}!!!</h1>
-  <h3 style="padding-left: 1.5em;">Epidemic Eagle suggests to reschedule this location for at least 90 days later.</h3>
-  <div class="mx-auto" style="padding-left: 20px;">
+    </div>
+    <h1>Report Search</h1>
+    <form class="form-inline" action="/reports" method="post">
+        <input id="countryInput" type="text" name="location" placeholder="Country" required>
+        <input id="diseaseInput" type="text" name="disease" placeholder="Disease" required>
+        <input type="datetime-local" id="start_date" name="start_date">
+        <input type="datetime-local" id="end_date" name="end_date">
+        <input type="submit">
+    </form>
+    {% if reports %}
+    <h1>Search results</h1>
     <table class="styled-table">
         <thead>
-            <th>Headline</th>
-            <th>Date of publication</th>
-            <th>URL</th>
+            <th>Diseases</th>
+            <th>Syndromes</th> 
+            <th>Date</th>
+            <th>Locations</th>
         </thead>
         <tbody>
-          {% for qs in searches %}
-          <tr>
-            <td> {{ qs.headline }} </td>
-            <td> {{ qs.dateOfPublication }} </td>
-            <td>
-              <a href="{{ qs.url }}">
-                {{ qs.url }}
-              </a>
-            </td>
-          </tr>
-          {% endfor %}
+            
+            {% for report in reports %}
+                <tr>
+                    <td> {{ report.l_diseases }} </td>
+                    <td> {{ report.syndrome }} </td>
+                    <td> {{report.eventDate }} </td> 
+                    <td> {{ report.l_locations }} </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-  </div>
-  {% elif location %}
-  <h1 class="mx-auto" style="color:#5cb25d;padding-left: 1em;">No reports for {{location}}.</h1>
-  <h3 style="padding-left: 1em;">Epidemic Eagle suggests to enjoy your trip.</h3>
-  {% endif %}
+    {% endif %}
 </body>
 </html>

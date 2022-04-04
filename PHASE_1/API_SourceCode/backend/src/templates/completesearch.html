@@ -1,0 +1,106 @@
+<html>
+<head>
+  <link href="css/fontawesome-all.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">    
+  <!-- Website Title -->
+  <title>Epidemic Eagle</title>
+  
+  <!-- Styles -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,600,700,700i&amp;subset=latin-ext" rel="stylesheet">
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <link href="css/fontawesome-all.css" rel="stylesheet">
+  <link href="css/swiper.css" rel="stylesheet">
+  <link href="css/magnific-popup.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
+  
+  <!-- Favicon  -->
+  <link rel="icon" href="images/favicon.png">
+<style>
+  /* https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */
+  .styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .styled-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  }
+  .styled-table th,
+  .styled-table td {
+  padding: 12px 15px;
+  }
+  .styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  }
+
+  .styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+  }
+
+  .styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+  }
+  .styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+  }
+</style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="shadow header" style="height: 240px;">
+    <div style="padding-left: 1.5em;">
+      <a class="navbar-brand logo-image" href="index.html" style="padding-left: 20px;"><img src="images/crop_logo.svg" alt="alternative" style="width:150px;height:150px;"></a>
+      <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
+    </div>
+  </div>
+  <h1>Article Search</h1>
+  <form class="form-inline" action="/completesearch" method="post">
+  <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
+  <input id="diseaseInput" type="text" name="disease" placeholder="Disease" value={{disease}}>
+  <input type="datetime-local" id="start_date" name="start_date"
+      min="2000-01-01" max="2024-12-31" value={{start_date}}>
+  <input type="datetime-local" id="end_date" name="end_date"
+      min="2000-01-01" max="2024-12-31" value={{end_date}}>
+  <input type="text" name="key_terms" value={{key_terms}}>
+  <input type="submit">
+</form>
+  {% if searches %}
+    <div class="mx-auto" style="padding-left: 20px;">
+    <table class="styled-table">
+        <thead>
+            <th>Headline</th>
+            <th>Date of publication</th>
+            <th>Article id</th>
+            <th>url</th>
+        </thead>
+        <tbody>
+            
+            {% for qs in searches %}
+                <tr>
+                  <td>
+                    <a href="/articles/{{ qs.articleId }}">
+                      {{ qs.articleId }}
+                    </a>
+                  </td>
+                  <td> {{ qs.headline }} </td>
+                  <td> {{ qs.dateOfPublication }} </td>
+                  <td>
+                    <a href="{{ qs.url }}">
+                      {{ qs.url }}
+                    </a>
+                  </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+  {% endif %}
+  </body>
+</html>
