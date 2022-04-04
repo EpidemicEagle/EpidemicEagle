@@ -91,6 +91,11 @@ responses = {
     404: {"description": "Item not found"}
 }
 
+################################
+#
+# FAKE FUNCTIONS
+#
+################################
 
 @app.get("/form")
 def form_post(request: Request):
@@ -103,6 +108,18 @@ def form_post(request: Request, num: int = Form(...)):
     return templates.TemplateResponse('form.html', context={'request': request, 'result': num})
 
 
+@app.get("/dummy", response_class=HTMLResponse)
+async def get(request: Request):
+    return templates.TemplateResponse("dummy.html", {"request": request})
+
+################################
+#
+# REAL FUNCTIONS
+#
+################################
+
+def parse_report_info(keyword, article):
+    return set([_ for _ in [_[keyword] for _ in article['reports']] for _ in _])
 
 # unify index calls
 @app.get("/", response_class=HTMLResponse)
@@ -113,27 +130,13 @@ async def index(request: Request):
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-
-@app.get("/dummy", response_class=HTMLResponse)
-async def get(request: Request):
-    return templates.TemplateResponse("dummy.html", {"request": request})
-
-
-# search get
-@app.get("/search", response_class=HTMLResponse)
-async def search(request: Request):
-    return templates.TemplateResponse("dummy.html", {"request": request})
-
-def parse_report_info(keyword, article):
-    return set([_ for _ in [_[keyword] for _ in article['reports']] for _ in _])
-
-# search post
+# QUICK SEARCH
+# qsearch search box
 @app.get("/qsearch", response_class=HTMLResponse)
 async def q(request: Request):
     return templates.TemplateResponse("qsearch.html", {"request": request})
 
-
-# search post
+# qsearch table
 @app.post("/qsearch", response_class=HTMLResponse)
 async def q(request: Request,
     location: Optional[str] = Form(...),
@@ -173,10 +176,51 @@ async def q(request: Request,
     }
     )
 
+# REPORT SEARCH
+# reports get
+@app.get("/reports", response_class=HTMLResponse)
+async def reports(request: Request):
+    return templates.TemplateResponse("reports_get.html", {"request": request})
 
+# reports post
+@app.post("/reports", response_class=HTMLResponse)
+async def reports_post(request: Request,
+    key_terms: str,
+    location: str,
+    start_date: str = Query(..., regex=date_exact),
+    end_date: str = Query(..., regex=date_exact),
+    page_number: Optional[int] = None  
+):
+
+    f = open('reports.json')
+    data= json.load(f)
+    l = []
+    for i in range(10):
+        # print(data["articles"][i])
+        l.append(data['reports'][i])
+    f.close()
+
+    return templates.TemplateResponse("reports_post.html", 
+    {
+        "key_terms": key_terms,
+        "location": location,
+        "start_date": start_date,
+        "end_date": end_date,
+        "page_number": page_number,
+        "request": request,
+        "l": l
+    }
+    )
+
+
+# COMPLETE SEARCH
+# search get
+@app.get("/completesearch", response_class=HTMLResponse)
+async def search(request: Request):
+    return templates.TemplateResponse("dummy.html", {"request": request})
 
 # search post
-@app.post("/search", response_class=HTMLResponse)
+@app.post("/completesearch", response_class=HTMLResponse)
 async def search_post(request: Request,
     key_terms: str = Form(...),
     disease: str = Form(...),
@@ -228,86 +272,12 @@ async def search_post(request: Request,
     }
     )
 
-#qsearch get
-@app.get("/quicksearch", response_class=HTMLResponse)
-async def quicksearch(request: Request):
-    return templates.TemplateResponse("quicksearch.html", {"request": request})
-
-#qsearch post
-@app.post("/quicksearch", response_class=HTMLResponse)
-async def quicksearch_post(request: Request,
-    # key_terms: str,
-    # location: str,
-    start_date: datetime = Form(...),
-    end_date: datetime = Form(...),
-    # page_number: Optional[int] = None  
-):
-    f = open('sample_file.json')
-    data= json.load(f)['articles']
-    f.close()
-    searches = []
-    count = 0
-    for article in data:
-        if count == 10:
-            break
-        # exclude and pagination
-        searches.append(article)
-        count += 1
-
-    print(searches)
-
-    return templates.TemplateResponse("quicksearch_post.html", 
-    {
-        # "key_terms": key_terms,
-        # "location": location,
-        "start_date": start_date,
-        "end_date": end_date,
-        # "page_number": page_number,
-        "request": request,
-        "searches": searches
-    }
-    )
-
-# reports get
-@app.get("/reports", response_class=HTMLResponse)
-async def reports(request: Request):
-    return templates.TemplateResponse("reports_get.html", {"request": request})
-
-# reports post
-@app.post("/reports", response_class=HTMLResponse)
-async def reports_post(request: Request,
-    key_terms: str,
-    location: str,
-    start_date: str = Query(..., regex=date_exact),
-    end_date: str = Query(..., regex=date_exact),
-    page_number: Optional[int] = None  
-):
-
-    f = open('reports.json')
-    data= json.load(f)
-    l = []
-    for i in range(10):
-        # print(data["articles"][i])
-        l.append(data['reports'][i])
-    f.close()
-
-    return templates.TemplateResponse("reports_post.html", 
-    {
-        "key_terms": key_terms,
-        "location": location,
-        "start_date": start_date,
-        "end_date": end_date,
-        "page_number": page_number,
-        "request": request,
-        "l": l
-    }
-    )
-
-
-# srticles get
+# articles get 
 @app.get("/articles", response_class=HTMLResponse)
 async def articles(request: Request):
     return templates.TemplateResponse("articles_get.html", {"request": request})
+
+
 
 
 # articles id get
@@ -334,6 +304,7 @@ async def id_articles(request: Request, id: str):
 
     return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report})
 
+## API functions
 
 @app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
 def list_all_articles_with_params(
@@ -412,7 +383,6 @@ def finds_report_by_id(report_id : int):
                     locations=[]
                 )
 
-
 @app.get("/api/v1/search", response_model=ListSearchResult, tags=["api"])
 def list_reports(
     key_terms: str,
@@ -447,7 +417,6 @@ def list_reports(
         "num_pages": 1,
         "page_number": 1
     } 
-
 
 def custom_openapi():
     """Boilerplate to return swagger on /doc and prettySwagger on /redoc
