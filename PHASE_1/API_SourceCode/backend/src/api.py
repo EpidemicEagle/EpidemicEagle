@@ -271,7 +271,7 @@ async def search_post(request: Request,
         
     # print(searches)
 
-    return templates.TemplateResponse("quicksearch.html", 
+    return templates.TemplateResponse("completesearch.html", 
     {
         "key_terms": key_terms,
         "disease": disease,
