@@ -193,22 +193,27 @@ async def reports_post(request: Request,
 ):
 
     f = open('reports.json')
-    data= json.load(f)
-    l = []
-    for i in range(10):
-        # print(data["articles"][i])
-        l.append(data['reports'][i])
+    data = json.load(f)['reports']
     f.close()
+    reports = []
+    count = 0
+    for report in data:
+        
+        date = datetime.strptime(report['eventDate'], '%d %B %Y')
+        # do easy comparision before hard comparision
+        if start_date < date and date < end_date:
+            if location in report['locations']:
+                
+                reports.append(data['reports'][i])
+    
 
     return templates.TemplateResponse("reports_post.html", 
     {
-        "key_terms": key_terms,
-        "location": location,
         "start_date": start_date,
         "end_date": end_date,
         "page_number": page_number,
         "request": request,
-        "l": l
+        "reports": reports,
     }
     )
 
