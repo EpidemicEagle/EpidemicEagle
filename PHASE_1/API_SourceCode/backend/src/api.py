@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
+from dateutil import parser
 import json
 app = FastAPI(openapi_url="/api/v1/openapi.json")
 # add stylesheet
@@ -91,18 +92,24 @@ responses = {
     404: {"description": "Item not found"}
 }
 
+################################
+#
+# FAKE FUNCTIONS
+#
+################################
 
-@app.get("/form")
-def form_post(request: Request):
-    result = "Type a number"
-    return templates.TemplateResponse('form.html', context={'request': request, 'result': result})
+@app.get("/dummy", response_class=HTMLResponse)
+async def get(request: Request):
+    return templates.TemplateResponse("completesearch.html", {"request": request})
 
+################################
+#
+# REAL FUNCTIONS
+#
+################################
 
-@app.post("/form")
-def form_post(request: Request, num: int = Form(...)):
-    return templates.TemplateResponse('form.html', context={'request': request, 'result': num})
-
-
+def parse_report_info(keyword, article):
+    return set([_ for _ in [_[keyword] for _ in article['reports']] for _ in _])
 
 # unify index calls
 @app.get("/", response_class=HTMLResponse)
@@ -113,27 +120,13 @@ async def index(request: Request):
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-
-@app.get("/dummy", response_class=HTMLResponse)
-async def get(request: Request):
-    return templates.TemplateResponse("dummy.html", {"request": request})
-
-
-# search get
-@app.get("/search", response_class=HTMLResponse)
-async def search(request: Request):
-    return templates.TemplateResponse("dummy.html", {"request": request})
-
-def parse_report_info(keyword, article):
-    return set([_ for _ in [_[keyword] for _ in article['reports']] for _ in _])
-
-# search post
+# QUICK SEARCH
+# qsearch search box
 @app.get("/qsearch", response_class=HTMLResponse)
 async def q(request: Request):
     return templates.TemplateResponse("qsearch.html", {"request": request})
 
-
-# search post
+# qsearch table
 @app.post("/qsearch", response_class=HTMLResponse)
 async def q(request: Request,
     location: Optional[str] = Form(...),
@@ -173,10 +166,73 @@ async def q(request: Request,
     }
     )
 
+# REPORT SEARCH
+# reports get
+@app.get("/reports", response_class=HTMLResponse)
+async def reports(request: Request):
+    return templates.TemplateResponse("reports.html", {"request": request})
 
+# reports post
+@app.post("/reports", response_class=HTMLResponse)
+async def reports(request: Request,
+    location: str = Form(...),
+    disease: str = Form(...),
+    start_date: datetime = Form(...),
+    end_date: datetime = Form(...),
+    # page_number: Optional[int] = None  
+):
+
+    f = open('reports_file_v2.json')
+    data = json.load(f)['reports']
+    f.close()
+    reports = []
+    count = 0
+    locations = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
+    
+    for report in data:
+        if count >= 10:
+            break
+        # check date of report
+        date = datetime.strptime(report['eventDate'], "%Y-%M-%d")
+        if start_date < date and date < end_date:
+
+            # check disease
+            if disease not in report['diseases']:
+                continue
+
+            #check each location of report
+            for replocation in report['locations']:
+                # check report location is valid and is searched location
+                if replocation in locations and replocation == location:
+                    # check key terms
+                    # if key_terms in report['diseases']:
+                    report["l_diseases"] = ", ".join(report['diseases'])
+                    report["l_locations"] = ", ".join(report['locations'])
+                    # change the report for html
+                    reports.append(report)
+                    count += 1
+                    # can stop checking report locations
+                    break
+    return templates.TemplateResponse("reports.html", 
+    {
+        "location": location,
+        "start_date": start_date,
+        "end_date": end_date,
+        # "page_number": page_number,
+        "request": request,
+        "reports": reports,
+    }
+    )
+
+
+# COMPLETE SEARCH
+# search get
+@app.get("/completesearch", response_class=HTMLResponse)
+async def search(request: Request):
+    return templates.TemplateResponse("completesearch.html", {"request": request})
 
 # search post
-@app.post("/search", response_class=HTMLResponse)
+@app.post("/completesearch", response_class=HTMLResponse)
 async def search_post(request: Request,
     key_terms: str = Form(...),
     disease: str = Form(...),
@@ -215,7 +271,7 @@ async def search_post(request: Request,
         
     # print(searches)
 
-    return templates.TemplateResponse("quicksearch.html", 
+    return templates.TemplateResponse("completesearch.html", 
     {
         "key_terms": key_terms,
         "disease": disease,
@@ -227,88 +283,6 @@ async def search_post(request: Request,
         "searches": searches
     }
     )
-
-#qsearch get
-@app.get("/quicksearch", response_class=HTMLResponse)
-async def quicksearch(request: Request):
-    return templates.TemplateResponse("quicksearch.html", {"request": request})
-
-#qsearch post
-@app.post("/quicksearch", response_class=HTMLResponse)
-async def quicksearch_post(request: Request,
-    # key_terms: str,
-    # location: str,
-    start_date: datetime = Form(...),
-    end_date: datetime = Form(...),
-    # page_number: Optional[int] = None  
-):
-    f = open('sample_file.json')
-    data= json.load(f)['articles']
-    f.close()
-    searches = []
-    count = 0
-    for article in data:
-        if count == 10:
-            break
-        # exclude and pagination
-        searches.append(article)
-        count += 1
-
-    print(searches)
-
-    return templates.TemplateResponse("quicksearch_post.html", 
-    {
-        # "key_terms": key_terms,
-        # "location": location,
-        "start_date": start_date,
-        "end_date": end_date,
-        # "page_number": page_number,
-        "request": request,
-        "searches": searches
-    }
-    )
-
-# reports get
-@app.get("/reports", response_class=HTMLResponse)
-async def reports(request: Request):
-    return templates.TemplateResponse("reports_get.html", {"request": request})
-
-# reports post
-@app.post("/reports", response_class=HTMLResponse)
-async def reports_post(request: Request,
-    key_terms: str,
-    location: str,
-    start_date: str = Query(..., regex=date_exact),
-    end_date: str = Query(..., regex=date_exact),
-    page_number: Optional[int] = None  
-):
-
-    f = open('reports.json')
-    data= json.load(f)
-    l = []
-    for i in range(10):
-        # print(data["articles"][i])
-        l.append(data['reports'][i])
-    f.close()
-
-    return templates.TemplateResponse("reports_post.html", 
-    {
-        "key_terms": key_terms,
-        "location": location,
-        "start_date": start_date,
-        "end_date": end_date,
-        "page_number": page_number,
-        "request": request,
-        "l": l
-    }
-    )
-
-
-# srticles get
-@app.get("/articles", response_class=HTMLResponse)
-async def articles(request: Request):
-    return templates.TemplateResponse("articles_get.html", {"request": request})
-
 
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)
@@ -322,18 +296,12 @@ async def id_articles(request: Request, id: str):
         return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
         
     report = data[int(id)]    
-    # TODO: 
-    # pip freeze > requirements.txt
-    # get the ['url'] form the data
-    # scrape the url
-    #   installing selenium in project foler
-    # pull relevant data (body of text)
-    # integrate it into entry_article.html
-    # match index.html style if time permits
-    # (use styles.css (font-size if necessary))
+    text = open("text.txt", 'r')
+    print(text.read())
 
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report})
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, 'text': text.read()})
 
+## API functions
 
 @app.get("/api/v1/articles", response_model=ListArticle, tags=["api"])
 def list_all_articles_with_params(
@@ -412,7 +380,6 @@ def finds_report_by_id(report_id : int):
                     locations=[]
                 )
 
-
 @app.get("/api/v1/search", response_model=ListSearchResult, tags=["api"])
 def list_reports(
     key_terms: str,
@@ -447,7 +414,6 @@ def list_reports(
         "num_pages": 1,
         "page_number": 1
     } 
-
 
 def custom_openapi():
     """Boilerplate to return swagger on /doc and prettySwagger on /redoc

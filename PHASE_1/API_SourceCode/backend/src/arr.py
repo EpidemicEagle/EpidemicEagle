@@ -1,20 +1,21 @@
 import json 
 
-f = open('articles.json')
+f = open('reports.json')
 
-js = json.load(f)['articles']
+js = json.load(f)['reports']
 
 v = 0
 r = 0
 for i in js:
-    i['articleId'] = v
-    for rp in i ['reports']:
-        rp['reportId'] = r
-        r+= 1
-    # print(i)
-    v+= 1
+    i['reportId'] = r
+    
+    # 1996-01-22T00:00:00.000Z
+    i['eventDate'] = i['eventDate'][:10]
+    r += 1
 
 
-a_file = open("sample_file.json", "w")
+
+
+a_file = open("reports_file_v2.json", "w")
 json.dump(js, a_file)
 a_file.close()
