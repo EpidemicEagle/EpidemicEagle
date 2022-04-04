@@ -98,20 +98,9 @@ responses = {
 #
 ################################
 
-@app.get("/form")
-def form_post(request: Request):
-    result = "Type a number"
-    return templates.TemplateResponse('form.html', context={'request': request, 'result': result})
-
-
-@app.post("/form")
-def form_post(request: Request, num: int = Form(...)):
-    return templates.TemplateResponse('form.html', context={'request': request, 'result': num})
-
-
 @app.get("/dummy", response_class=HTMLResponse)
 async def get(request: Request):
-    return templates.TemplateResponse("dummy.html", {"request": request})
+    return templates.TemplateResponse("completesearch.html", {"request": request})
 
 ################################
 #
@@ -185,7 +174,7 @@ async def reports(request: Request):
 
 # reports post
 @app.post("/reports", response_class=HTMLResponse)
-async def reports_post(request: Request,
+async def reports(request: Request,
     location: str = Form(...),
     disease: str = Form(...),
     start_date: datetime = Form(...),
@@ -224,7 +213,6 @@ async def reports_post(request: Request,
                     count += 1
                     # can stop checking report locations
                     break
-    print(reports)
     return templates.TemplateResponse("reports.html", 
     {
         "location": location,
@@ -241,7 +229,7 @@ async def reports_post(request: Request,
 # search get
 @app.get("/completesearch", response_class=HTMLResponse)
 async def search(request: Request):
-    return templates.TemplateResponse("dummy.html", {"request": request})
+    return templates.TemplateResponse("completesearch.html", {"request": request})
 
 # search post
 @app.post("/completesearch", response_class=HTMLResponse)
@@ -308,17 +296,10 @@ async def id_articles(request: Request, id: str):
         return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
         
     report = data[int(id)]    
-    # TODO: 
-    # pip freeze > requirements.txt
-    # get the ['url'] form the data
-    # scrape the url
-    #   installing selenium in project foler
-    # pull relevant data (body of text)
-    # integrate it into entry_article.html
-    # match index.html style if time permits
-    # (use styles.css (font-size if necessary))
+    text = open("text.txt", 'r')
+    print(text.read())
 
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report})
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, 'text': text.read()})
 
 ## API functions
 
