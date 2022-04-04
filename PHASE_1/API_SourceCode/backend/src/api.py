@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import requests
+from dateutil import parser
 import json
 app = FastAPI(openapi_url="/api/v1/openapi.json")
 # add stylesheet
@@ -180,19 +181,19 @@ async def q(request: Request,
 # reports get
 @app.get("/reports", response_class=HTMLResponse)
 async def reports(request: Request):
-    return templates.TemplateResponse("reports_get.html", {"request": request})
+    return templates.TemplateResponse("reports.html", {"request": request})
 
 # reports post
 @app.post("/reports", response_class=HTMLResponse)
 async def reports_post(request: Request,
-    key_terms: str,
-    location: str,
-    start_date: str = Query(..., regex=date_exact),
-    end_date: str = Query(..., regex=date_exact),
-    page_number: Optional[int] = None  
+    location: str = Form(...),
+    disease: str = Form(...),
+    start_date: datetime = Form(...),
+    end_date: datetime = Form(...),
+    # page_number: Optional[int] = None  
 ):
 
-    f = open('reports.json')
+    f = open('reports_file_v2.json')
     data = json.load(f)['reports']
     f.close()
     reports = []
@@ -203,26 +204,33 @@ async def reports_post(request: Request,
         if count >= 10:
             break
         # check date of report
-        date = datetime.strptime(report['eventDate'], '%d %B %Y')
+        date = datetime.strptime(report['eventDate'], "%Y-%M-%d")
         if start_date < date and date < end_date:
+
+            # check disease
+            if disease not in report['diseases']:
+                continue
+
             #check each location of report
             for replocation in report['locations']:
                 # check report location is valid and is searched location
-                if replocation in locations and replocation = location:
+                if replocation in locations and replocation == location:
                     # check key terms
-                    if key_terms in report['diseases']:
-                        reports.append(report)
-                        count += 1
+                    # if key_terms in report['diseases']:
+                    report["l_diseases"] = ", ".join(report['diseases'])
+                    report["l_locations"] = ", ".join(report['locations'])
+                    # change the report for html
+                    reports.append(report)
+                    count += 1
                     # can stop checking report locations
                     break
-
-    return templates.TemplateResponse("reports_post.html", 
+    print(reports)
+    return templates.TemplateResponse("reports.html", 
     {
-        "key_terms": key_terms,
         "location": location,
         "start_date": start_date,
         "end_date": end_date,
-        "page_number": page_number,
+        # "page_number": page_number,
         "request": request,
         "reports": reports,
     }
@@ -287,14 +295,6 @@ async def search_post(request: Request,
         "searches": searches
     }
     )
-
-# articles get 
-@app.get("/articles", response_class=HTMLResponse)
-async def articles(request: Request):
-    return templates.TemplateResponse("articles_get.html", {"request": request})
-
-
-
 
 # articles id get
 @app.get("/articles/{id}", response_class=HTMLResponse)

@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>Item Details</title>
+        <link href="css/styles.css" rel="stylesheet">
+      <style>
+
+      /* https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */
+      .styled-table {
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 0.9em;
+      font-family: sans-serif;
+      min-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .styled-table thead tr {
+      background-color: #009879;
+      color: #ffffff;
+      text-align: left;
+      }
+      .styled-table th,
+      .styled-table td {
+      padding: 12px 15px;
+      }
+      .styled-table tbody tr {
+      border-bottom: 1px solid #dddddd;
+      }
+
+      .styled-table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+      }
+
+      .styled-table tbody tr:last-of-type {
+      border-bottom: 2px solid #009879;
+      }
+      .styled-table tbody tr.active-row {
+      font-weight: bold;
+      color: #009879;
+      }
+
+
+      </style>
+    </head>
+    <body>
+        <div>
+            <h3><a href='/'>Back to main page</a></h3>
+        </div>
+        <h1>Search results</h1>
+        <form class="form-inline" action="/reports" method="post">
+          <input id="countryInput" type="text" name="location" placeholder="Country" required>
+          <input id="diseaseInput" type="text" name="disease" placeholder="Disease" required>
+          <input type="datetime-local" id="start_date" name="start_date">
+          <input type="datetime-local" id="end_date" name="end_date">
+          <input type="submit">
+        </form>
+        {% if reports %}
+        <h1>Search for reports</h1>
+        <table class="styled-table">
+            <thead>
+                <th>Diseases</th>
+                <th>Syndromes</th> 
+                <th>Date</th>
+                <th>Locations</th>
+            </thead>
+            <tbody>
+                
+                {% for report in reports %}
+                    <tr>
+                      <td> {{ report.l_diseases }} </td>
+                      <td> {{ report.syndrome }} </td>
+                      <td> {{report.eventDate }} </td> 
+                      <td> {{ report.l_locations }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </body>
+</html>
