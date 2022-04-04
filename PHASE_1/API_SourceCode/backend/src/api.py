@@ -296,10 +296,7 @@ async def id_articles(request: Request, id: str):
         return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
         
     report = data[int(id)]    
-    text = open("text.txt", 'r')
-    print(text.read())
-
-    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report, 'text': text.read()})
+    return templates.TemplateResponse("entry_article.html", {"request": request, "id": id, 'article' : report})
 
 ## API functions
 
