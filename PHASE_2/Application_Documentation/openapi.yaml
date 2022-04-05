@@ -9,7 +9,7 @@ info:
             - 2018-11-01 xx:xx:xx
             - 2018-11-xx 17:00:xx
             
-  version: v1
+  version: v2
   x-logo:
     url: https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png
 paths:
