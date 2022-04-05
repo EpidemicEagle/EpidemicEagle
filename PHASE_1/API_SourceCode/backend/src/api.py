@@ -175,7 +175,6 @@ async def reports(request: Request):
 @app.post("/reports", response_class=HTMLResponse)
 async def reports(request: Request,
     location: str = Form(...),
-    disease: str = Form(...),
     start_date: datetime = Form(...),
     end_date: datetime = Form(...),
     # page_number: Optional[int] = None  
@@ -194,10 +193,6 @@ async def reports(request: Request,
         # check date of report
         date = datetime.strptime(report['eventDate'], "%Y-%M-%d")
         if start_date < date and date < end_date:
-
-            # check disease
-            if disease not in report['diseases']:
-                continue
 
             #check each location of report
             for replocation in report['locations']:
