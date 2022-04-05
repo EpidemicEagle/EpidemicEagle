@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>Item Details</title>
+        <link href="css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <div>
+            <h3><a href='/'>Back to main page</a></h3>
+        </div>
+        <h1>Hello welcome to article search</h1>
+        
+        {% for search in searches %}
+            <p>
+            <ul>
+                <li> {{ search.headline }} </li>
+                <li> {{ search.date_of_publication }} </li>
+                <li> {{ search.article_id }} </li>
+                <li> {{ search.url }} </li>
+                <li>
+                    {% for report in search.reports %}
+                        <ul>
+                            <li> {{ report.disease }} </li>
+                            <li> {{ report.syndrome }} </li>
+                            <li> {{ report.event_date }} </li>
+                            <li> {{ report.location }} </li>
+                        </ul>
+                    {% endfor %}
+                </li>
+            </ul>
+            </p>
+        {% endfor %}
+    </body>
+</html>

@@ -1,0 +1,42 @@
+<html>
+<head>
+<link href="css/fontawesome-all.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">    
+<!-- Website Title -->
+<title>Epidemic Eagle</title>
+
+<!-- Styles -->
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,600,700,700i&amp;subset=latin-ext" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/fontawesome-all.css" rel="stylesheet">
+<link href="css/swiper.css" rel="stylesheet">
+<link href="css/magnific-popup.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+
+<!-- Favicon  -->
+<link rel="icon" href="images/favicon.png">
+</head>
+<body>
+    <!-- Header -->
+    <div class="shadow header" style="height: 240px;">
+    <div style="padding-left: 1.5em;">
+        <a class="navbar-brand logo-image" href="index.html" style="padding-left: 20px;"><img src="images/crop_logo.svg" alt="alternative" style="width:150px;height:150px;"></a>
+        <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
+    </div>
+    </div>
+
+    <h1>Checking if article exists with id of {{id}}</h1>
+
+    {% if article %}
+
+        <h1>Article found with id of {{article.articleId}}</h1>
+
+        <p id="myInput">Testing{{ text }}</p>
+        <!-- The button used to copy the text -->
+        <button onclick="myFunction()">Copy text</button>
+
+    {% else %}
+        <h1>No articles found</h1>
+    {% endif %}
+</body>
+</html>

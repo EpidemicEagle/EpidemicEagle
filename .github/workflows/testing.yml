@@ -39,4 +39,4 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
       - name: Run unit tests
-        run: cd PHASE_1/API_SourceCode/backend/src && pytest
+        run: cd PHASE_2/Application_SourceCode/backend/src && pytest
