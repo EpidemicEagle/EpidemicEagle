@@ -1,0 +1,41 @@
+<html>
+    <head>
+        <title>Item Details</title>
+        <link href="css/styles.css" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Results for reports</h1>
+        <form class="form-inline" action="/reports" method="post">
+            <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
+            <input type="submit">
+        </form>
+        {% if reports %}
+        <table class="styled-table">
+            <thead>
+                <th>Disease</th>
+                <th>Syndrome</th> 
+                <th>Date</th>
+                <th>Location</th>
+            </thead>
+            <tbody>
+                
+                {% for report in reports %}
+                    <tr>
+                      <!--
+                        <td>
+                        <a href="/articles/{{ qs.articleId }}">
+                          {{ report.reportId }}
+                        </a>
+                      </td>
+                      -->
+                      <td> {{ report.disease }} </td>
+                      <td> {{ report.syndrome }} </td>
+                      <td> {{report.eventDate }} </td> 
+                      <td> {{ report.location }} </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </body>
+</html>

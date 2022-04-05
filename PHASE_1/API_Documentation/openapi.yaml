@@ -1,0 +1,477 @@
+openapi: 3.0.2
+info:
+  title: EpidemicEagle API
+  description: |2-
+
+            This is an API to get news articles, reports and search results for diseases.
+            Sample dates:
+            - 2018-xx-xx xx:xx:xx
+            - 2018-11-01 xx:xx:xx
+            - 2018-11-xx 17:00:xx
+            
+  version: v1
+  x-logo:
+    url: https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png
+paths:
+  /api/v1/articles:
+    get:
+      tags:
+        - api
+      summary: List All Articles With Params
+      description: >-
+        Lists all the articles specified within the parameters: start_date to
+        end_date, key_terms and location.
+
+        page_number can be specified to go to the corresponding page.
+      operationId: list_all_articles_with_params_api_v1_articles_get
+      parameters:
+        - required: true
+          schema:
+            title: Key Terms
+            type: string
+          name: key_terms
+          in: query
+        - required: true
+          schema:
+            title: Location
+            type: string
+          name: location
+          in: query
+        - required: true
+          schema:
+            title: Start Date
+            pattern: ^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$
+            type: string
+          name: start_date
+          in: query
+        - required: true
+          schema:
+            title: End Date
+            pattern: ^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$
+            type: string
+          name: end_date
+          in: query
+        - required: false
+          schema:
+            title: Page Number
+            type: integer
+          name: page_number
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListArticle'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/articles/{article_id}:
+    get:
+      tags:
+        - api
+      summary: Finds Article By Id
+      description: Lists all the information about an article from given id.
+      operationId: finds_article_by_id_api_v1_articles__article_id__get
+      parameters:
+        - required: true
+          schema:
+            title: Article Id
+            type: integer
+          name: article_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: Item not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/reports:
+    get:
+      tags:
+        - api
+      summary: List Reports
+      description: >-
+        Lists all the reports specified within the parameters: start_date to
+        end_date, key_terms and location.
+
+        page_number can be specified to go to the corresponding page.
+      operationId: list_reports_api_v1_reports_get
+      parameters:
+        - required: true
+          schema:
+            title: Key Terms
+            type: string
+          name: key_terms
+          in: query
+        - required: true
+          schema:
+            title: Location
+            type: string
+          name: location
+          in: query
+        - required: true
+          schema:
+            title: Start Date
+            pattern: ^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$
+            type: string
+          name: start_date
+          in: query
+        - required: true
+          schema:
+            title: End Date
+            pattern: ^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$
+            type: string
+          name: end_date
+          in: query
+        - required: false
+          schema:
+            title: Page Number
+            type: integer
+          name: page_number
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListReport'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/reports/{report_id}:
+    get:
+      tags:
+        - api
+      summary: Finds Report By Id
+      description: Lists all the information about a report from given id.
+      operationId: finds_report_by_id_api_v1_reports__report_id__get
+      parameters:
+        - required: true
+          schema:
+            title: Report Id
+            type: integer
+          name: report_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+        '404':
+          description: Item not found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/search:
+    get:
+      tags:
+        - api
+      summary: List Reports
+      description: >-
+        Lists all the search results specified within the parameters: start_date
+        to end_date, key_terms and location.
+
+        page_number can be specified to go to the corresponding page.
+      operationId: list_reports_api_v1_search_get
+      parameters:
+        - required: true
+          schema:
+            title: Key Terms
+            type: string
+          name: key_terms
+          in: query
+        - required: true
+          schema:
+            title: Location
+            type: string
+          name: location
+          in: query
+        - required: true
+          schema:
+            title: Start Date
+            pattern: ^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$
+            type: string
+          name: start_date
+          in: query
+        - required: true
+          schema:
+            title: End Date
+            pattern: ^(\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$
+            type: string
+          name: end_date
+          in: query
+        - required: false
+          schema:
+            title: Page Number
+            type: integer
+          name: page_number
+          in: query
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSearchResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Article:
+      title: Article
+      required:
+        - url
+        - date_of_publication
+        - headline
+        - main_text
+        - reports
+      type: object
+      properties:
+        url:
+          title: Url
+          type: string
+        date_of_publication:
+          title: Date Of Publication
+          type: string
+        headline:
+          title: Headline
+          type: string
+        main_text:
+          title: Main Text
+          type: string
+        reports:
+          title: Reports
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+    Body_q_qsearch_post:
+      title: Body_q_qsearch_post
+      required:
+        - location
+      type: object
+      properties:
+        location:
+          title: Location
+          type: string
+    Body_reports_reports_post:
+      title: Body_reports_reports_post
+      required:
+        - location
+        - start_date
+        - end_date
+      type: object
+      properties:
+        location:
+          title: Location
+          type: string
+        start_date:
+          title: Start Date
+          type: string
+          format: date-time
+        end_date:
+          title: End Date
+          type: string
+          format: date-time
+    Body_search_post_completesearch_post:
+      title: Body_search_post_completesearch_post
+      required:
+        - key_terms
+        - disease
+        - location
+        - start_date
+        - end_date
+      type: object
+      properties:
+        key_terms:
+          title: Key Terms
+          type: string
+        disease:
+          title: Disease
+          type: string
+        location:
+          title: Location
+          type: string
+        start_date:
+          title: Start Date
+          type: string
+          format: date-time
+        end_date:
+          title: End Date
+          type: string
+          format: date-time
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ListArticle:
+      title: ListArticle
+      required:
+        - num_pages
+        - page_number
+        - articles
+      type: object
+      properties:
+        num_pages:
+          title: Num Pages
+          type: integer
+        page_number:
+          title: Page Number
+          type: integer
+        articles:
+          title: Articles
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+    ListReport:
+      title: ListReport
+      required:
+        - num_pages
+        - page_number
+        - reports
+      type: object
+      properties:
+        num_pages:
+          title: Num Pages
+          type: integer
+        page_number:
+          title: Page Number
+          type: integer
+        reports:
+          title: Reports
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+    ListSearchResult:
+      title: ListSearchResult
+      required:
+        - num_pages
+        - page_number
+        - results
+      type: object
+      properties:
+        num_pages:
+          title: Num Pages
+          type: integer
+        page_number:
+          title: Page Number
+          type: integer
+        results:
+          title: Results
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+    Location:
+      title: Location
+      required:
+        - country
+        - location
+      type: object
+      properties:
+        country:
+          title: Country
+          type: string
+        location:
+          title: Location
+          type: string
+    Report:
+      title: Report
+      required:
+        - diseases
+        - syndromes
+        - event_date
+        - locations
+      type: object
+      properties:
+        diseases:
+          title: Diseases
+          type: array
+          items:
+            type: string
+        syndromes:
+          title: Syndromes
+          type: array
+          items:
+            type: string
+        event_date:
+          title: Event Date
+          pattern: >-
+            ^(\d{4})-(\d\d|xx)-(\d\d|xx) (\ d\d|xx):(\d\d|xx):(\d\d|xx) to
+            (\d{4})-(\d\d|xx)-(\d\d|xx) (\d\d|xx):(\d\d|xx):(\d\d|xx)$
+          type: string
+        locations:
+          title: Locations
+          type: array
+          items:
+            $ref: '#/components/schemas/Location'
+    SearchResult:
+      title: SearchResult
+      required:
+        - article_id
+        - url
+        - date_of_publication
+        - headline
+      type: object
+      properties:
+        article_id:
+          title: Article Id
+          type: integer
+        url:
+          title: Url
+          type: string
+        date_of_publication:
+          title: Date Of Publication
+          type: string
+        headline:
+          title: Headline
+          type: string
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            type: string
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string

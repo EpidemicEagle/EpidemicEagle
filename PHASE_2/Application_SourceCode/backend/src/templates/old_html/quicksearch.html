@@ -1,0 +1,108 @@
+<html>
+    <head>
+        <title>Item Details</title>
+        <link href="css/styles.css" rel="stylesheet">
+      <style>
+
+      /* https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */
+      .styled-table {
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 0.9em;
+      font-family: sans-serif;
+      min-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .styled-table thead tr {
+      background-color: #009879;
+      color: #ffffff;
+      text-align: left;
+      }
+      .styled-table th,
+      .styled-table td {
+      padding: 12px 15px;
+      }
+      .styled-table tbody tr {
+      border-bottom: 1px solid #dddddd;
+      }
+
+      .styled-table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+      }
+
+      .styled-table tbody tr:last-of-type {
+      border-bottom: 2px solid #009879;
+      }
+      .styled-table tbody tr.active-row {
+      font-weight: bold;
+      color: #009879;
+      }
+
+
+      </style>
+    </head>
+    <body>
+      
+        <div>
+            <h3><a href='/'>Back to main page</a></h3>
+        </div>
+        <h1>Search results</h1>
+        <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
+        <input id="diseaseInput" type="text" name="disease" placeholder="Disease" value={{disease}}>
+        <input type="datetime-local" id="start_date" name="start_date"
+           min="2000-01-01" max="2024-12-31" value={{start_date}}>
+        <input type="datetime-local" id="end_date" name="end_date"
+           min="2000-01-01" max="2024-12-31" value={{end_date}}>
+        <input type="text" name="key_terms" value={{key_terms}}>
+        <table class="styled-table">
+            <thead>
+                <th>Headline</th>
+                <th>Date of publication</th>
+                <th>Article id</th>
+                <th>url</th>
+            </thead>
+            <tbody>
+                
+                {% for qs in searches %}
+                    <tr>
+                      <td>
+                        <a href="/articles/{{ qs.articleId }}">
+                          {{ qs.articleId }}
+                        </a>
+                      </td>
+                      <td> {{ qs.headline }} </td>
+                      <td> {{ qs.dateOfPublication }} </td>
+                      <td>
+                        <a href="{{ qs.url }}">
+                          {{ qs.url }}
+                        </a>
+                      </td>
+                    </tr>
+                {% endfor %}
+                
+                <!-- potential sample data for demonstration 
+                <tr>
+                    <td>Covid in Sydney</td>
+                    <td>10/4/2020</td>
+                    <td>1</td>
+                    <td>www.smh.com</td>
+                </tr>
+                <tr>
+                    <td>Covid runs rampant</td>
+                    <td>20/4/2020</td>
+                    <td>2</td>
+                    <td>www.smh.com</td>
+                </tr>
+            
+                <div>
+                    <h3><a href='/search'>go to search</a></h3>
+                </div>
+                -->
+            </tbody>
+        </table>
+        <div>
+            <h3><a href='/search'>go to search</a></h3>
+        </div>
+    </body>
+</html>
