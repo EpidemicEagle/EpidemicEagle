@@ -66,5 +66,42 @@
   </div>
   <h1>Welcome to article with {{id}}</h1>
   <p>This is the text we want to copy</p>
+  <input type="hidden" value="This is the text we want to copy" id="myInput">
+  <button onclick="copyToClip()">Copy text</button>
 </body>
 </html>
+
+
+<script>
+    function copyToClip() {
+        /* Get the text field */
+        var copyText = document.getElementById("myInput");
+        copyText.type = 'text';
+        /* Select the text field */
+        copyText.select();
+        //copyText.setSelectionRange(0, 99999); /* For mobile devices */
+      
+        document.execCommand("copy");
+        copyText.type = 'hidden';
+      
+        /* Alert the copied text */
+        alert("Copied the text: " + copyText.value);
+    }
+
+    function CopyMe(TextToCopy) {
+        var TempText = document.createElement("input");
+        TempText.value = TextToCopy;
+        document.body.appendChild(TempText);
+        TempText.select();
+        
+        document.execCommand("copy");
+        document.body.removeChild(TempText);
+        
+        alert("Copied the text: " + TempText.value);
+      }
+</script> 
+
+<!-- use this to copy to clipboard
+// The button used to copy the text
+<button onclick="copyToClip()">Copy text</button>
+-->
