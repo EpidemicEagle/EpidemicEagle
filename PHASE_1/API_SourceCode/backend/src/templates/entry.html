@@ -64,40 +64,7 @@
       <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
     </div>
   </div>
-  <h1>Quick Search</h1>
-  <form class="form-inline" action="/qsearch" method="post">
-    <label for="countryInput">Enter a Country</label>
-    <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
-    <input type="submit">
-  </form>
-  {% if searches %}
-  <h1 class="mx-auto" style="color:red;padding-left: 1.5em;">Found reports for {{location}}!!!</h1>
-  <h3 style="padding-left: 1.5em;">Epidemic Eagle suggests to reschedule this location for at least 90 days later.</h3>
-  <div class="mx-auto" style="padding-left: 20px;">
-    <table class="styled-table">
-        <thead>
-            <th>Headline</th>
-            <th>Date of publication</th>
-            <th>URL</th>
-        </thead>
-        <tbody>
-          {% for qs in searches %}
-          <tr>
-            <td> {{ qs.headline }} </td>
-            <td> {{ qs.dateOfPublication }} </td>
-            <td>
-              <a href="{{ qs.url }}">
-                {{ qs.url }}
-              </a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-    </table>
-  </div>
-  {% elif location %}
-  <h1 class="mx-auto" style="color:#5cb25d;padding-left: 1em;">No reports for {{location}}.</h1>
-  <h3 style="padding-left: 1em;">Epidemic Eagle suggests to enjoy your trip.</h3>
-  {% endif %}
+  <h1>Welcome to article with {{id}}</h1>
+  <p>This is the text we want to copy</p>
 </body>
 </html>

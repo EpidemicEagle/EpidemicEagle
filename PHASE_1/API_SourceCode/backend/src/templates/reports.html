@@ -63,14 +63,28 @@
         <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
     </div>
     </div>
-    <h1>Report Search</h1>
-    <form class="form-inline" action="/reports" method="post">
-        <input id="countryInput" type="text" name="location" placeholder="Country" required>
-        <input id="diseaseInput" type="text" name="disease" placeholder="Disease" required>
+    <hr>
+    <h1 style="padding-left: 20px;">Report Search</h1>
+    <hr>
+    <form class="form-inline" action="/completesearch" method="post" style="padding-left: 20px;" autocomplete="off">
+      <div class="overflow-auto">
+        <h3>Country</h3>
+        <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
+      </div>
+      <div style="padding-left: 20px;">
+        <h3>Start Date</h3>
         <input type="datetime-local" id="start_date" name="start_date">
+      </div>
+      <div style="padding-left: 20px;">
+        <h3>End Date</h3>
         <input type="datetime-local" id="end_date" name="end_date">
-        <input type="submit">
+      </div>
+      <div style="padding-left: 20px;">
+        <h3>Submit</h3>
+      <input type="submit">
+      </div>
     </form>
+    <hr>
     {% if reports %}
     <h1>Search results</h1>
     <table class="styled-table">
