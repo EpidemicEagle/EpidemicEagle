@@ -91,6 +91,8 @@ responses = {
     404: {"description": "Item not found"}
 }
 
+users = []
+
 ################################
 #
 # FAKE FUNCTIONS
@@ -290,6 +292,100 @@ async def id_articles(request: Request, id):
     #     return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
     # report = data[int(id)]    
     return templates.TemplateResponse("entry.html", {"request": request, "id": id})
+
+
+# traveller get
+@app.get("/traveller", response_class=HTMLResponse)
+async def traveller(request: Request):
+    return templates.TemplateResponse("traveller.html", {"request": request})
+
+
+# traveller post
+@app.post("/traveller", response_class=HTMLResponse)
+async def traveller_dash(request: Request):
+    found_user = None
+    for user in users:
+        if user["id"] == id:
+            found_user = user
+            break
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=90)
+    # sample user
+    found_user = {
+        "name": "Treav",
+        "start_loc": "Aus",
+        "end_loc": "China",
+        "start_date": start_date,
+        "end_date": end_date,
+        "reports": [],
+    }
+    if found_user: 
+        return templates.TemplateResponse("traveller.html", 
+        {
+            "user": found_user,
+            "request": request,
+        }
+        
+
+    
+        )
+    else:
+        # user not found, try again
+        return templates.TemplateResponse("traveller.html", 
+        {
+            
+            "request": request,
+        }
+        )
+
+
+
+# traveller get
+@app.get("/edit", response_class=HTMLResponse)
+async def traveller_edit(request: Request):
+    return templates.TemplateResponse("traveller_edit.html", {"request": request})
+
+
+# traveller post
+@app.post("/edit", response_class=HTMLResponse)
+async def traveller_dash_edit(request: Request):
+    found_user = None
+    for user in users:
+        if user["id"] == id:
+            found_user = user
+            break
+    found_user = {
+        "name": "testing",
+    }
+    if found_user: 
+        """
+            "traveller": request,
+            "start_loc": start_loc,
+            "end_loc": end_loc,
+            "start_date": start_date,
+            "end_date": end_date,
+            "reports": reports,
+        """
+        return templates.TemplateResponse("traveller_edit.html", 
+        {
+            
+            "user": found_user,
+            "request": request,
+            
+        }
+        
+
+    
+        )
+    else:
+        # user not found, try again
+        return templates.TemplateResponse("traveller_edit.html", 
+        {
+            
+            "request": request,
+        }
+        )
+
 
 ## API functions
 
