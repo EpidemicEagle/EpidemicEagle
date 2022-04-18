@@ -128,22 +128,40 @@ async def index(request: Request):
 async def index(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-
-def send_user_login(request, user):
-    # also sends
-    # username 
-    # current trip (SYD -> CHN)
-    # container
-    # Start Date   || Current Risk Level (API)
-    # End   Date   || Vaccination Rate (API)
-    # Send Message || Reports on Current Destination
-    # (          ) ||
-    #         (go) ||
-    dest = user['destination']
+def covid_api(dest):
     url = "https://disease.sh/v3/covid-19/countries/" + dest + "?strict=true"
     response = requests.get(url)
-    data = response.json()
-    return templates.TemplateResponse("traveller.html", {"request": request, "user": user, "covid_data" : data})
+    return response.json()
+
+def report_find(start_date, end_date, location):
+    f = open('reports_file_v2.json')
+    data = json.load(f)['reports']
+    f.close()
+    reports = []
+    count = 0
+    locations = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
+    
+    for report in data:
+        if count >= 10:
+            break
+        # check date of report
+        date = datetime.strptime(report['eventDate'], "%Y-%M-%d")
+        if start_date < date and date < end_date:
+
+            #check each location of report
+            for replocation in report['locations']:
+                # check report location is valid and is searched location
+                if replocation in locations and replocation == location:
+                    # check key terms
+                    # if key_terms in report['diseases']:
+                    report["l_diseases"] = ", ".join(report['diseases'])
+                    report["l_locations"] = ", ".join(report['locations'])
+                    # change the report for html
+                    reports.append(report)
+                    count += 1
+                    # can stop checking report locations
+                    break
+    return reports
 
 @app.post("/login", response_class=HTMLResponse)
 async def index(request: Request,
@@ -151,16 +169,21 @@ async def index(request: Request,
     password: Optional[str] = Form(...),
     type: Optional[str] = Form(...),
     ):
-    print(email, password, type)
+    # print(email, password, type)
     f = open('users.json', 'r+')
     data = json.load(f)
-    print(data)
+    # print(data)
     users = data['travellers']
     if type == 'user':
         users = data['travellers']
         for user in users:
             if user['email'] == email and user['password'] == password:
-                send_user_login(request, user)
+                return templates.TemplateResponse("person.html", {
+                    "request": request, 
+                    "user": user, 
+                    "covid_data" : covid_api(user['destination']),
+                    "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), user['destination'])
+                    })
         return templates.TemplateResponse("login.html", {"request": request, "wrong_user" : True})
     else:
         agencies = data['agencies']
@@ -220,7 +243,7 @@ async def q(request: Request,
         count += 1
     
     rl = risk_level(location)
-    print(rl)
+    # print(rl)
     return templates.TemplateResponse("qsearch.html", 
     {
         "location": location,
@@ -244,34 +267,6 @@ async def reports(request: Request,
     end_date: datetime = Form(...),
     # page_number: Optional[int] = None  
 ):
-
-    f = open('reports_file_v2.json')
-    data = json.load(f)['reports']
-    f.close()
-    reports = []
-    count = 0
-    locations = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
-    
-    for report in data:
-        if count >= 10:
-            break
-        # check date of report
-        date = datetime.strptime(report['eventDate'], "%Y-%M-%d")
-        if start_date < date and date < end_date:
-
-            #check each location of report
-            for replocation in report['locations']:
-                # check report location is valid and is searched location
-                if replocation in locations and replocation == location:
-                    # check key terms
-                    # if key_terms in report['diseases']:
-                    report["l_diseases"] = ", ".join(report['diseases'])
-                    report["l_locations"] = ", ".join(report['locations'])
-                    # change the report for html
-                    reports.append(report)
-                    count += 1
-                    # can stop checking report locations
-                    break
     return templates.TemplateResponse("reports.html", 
     {
         "location": location,
@@ -279,7 +274,7 @@ async def reports(request: Request,
         "end_date": end_date,
         # "page_number": page_number,
         "request": request,
-        "reports": reports,
+        "reports": report_find(start_date, end_date, location),
     }
     )
 
