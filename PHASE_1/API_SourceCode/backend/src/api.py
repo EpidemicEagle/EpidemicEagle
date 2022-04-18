@@ -442,46 +442,31 @@ async def traveller_dash_edit(request: Request):
 # travel agency get
 @app.get("/travelagency", response_class=HTMLResponse)
 async def travelagency(request: Request):
-    return templates.TemplateResponse("traveller.html", {"request": request})
+    return templates.TemplateResponse("travelagency.html", {"request": request})
 
 
 # travel agency post
 @app.post("/travelagency", response_class=HTMLResponse)
 async def travelagency_dash(request: Request):
-    found_user = None
-    for user in users:
-        if user["id"] == id:
-            found_user = user
-            break
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=90)
-    # sample user
-    found_user = {
-        "name": "Treav",
-        "start_loc": "Aus",
-        "end_loc": "China",
-        "start_date": start_date,
-        "end_date": end_date,
-        "reports": [],
+    # sample agency
+    agency = {
+        "id": 1,
+        "name": "Bob's Agency",
+        "users": [
+            {"name" : "Stanley Parks","email" : "stanleyparks@gmail.com", "phone": "083 555 6733", "location" : "Sydney","destination" : "Thailand"}, 
+            {"name" : "Edgar Wright","email" : "ewright@gmail.com", "phone": "074 555 1491", "location" : "England","destination" : "Wales"}
+        ],
+        "phone": "555-5555-555",
+        "locations": ["Sydney"],
+        "email" : "bobsagency@gmail.com",
+        "password" : "abc123",
+        "new_requests" : [
+            {"email": "garrysmith@gmail.com", "message": "I want to go to New York."},
+            {"email": "jamesdaniels@gmail.com", "message": "I would like to travel to Amsterdam from Manchester"}
+        ],
+        "current_requests": [{"u_id": 1, "message": "The hotel room was not booked. I need a new room."}]
     }
-    if found_user: 
-        return templates.TemplateResponse("travelagency.html", 
-        {
-            "user": found_user,
-            "request": request,
-        }
-        
-
-    
-        )
-    else:
-        # user not found, try again
-        return templates.TemplateResponse("travelagency.html", 
-        {
-            
-            "request": request,
-        }
-        )
+    return templates.TemplateResponse("travelagency.html", {"request": request, "agency": agency})
 
 ## API functions
 

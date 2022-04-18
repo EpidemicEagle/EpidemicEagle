@@ -21,9 +21,10 @@
   .styled-table {
   border-collapse: collapse;
   margin: 25px 0;
-  font-size: 0.9em;
+  font-size: 1.4em;
   font-family: "Raleway", sans-serif;
-  min-width: 400px;
+  /*min-width: 400px;*/
+  width: 50%;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   padding-left: 20px;
   }
@@ -53,6 +54,13 @@
   color: #009879;
   }
 
+  .styled-table caption {
+    font-size: 2em;
+    font-family: "Raleway", sans-serif;
+  }
+
+  .column
+
 
 </style>
 </head>
@@ -66,52 +74,62 @@
   </div>
   <hr>
   <hr>
-  {% if user %}
-    <h1 class="mx-auto" style="color:#5cb25d;padding-left: 1.5em;">Dashboard</h1>
-    <h2 style="padding-left: 1.5em;">Welcome {{ user.name }}</h2>
+  {% if agency %}
+    <h1 class="mx-auto" style="color:#5cb25d;padding-left: 1.5em;">Dashboard of {{ agency.name }}</h1>
     
     <div class="mx-auto" style="padding-left: 20px;">
-        <h3 style="padding-left: 1.5em;">Current Trip: {{ user.location }} to {{ user.destination }} </h3>
-        <h3 style="padding-left: 1.5em;">Starting: {{ user.start_date }} </h3>
-        <h3 style="padding-left: 1.5em;">Ending: {{ user.end_date }} </h3>
-        <h3 style="padding-left: 1.5em;">Cost: {{ user.cost }} </h3>
-        
-        {% if reports %}
-            <h3 style="padding-left: 1.5em;">Reports of concern:</h3>
-            <table class="styled-table">
-                <thead>
-                    <th>Diseases</th>
-                    <th>Syndromes</th> 
-                    <th>Date</th>
-                    <th>Locations</th>
+        {% if agency.users %}
+            <table class="styled-table" style="display: inline-block">
+              <caption style="caption-side:top; text-align:center" font-size="1.9rem">Current Clients</caption> 
+              <thead>
+                    <th>Client Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Destination</th>
+                    <th>Location</th>
                 </thead>
                 <tbody>
-                    
-                    {% for report in reports %}
+                    {% for user in agency.users %}
                         <tr>
-                            <td> {{ reports.l_diseases }} </td>
-                            <td> {{ reports.syndrome }} </td>
-                            <td> {{reports.eventDate }} </td> 
-                            <td> {{ reports.l_locations }} </td>
+                            <td> {{ user.name }} </td>
+                            <td> {{ user.email }} </td>
+                            <td> {{ user.phone }} </td>
+                            <td> {{ user.destination }} </td>
+                            <td> {{ user.location }} </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table class="styled-table" style="float: left">
+              <caption style="caption-side:top; text-align:center" font-size="1.9rem">Current Requests</caption> 
+              <thead>
+                    <th>Client Email</th>
+                    <th>Request</th>
+                </thead>
+                <tbody>
+                    {% for request in agency.new_requests %}
+                        <tr>
+                            <td> {{ request.email }} </td>
+                            <td> {{ request.message }} </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         {% else %}
-            <h3 style="padding-left: 1.5em;">No reports to show</h3>
+            <h3 style="padding-left: 1.5em;">No clients currently</h3>
         {% endif %}
         
     </div>
   {% else %}
-    <h1 class="mx-auto" style="color:red;padding-left: 1em;">No stats for user</h1>
+    <h1 class="mx-auto" style="color:red;padding-left: 1em;">No stats for agency</h1>
     <h3 style="padding-left: 1em;">Please try logging in or signing up</h3>
   {% endif %}
   <hr>
-  <form class="form-inline" action="/edit" method="post" style="padding-left: 20px;" autocomplete="off">
+  <form class="form-inline" action="/travelagency" method="post">
     
     <div style="padding-left: 20px;">
-      <h3>Edit</h3>
-        <input type="submit" placeholder="Edit Dashboard">
+      <h3>Post</h3>
+        <input type="submit" placeholder="Emulate Login">
     </div>
   </form>
 </body>
