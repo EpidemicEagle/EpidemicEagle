@@ -428,6 +428,49 @@ async def traveller_dash_edit(request: Request):
         }
         )
 
+# travel agency get
+@app.get("/travelagency", response_class=HTMLResponse)
+async def travelagency(request: Request):
+    return templates.TemplateResponse("traveller.html", {"request": request})
+
+
+# travel agency post
+@app.post("/travelagency", response_class=HTMLResponse)
+async def travelagency_dash(request: Request):
+    found_user = None
+    for user in users:
+        if user["id"] == id:
+            found_user = user
+            break
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=90)
+    # sample user
+    found_user = {
+        "name": "Treav",
+        "start_loc": "Aus",
+        "end_loc": "China",
+        "start_date": start_date,
+        "end_date": end_date,
+        "reports": [],
+    }
+    if found_user: 
+        return templates.TemplateResponse("travelagency.html", 
+        {
+            "user": found_user,
+            "request": request,
+        }
+        
+
+    
+        )
+    else:
+        # user not found, try again
+        return templates.TemplateResponse("travelagency.html", 
+        {
+            
+            "request": request,
+        }
+        )
 
 ## API functions
 

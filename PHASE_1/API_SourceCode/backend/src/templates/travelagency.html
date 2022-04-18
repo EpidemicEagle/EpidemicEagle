@@ -1,0 +1,118 @@
+<html>
+<head>
+<link href="css/fontawesome-all.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">    
+<!-- Website Title -->
+<title>Epidemic Eagle</title>
+
+<!-- Styles -->
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,600,700,700i&amp;subset=latin-ext" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/fontawesome-all.css" rel="stylesheet">
+<link href="css/swiper.css" rel="stylesheet">
+<link href="css/magnific-popup.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+
+<!-- Favicon  -->
+<link rel="icon" href="images/favicon.png">
+<style>
+
+  /* https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */
+  .styled-table {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: "Raleway", sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  padding-left: 20px;
+  }
+
+  .styled-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  }
+  .styled-table th,
+  .styled-table td {
+  padding: 12px 15px;
+  }
+  .styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  }
+
+  .styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+  }
+
+  .styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+  }
+  .styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+  }
+
+
+</style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="shadow header" style="height: 240px;">
+    <div style="padding-left: 1.5em;">
+      <a class="navbar-brand logo-image" href="index.html" style="padding-left: 20px;"><img src="images/crop_logo.svg" alt="alternative" style="width:150px;height:150px;"></a>
+      <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
+    </div>
+  </div>
+  <hr>
+  <hr>
+  {% if user %}
+    <h1 class="mx-auto" style="color:#5cb25d;padding-left: 1.5em;">Dashboard</h1>
+    <h2 style="padding-left: 1.5em;">Welcome {{ user.name }}</h2>
+    
+    <div class="mx-auto" style="padding-left: 20px;">
+        <h3 style="padding-left: 1.5em;">Current Trip: {{ user.location }} to {{ user.destination }} </h3>
+        <h3 style="padding-left: 1.5em;">Starting: {{ user.start_date }} </h3>
+        <h3 style="padding-left: 1.5em;">Ending: {{ user.end_date }} </h3>
+        <h3 style="padding-left: 1.5em;">Cost: {{ user.cost }} </h3>
+        
+        {% if reports %}
+            <h3 style="padding-left: 1.5em;">Reports of concern:</h3>
+            <table class="styled-table">
+                <thead>
+                    <th>Diseases</th>
+                    <th>Syndromes</th> 
+                    <th>Date</th>
+                    <th>Locations</th>
+                </thead>
+                <tbody>
+                    
+                    {% for report in reports %}
+                        <tr>
+                            <td> {{ reports.l_diseases }} </td>
+                            <td> {{ reports.syndrome }} </td>
+                            <td> {{reports.eventDate }} </td> 
+                            <td> {{ reports.l_locations }} </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h3 style="padding-left: 1.5em;">No reports to show</h3>
+        {% endif %}
+        
+    </div>
+  {% else %}
+    <h1 class="mx-auto" style="color:red;padding-left: 1em;">No stats for user</h1>
+    <h3 style="padding-left: 1em;">Please try logging in or signing up</h3>
+  {% endif %}
+  <hr>
+  <form class="form-inline" action="/edit" method="post" style="padding-left: 20px;" autocomplete="off">
+    
+    <div style="padding-left: 20px;">
+      <h3>Edit</h3>
+        <input type="submit" placeholder="Edit Dashboard">
+    </div>
+  </form>
+</body>
+</html>
