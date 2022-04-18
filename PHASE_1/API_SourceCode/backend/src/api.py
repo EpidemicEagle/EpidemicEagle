@@ -148,16 +148,26 @@ def write_json(new_data, filename='users.json'):
 async def index(request: Request,
     email: Optional[str] = Form(...),
     password: Optional[str] = Form(...),
+    type: Optional[str] = Form(...),
     ):
-    print(email, password)
+    print(email, password, type)
     f = open('users.json', 'r+')
     data = json.load(f)
     print(data)
     users = data['travellers']
-    for user in users:
-        if user['email'] == email and user['password'] == password:
-            return templates.TemplateResponse("traveller.html", {"request": request, "user": user})
-    return templates.TemplateResponse("login.html", {"request": request, "wrong" : True})
+    if type == 'user':
+        users = data['travellers']
+        for user in users:
+            if user['email'] == email and user['password'] == password:
+                return templates.TemplateResponse("traveller.html", {"request": request, "user": user})
+        return templates.TemplateResponse("login.html", {"request": request, "wrong_user" : True})
+    else:
+        agencies = data['agencies']
+        for agency in agencies:
+            if agency['email'] == email and agency['password'] == password:
+                return templates.TemplateResponse("agency.html", {"request": request, "user": user})
+        return templates.TemplateResponse("login.html", {"request": request, "wrong_agency" : True})
+
 
 @app.get("/agency", response_class=HTMLResponse)
 async def index(request: Request):
@@ -198,6 +208,7 @@ async def q(request: Request,
     
         
     print(searches)
+
 
     return templates.TemplateResponse("qsearch.html", 
     {
