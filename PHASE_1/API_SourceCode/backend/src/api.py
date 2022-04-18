@@ -485,8 +485,8 @@ async def travelagency_dash(request: Request):
         "users": [
             {"name" : "Stanley Parks","email" : "stanleyparks@gmail.com", "phone": "083 555 6733", "location" : "Sydney, Australia","destination" : "Bangkok, Thailand"}, 
             {"name" : "Edgar Wright","email" : "ewright@gmail.com", "phone": "074 555 1491", "location" : "Birmingham, England","destination" : "Swansea, Wales"},
-            {"name" : "Jon Jones","email" : "jjones@gmail.com", "phone": "084 555 4143", "location" : "Manchester, England","destination" : "Durban, South Africa"},
             {"name" : "Maria de Souza","email" : "mdsouza@gmail.com", "phone": "073 555 3921", "location" : "Toronto, Canada","destination" : "Washington, USA"},
+            {"name" : "Jon Jones","email" : "jjones@gmail.com", "phone": "084 555 4143", "location" : "Manchester, England","destination" : "Durban, South Africa"},
             {"name" : "Sibusiso Jacob","email" : "sjakes@gmail.com", "phone": "074 555 8127", "location" : "Cape Town, South Africa","destination" : "Windhoek, Namibia"}
         ],
         "phone": "555-5555-555",
@@ -494,7 +494,7 @@ async def travelagency_dash(request: Request):
         "email" : "bobsagency@gmail.com",
         "password" : "abc123",
         "new_requests" : [
-            {"email": "garrysmith@gmail.com", "message": "I nned help booking a family vacation to the Caribbean."},
+            {"email": "garrysmith@gmail.com", "message": "I need help booking a family vacation to the Caribbean."},
             {"email": "jamesdaniels@gmail.com", "message": "I would like to travel to Amsterdam from Manchester"}
         ],
         "current_requests": [

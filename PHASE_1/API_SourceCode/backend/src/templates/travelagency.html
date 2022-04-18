@@ -77,22 +77,6 @@
     <div class="mx-auto" style="padding-left: 20px;">
         {% if agency.users %}
             <div id="container" style="display: flex; flex-direction: row; gap: 10px; width:99%">
-              
-              <table class="styled-table">
-                <caption style="caption-side:top; text-align:center" font-size="1.9rem">Client Issues</caption> 
-                <thead>
-                      <th>Client Name</th>
-                      <th>Issue</th>
-                  </thead>
-                  <tbody>
-                      {% for issue in agency.current_requests %}
-                          <tr>
-                              <td> {{ issue.name }} </td>
-                              <td> {{ issue.message }} </td>
-                          </tr>
-                      {% endfor %}
-                  </tbody>
-              </table>
               <table class="styled-table">
                 <caption style="caption-side:top; text-align:center" font-size="1.9rem">New Requests</caption> 
                 <thead>
@@ -104,6 +88,21 @@
                           <tr>
                               <td> {{ request.email }} </td>
                               <td> {{ request.message }} </td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+              <table class="styled-table">
+                <caption style="caption-side:top; text-align:center" font-size="1.9rem">Client Issues</caption> 
+                <thead>
+                      <th>Client Name</th>
+                      <th>Issue</th>
+                  </thead>
+                  <tbody>
+                      {% for issue in agency.current_requests %}
+                          <tr>
+                              <td> {{ issue.name }} </td>
+                              <td> {{ issue.message }} </td>
                           </tr>
                       {% endfor %}
                   </tbody>
