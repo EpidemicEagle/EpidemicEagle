@@ -65,15 +65,13 @@
     </div>
   </div>
   <hr>
-  <h1 style="padding-left: 20px;">Dashboard</h1>
-  
   <hr>
   {% if user %}
     <h1 class="mx-auto" style="color:#5cb25d;padding-left: 1.5em;">Dashboard</h1>
     <h2 style="padding-left: 1.5em;">Welcome {{ user.name }}</h2>
     
     <div class="mx-auto" style="padding-left: 20px;">
-        <h3 style="padding-left: 1.5em;">Current Trip: {{ user.start_loc }} to {{ user.end_loc }} </h3>
+        <h3 style="padding-left: 1.5em;">Current Trip: {{ user.location }} to {{ user.destination }} </h3>
         <h3 style="padding-left: 1.5em;">Starting: {{ user.start_date }} </h3>
         <h3 style="padding-left: 1.5em;">Ending: {{ user.end_date }} </h3>
         <h3 style="padding-left: 1.5em;">Cost: {{ user.cost }} </h3>

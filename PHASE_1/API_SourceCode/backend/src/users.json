@@ -1,0 +1,25 @@
+{
+"agencies" : [
+    {
+        "id": 1,
+        "name": "Bob's Agency",
+        "users": [1],
+        "phone": "555-5555-555",
+        "locations": ["Sydney"]
+    }
+],
+"travellers" : [
+    { 
+        "u_id" : 1,
+        "email" : "stanleyparks@gmail.com",
+        "password" : "abc123",
+        "name" : "Stanley Parks",
+        "location" : "Sydney",
+        "destination" : "Thailand",
+        "start_date" : "2020-01-01",
+        "end_date" : "2022-10-10",
+        "phone": "2022-2022-2022",
+        "agency": 0
+    }
+]
+}

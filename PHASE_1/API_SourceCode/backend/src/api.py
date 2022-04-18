@@ -121,6 +121,48 @@ async def index(request: Request):
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/login", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+def write_json(new_data, filename='users.json'):
+    with open(filename,'r+') as file:
+          # First we load existing data into a dict.
+        file_data = json.load(file)
+        # Join new_data with file_data inside emp_details
+        file_data["emp_details"].append(new_data)
+        # Sets file's current position at offset.
+        file.seek(0)
+        # convert back to json.
+        json.dump(file_data, file, indent = 4)
+ 
+    # python object to be appended
+    y = {"emp_name":"Nikhil",
+        "email": "nikhil@geeksforgeeks.org",
+        "job_profile": "Full Time"
+        }
+        
+    write_json(y)
+
+@app.post("/login", response_class=HTMLResponse)
+async def index(request: Request,
+    email: Optional[str] = Form(...),
+    password: Optional[str] = Form(...),
+    ):
+    print(email, password)
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    print(data)
+    users = data['travellers']
+    for user in users:
+        if user['email'] == email and user['password'] == password:
+            return templates.TemplateResponse("traveller.html", {"request": request, "user": user})
+    return templates.TemplateResponse("login.html", {"request": request, "wrong" : True})
+
+@app.get("/agency", response_class=HTMLResponse)
+async def index(request: Request):
+    return templates.TemplateResponse("agency.html", {"request": request})
+
 # QUICK SEARCH
 # qsearch search box
 @app.get("/qsearch", response_class=HTMLResponse)
