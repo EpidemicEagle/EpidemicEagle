@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from resource import RLIMIT_CPU
 from fastapi import FastAPI, HTTPException, Query, Request, Form
 from fastapi.openapi.utils import get_openapi
 from typing import List,Optional
@@ -6,6 +7,8 @@ from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+import requests
+from starlette.responses import PlainTextResponse, RedirectResponse
 import json
 
 app = FastAPI(openapi_url="/api/v1/openapi.json")
@@ -125,24 +128,22 @@ async def index(request: Request):
 async def index(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
-def write_json(new_data, filename='users.json'):
-    with open(filename,'r+') as file:
-          # First we load existing data into a dict.
-        file_data = json.load(file)
-        # Join new_data with file_data inside emp_details
-        file_data["emp_details"].append(new_data)
-        # Sets file's current position at offset.
-        file.seek(0)
-        # convert back to json.
-        json.dump(file_data, file, indent = 4)
- 
-    # python object to be appended
-    y = {"emp_name":"Nikhil",
-        "email": "nikhil@geeksforgeeks.org",
-        "job_profile": "Full Time"
-        }
-        
-    write_json(y)
+
+def send_user_login(request, user):
+    # also sends
+    # username 
+    # current trip (SYD -> CHN)
+    # container
+    # Start Date   || Current Risk Level (API)
+    # End   Date   || Vaccination Rate (API)
+    # Send Message || Reports on Current Destination
+    # (          ) ||
+    #         (go) ||
+    dest = user['destination']
+    url = "https://disease.sh/v3/covid-19/countries/" + dest + "?strict=true"
+    response = requests.get(url)
+    data = response.json()
+    return templates.TemplateResponse("traveller.html", {"request": request, "user": user, "covid_data" : data})
 
 @app.post("/login", response_class=HTMLResponse)
 async def index(request: Request,
@@ -159,7 +160,7 @@ async def index(request: Request,
         users = data['travellers']
         for user in users:
             if user['email'] == email and user['password'] == password:
-                return templates.TemplateResponse("traveller.html", {"request": request, "user": user})
+                send_user_login(request, user)
         return templates.TemplateResponse("login.html", {"request": request, "wrong_user" : True})
     else:
         agencies = data['agencies']
@@ -178,6 +179,18 @@ async def index(request: Request):
 @app.get("/qsearch", response_class=HTMLResponse)
 async def q(request: Request):
     return templates.TemplateResponse("qsearch.html", {"request": request})
+
+def risk_level(location):
+    f = open("country_codes.json", 'r')
+    data = json.load(f)
+    code = data.get(location, "not found")
+    if code == 'not found':
+        return "No risk data detected."
+    else:
+        response = requests.get('https://www.travel-advisory.info/api')
+        a = response.json()['data'][code]['advisory']
+    return a
+
 
 # qsearch table
 @app.post("/qsearch", response_class=HTMLResponse)
@@ -206,17 +219,14 @@ async def q(request: Request,
                 count += 1
         count += 1
     
-        
-    print(searches)
-
-
+    rl = risk_level(location)
+    print(rl)
     return templates.TemplateResponse("qsearch.html", 
     {
         "location": location,
-        "start_date": start_date,
-        "end_date": end_date,
         "request": request,
         "searches": searches,
+        "risk_level": rl
     }
     )
 
