@@ -59,9 +59,6 @@
     font-family: "Raleway", sans-serif;
   }
 
-  .column
-
-
 </style>
 </head>
 <body>
@@ -79,7 +76,40 @@
     
     <div class="mx-auto" style="padding-left: 20px;">
         {% if agency.users %}
-            <table class="styled-table" style="display: inline-block">
+            <div id="container" style="display: flex; flex-direction: row; gap: 10px; width:99%">
+              
+              <table class="styled-table">
+                <caption style="caption-side:top; text-align:center" font-size="1.9rem">Client Issues</caption> 
+                <thead>
+                      <th>Client Name</th>
+                      <th>Issue</th>
+                  </thead>
+                  <tbody>
+                      {% for issue in agency.current_requests %}
+                          <tr>
+                              <td> {{ issue.name }} </td>
+                              <td> {{ issue.message }} </td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+              <table class="styled-table">
+                <caption style="caption-side:top; text-align:center" font-size="1.9rem">New Requests</caption> 
+                <thead>
+                      <th>User Email</th>
+                      <th>Request</th>
+                  </thead>
+                  <tbody>
+                      {% for request in agency.new_requests %}
+                          <tr>
+                              <td> {{ request.email }} </td>
+                              <td> {{ request.message }} </td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+              </table>
+            </div>
+            <table class="styled-table" style="width:70%">
               <caption style="caption-side:top; text-align:center" font-size="1.9rem">Current Clients</caption> 
               <thead>
                     <th>Client Name</th>
@@ -96,21 +126,6 @@
                             <td> {{ user.phone }} </td>
                             <td> {{ user.destination }} </td>
                             <td> {{ user.location }} </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <table class="styled-table" style="float: left">
-              <caption style="caption-side:top; text-align:center" font-size="1.9rem">Current Requests</caption> 
-              <thead>
-                    <th>Client Email</th>
-                    <th>Request</th>
-                </thead>
-                <tbody>
-                    {% for request in agency.new_requests %}
-                        <tr>
-                            <td> {{ request.email }} </td>
-                            <td> {{ request.message }} </td>
                         </tr>
                     {% endfor %}
                 </tbody>
