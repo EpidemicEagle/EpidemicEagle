@@ -5,7 +5,11 @@
         "name": "Bob's Agency",
         "users": [1],
         "phone": "555-5555-555",
-        "locations": ["Sydney"]
+        "locations": ["Sydney"],
+        "email" : "bobsagency@gmail.com",
+        "password" : "abc123",
+        "new_requests" : [{"email": "garrysmith@gmail.com", "message": "I want to go to New York."}],
+        "current_requests": [{"u_id": 1, "message": "The hotel room was not booked. I need a new room."}]
     }
 ],
 "travellers" : [
