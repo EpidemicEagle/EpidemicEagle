@@ -163,34 +163,57 @@ def report_find(start_date, end_date, location):
                     break
     return reports
 
+@app.get("/login", response_class=HTMLResponse)
+async def q(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
 @app.post("/login", response_class=HTMLResponse)
-async def index(request: Request,
-    email: Optional[str] = Form(...),
-    password: Optional[str] = Form(...),
-    type: Optional[str] = Form(...),
+async def q(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, "wrong_user": True})
+
+@app.post("/traveller", response_class=HTMLResponse)
+async def q(request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
     ):
-    # print(email, password, type)
+    print(email, password)
     f = open('users.json', 'r+')
     data = json.load(f)
-    # print(data)
     users = data['travellers']
-    if type == 'user':
-        users = data['travellers']
-        for user in users:
-            if user['email'] == email and user['password'] == password:
-                return templates.TemplateResponse("person.html", {
-                    "request": request, 
-                    "user": user, 
-                    "covid_data" : covid_api(user['destination']),
-                    "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), user['destination'])
-                    })
-        return templates.TemplateResponse("login.html", {"request": request, "wrong_user" : True})
-    else:
-        agencies = data['agencies']
-        for agency in agencies:
-            if agency['email'] == email and agency['password'] == password:
-                return templates.TemplateResponse("agency.html", {"request": request, "user": user})
-        return templates.TemplateResponse("login.html", {"request": request, "wrong_agency" : True})
+    for user in users:
+        if user['email'] == email and user['password'] == password:
+            return templates.TemplateResponse("person.html", {
+                "request": request, 
+                "user": user, 
+                "covid_data" : covid_api(user['destination']),
+                "risk_level" : risk_level(user['destination']),
+                "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), user['destination'])
+                })
+    return RedirectResponse("/login") 
+
+# @app.post("/login", response_class=HTMLResponse)
+# async def index(request: Request,
+#     email: Optional[str] = Form(...),
+#     password: Optional[str] = Form(...),
+#     type: Optional[str] = Form(...),
+#     ):
+#     # print(email, password, type)
+#     f = open('users.json', 'r+')
+#     data = json.load(f)
+#     # print(data)
+#     users = data['travellers']
+#     if type == 'user':
+#         users = data['travellers']
+#         for user in users:
+#             if user['email'] == email and user['password'] == password:
+#                 return RedirectResponse("/traveller") 
+#         return templates.TemplateResponse("login.html", {"request": request, "wrong_user" : True})
+#     else:
+#         agencies = data['agencies']
+#         for agency in agencies:
+#             if agency['email'] == email and agency['password'] == password:
+#                 return templates.TemplateResponse("agency.html", {"request": request, "user": user})
+#         return templates.TemplateResponse("login.html", {"request": request, "wrong_agency" : True})
 
 
 @app.get("/agency", response_class=HTMLResponse)
@@ -355,46 +378,22 @@ async def id_articles(request: Request, id):
 # traveller get
 @app.get("/traveller", response_class=HTMLResponse)
 async def traveller(request: Request):
-    return templates.TemplateResponse("traveller.html", {"request": request})
-
+    return templates.TemplateResponse("person.html", {
+        "request": request, 
+        "user": user, 
+        "covid_data" : covid_api(user['destination']),
+        "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), user['destination'])
+    })
 
 # traveller post
 @app.post("/traveller", response_class=HTMLResponse)
 async def traveller_dash(request: Request):
-    found_user = None
-    for user in users:
-        if user["id"] == id:
-            found_user = user
-            break
-    end_date = datetime.now()
-    start_date = end_date - timedelta(days=90)
-    # sample user
-    found_user = {
-        "name": "Treav",
-        "start_loc": "Aus",
-        "end_loc": "China",
-        "start_date": start_date,
-        "end_date": end_date,
-        "reports": [],
-    }
-    if found_user: 
-        return templates.TemplateResponse("traveller.html", 
-        {
-            "user": found_user,
-            "request": request,
-        }
-        
-
-    
-        )
-    else:
-        # user not found, try again
-        return templates.TemplateResponse("traveller.html", 
-        {
-            
-            "request": request,
-        }
-        )
+    return templates.TemplateResponse("person.html", {
+    "request": request, 
+    "user": user, 
+    "covid_data" : covid_api(user['destination']),
+    "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), user['destination'])
+})
 
 
 
