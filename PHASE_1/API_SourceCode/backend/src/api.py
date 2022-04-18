@@ -449,6 +449,31 @@ async def traveller_dash_edit(request: Request):
         }
         )
 
+# /traveller/edit
+@app.post("/traveller/edit", response_class=HTMLResponse)
+async def traveller_edit(request: Request,
+    u_id: str = Form(...),
+    location: str = Form(...),
+    destination: str = Form(...),
+    start_date: datetime = Form(...),
+    end_date: datetime = Form(...), 
+):
+    f = open('users.json')
+    travellers = json.load(f)['travellers']
+    f.close()
+    for traveller in travellers:
+        if traveller['u_id'] == u_id:
+            traveller 
+    
+    return templates.TemplateResponse("traveller_edit.html",
+    {
+        "location": location,
+        "destination": destination, 
+        "start_date": start_date,
+        "end_date": end_date,
+    }
+    )
+
 # travel agency get
 @app.get("/travelagency", response_class=HTMLResponse)
 async def travelagency(request: Request):
