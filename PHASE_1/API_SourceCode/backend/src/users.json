@@ -1,29 +1,55 @@
 {
-"agencies" : [
-    {
-        "id": 1,
-        "name": "Bob's Agency",
-        "users": [1],
-        "phone": "555-5555-555",
-        "locations": ["Sydney"],
-        "email" : "bobsagency@gmail.com",
-        "password" : "abc123",
-        "new_requests" : [{"email": "garrysmith@gmail.com", "message": "I want to go to New York."}],
-        "current_requests": [{"u_id": 1, "message": "The hotel room was not booked. I need a new room."}]
-    }
-],
-"travellers" : [
-    { 
-        "u_id" : 1,
-        "email" : "stanleyparks@gmail.com",
-        "password" : "abc123",
-        "name" : "Stanley Parks",
-        "location" : "Australia",
-        "destination" : "Thailand",
-        "start_date" : "2020-01-01",
-        "end_date" : "2022-10-10",
-        "phone": "2022-2022-2022",
-        "agency": 0
-    }
-]
+    "agencies": [
+        {
+            "current_requests": [
+                {
+                    "message": "The hotel room was not booked. I need a new room.",
+                    "u_id": 1
+                }
+            ],
+            "email": "bobsagency@gmail.com",
+            "id": 1,
+            "locations": [
+                "Sydney"
+            ],
+            "name": "Bob's Agency",
+            "new_requests": [
+                {
+                    "email": "garrysmith@gmail.com",
+                    "message": "I want to go to New York."
+                }
+            ],
+            "password": "abc123",
+            "phone": "555-5555-555",
+            "users": [
+                1
+            ]
+        }
+    ],
+    "travellers": [
+        {
+            "agency": 0,
+            "destination": "Thailand",
+            "email": "stanleyparks@gmail.com",
+            "end_date": "2022-10-10",
+            "location": "Australia",
+            "name": "Stanley Parks",
+            "password": "abc123",
+            "phone": "2022-2022-2022",
+            "start_date": "2020-01-01",
+            "u_id": 1
+        },
+        {
+            "agency": 0,
+            "destination": "aaa",
+            "email": "stanleyparks@gmail.com",
+            "end_date": "2022-04-19",
+            "location": "Aaa",
+            "name": "Stanley Parks",
+            "password": "abc123",
+            "phone": "2022-2022-2022",
+            "start_date": "2022-03-28",
+            "u_id": "1"
+        }
+    ]
 }

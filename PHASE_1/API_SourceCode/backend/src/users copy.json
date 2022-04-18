@@ -1,0 +1,41 @@
+{
+"agencies" : [
+    {
+        "id": 1,
+        "name": "Bob's Agency",
+        "users": [1],
+        "phone": "555-5555-555",
+        "locations": ["Sydney"],
+        "email" : "bobsagency@gmail.com",
+        "password" : "abc123",
+        "new_requests" : [{"email": "garrysmith@gmail.com", "message": "I want to go to New York."}],
+        "current_requests": [{"u_id": 1, "message": "The hotel room was not booked. I need a new room."}]
+    }
+],
+"travellers" : [
+    { 
+        "u_id" : 1,
+        "email" : "stanleyparks@gmail.com",
+        "password" : "abc123",
+        "name" : "Stanley Parks",
+        "location" : "Australia",
+        "destination" : "Thailand",
+        "start_date" : "2020-01-01",
+        "end_date" : "2022-10-10",
+        "phone": "2022-2022-2022",
+        "agency": 0
+    },
+    { 
+        "u_id" : "1",
+        "email" : "stanleyparks@gmail.com",
+        "password" : "abc123",
+        "name" : "Stanley Parks",
+        "location" : "Australia",
+        "destination" : "Thailand",
+        "start_date" : "2020-01-01",
+        "end_date" : "2022-10-10",
+        "phone": "2022-2022-2022",
+        "agency": 0
+    }
+]
+}

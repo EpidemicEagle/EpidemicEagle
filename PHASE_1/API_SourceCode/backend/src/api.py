@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from resource import RLIMIT_CPU
 from fastapi import FastAPI, HTTPException, Query, Request, Form
 from fastapi.openapi.utils import get_openapi
@@ -444,30 +444,54 @@ async def traveller_dash_edit(request: Request):
         }
         )
 
-# /traveller/edit
-@app.post("/traveller/edit", response_class=HTMLResponse)
+
+
+# traveller get
+@app.get("/traveller_edit", response_class=HTMLResponse)
+async def traveller_edit(request: Request):
+    return templates.TemplateResponse("edit.html", {"request": request})
+
+
+# /traveller_edit
+@app.post("/traveller_edit", response_class=HTMLResponse)
 async def traveller_edit(request: Request,
     u_id: str = Form(...),
     location: str = Form(...),
     destination: str = Form(...),
-    start_date: datetime = Form(...),
-    end_date: datetime = Form(...), 
+    start_date: date = Form(...),
+    end_date: date = Form(...), 
 ):
-    f = open('users.json')
-    travellers = json.load(f)['travellers']
-    f.close()
-    for traveller in travellers:
+
+    print(u_id, location, destination, start_date, end_date)
+
+
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    f.close() 
+    for traveller in data['travellers']:
+        
         if traveller['u_id'] == u_id:
-            traveller 
+            # change if not null
+            print("Matched")
+            if location != "":
+                traveller.update(location=location)
+            if destination != "":
+                traveller.update(destination=destination)            
+            if start_date != "":
+                traveller.update(start_date=start_date)            
+            if end_date != "":
+                traveller.update(end_date=end_date)
+            break
     
-    return templates.TemplateResponse("traveller_edit.html",
-    {
-        "location": location,
-        "destination": destination, 
-        "start_date": start_date,
-        "end_date": end_date,
-    }
-    )
+    with open('users.json', 'w') as fp:
+        fp.write(json.dumps(data, indent=4, sort_keys=True, default=str))
+        
+    return templates.TemplateResponse("person.html", {
+        "request": request, 
+        "user": traveller, 
+        "covid_data" : covid_api(traveller['destination']),
+        "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), traveller['destination'])
+        })
 
 # travel agency get
 @app.get("/travelagency", response_class=HTMLResponse)
