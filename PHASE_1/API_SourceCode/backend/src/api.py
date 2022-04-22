@@ -378,6 +378,12 @@ async def id_articles(request: Request, id):
 # traveller get
 @app.get("/traveller", response_class=HTMLResponse)
 async def traveller(request: Request):
+    try:
+        user
+    except:
+        print('no user')
+        return templates.TemplateResponse("person.html", {"request": request})
+
     return templates.TemplateResponse("person.html", {
         "request": request, 
         "user": user, 

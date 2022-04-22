@@ -53,7 +53,6 @@
   color: #009879;
   }
 
-
 </style>
 </head>
 <body>
@@ -67,7 +66,7 @@
   <hr>
   <h1 style="padding-left: 20px;">Quick Search</h1>
   <hr>
-  <form class="form-inline" action="/qsearch" method="post" style="padding-left: 20px;" autocomplete="off">
+  <form class="form-inline mx-auto" action="/qsearch" method="post" style="padding-left: 20px;" autocomplete="off">
     <div class="overflow-auto">
       <h3>Country</h3>
       <input id="countryInput" type="text" name="location" placeholder="Country" value={{location}}>
@@ -79,37 +78,53 @@
   </form>
   <hr>
   {% if searches %}
-  <h1 class="mx-auto" style="color:red;padding-left: 1.5em;">Found reports for {{location}}!!!</h1>
-  <h3 style="padding-left: 1.5em;">Epidemic Eagle suggests to reschedule this location for at least 90 days later.</h3>
-  <div class="mx-auto" style="padding-left: 20px;">
-    <table class="styled-table">
-        <thead>
-            <th>Headline</th>
-            <th>Date of publication</th>
-            <th>URL</th>
-        </thead>
-        <tbody>
-          {% for qs in searches %}
-          <tr>
-            <td> {{ qs.headline }} </td>
-            <td> {{ qs.dateOfPublication }} </td>
-            <td>
-              <a href="{{ qs.url }}">
-                {{ qs.url }}
-              </a>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-    </table>
+  <div class="card mx-auto" style="width: 75%">
+    <div class="card-body">
+      <br>
+      <h1 class="mx-auto" style="color:red;padding-left: 1.5em;">Found reports for {{location}}!!!</h1>
+      <h3 style="padding-left: 1.5em;">Epidemic Eagle suggests to reschedule this location for at least 90 days later.</h3>
+      <div class="mx-auto" style="padding-left: 20px;">
+        <table class="styled-table">
+            <thead>
+                <th>Headline</th>
+                <th>Date of publication</th>
+                <th>URL</th>
+            </thead>
+            <tbody>
+              {% for qs in searches %}
+              <tr>
+                <td> {{ qs.headline }} </td>
+                <td> {{ qs.dateOfPublication }} </td>
+                <td>
+                  <a href="{{ qs.url }}">
+                    {{ qs.url }}
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+      </div>
+      {% if risk_level %}
+      <h3 style="padding-left: 20px;">{{ risk_level.message}}</h3>
+      <br>
+      <h8 style="padding-left: 20px;"><a href={{risk_level.source}}>{{risk_level.source}}</a></h4>
+      {% endif %}
+    </div>
   </div>
-    {% if risk_level %}
-    <h3 style="padding-left: 1.5em;">{{ risk_level.message}}</h3>
-    <h4 style="padding-left: 1.5em;"><a href={{risk_level.source}}>{{risk_level.source}}</a></h4>
-    {% endif %}
   {% elif location %}
-  <h1 class="mx-auto" style="color:#5cb25d;padding-left: 1em;">No reports for {{location}}.</h1>
-  <h3 style="padding-left: 1em;">Epidemic Eagle suggests to enjoy your trip.</h3>
+    <div class="card mx-auto" style="width: 33%">
+      <div class="card-body">
+        <br>
+        <h1 class="mx-auto" style="color:#5cb25d;padding-left: 1em;">No reports for {{location}}.</h1>
+        <br>
+        {% if risk_level %}
+        <h3 style="padding-left: 20px;">{{ risk_level.message}}</h3>
+        <br>
+        <h8 style="padding-left: 20px;"><a href={{risk_level.source}}>{{risk_level.source}}</a></h4>
+        {% endif %}
+      </div>
+    </div>
   {% endif %}
   <script>
     function autocomplete(inp, arr) {

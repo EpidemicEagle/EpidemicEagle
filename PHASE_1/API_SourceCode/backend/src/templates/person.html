@@ -93,83 +93,92 @@
     </div>
     <hr>
     <div class="row">
-      <div class="col-md-4 border rounded-top border-success" >
-        <!-- If cases then show them, else show no data found for  -->
-        {% if covid_data %}
-          <hr>
-          <h2>Showing data for COVID</h2>
-          <hr>
-          <p>New Cases: {{covid_data.todayCases}}</p>
-          <hr>
-          <p>Active Cases: {{covid_data.active}}</p>
-          <hr>
-          <p>Recovered People: {{covid_data.recovered}}</p>
-          <hr>
-          <p>Tests: {{covid_data.tests}}</p>    
-          <hr>
-          <p>Average COVID Infection: 1 in {{covid_data.oneCasePerPeople}} people</p>
-          <hr>    
-          <p style="font-size:12px;">Source: <a href="https://disease.sh/">https://disease.sh/</a></p>
-        {% else %}
-          <h1>Could not find any data for {{user.destination}}</h1>
-        {% endif %}
+      <div class="col-md-4" >
+        <div class="card mx-auto" style="width: 85%">
+          <div class="card-body">           
+              <!-- If cases then show them, else show no data found for  -->
+              {% if covid_data %}
+              <h2>Showing data for COVID</h2>
+              <hr>
+              <p>New Cases: {{covid_data.todayCases}}</p>
+              <hr>
+              <p>Active Cases: {{covid_data.active}}</p>
+              <hr>
+              <p>Recovered People: {{covid_data.recovered}}</p>
+              <hr>
+              <p>Tests: {{covid_data.tests}}</p>    
+              <hr>
+              <p>Average COVID Infection: 1 in {{covid_data.oneCasePerPeople}} people</p>
+              <hr>    
+              <p style="font-size:12px;">Source: <a href="https://disease.sh/">https://disease.sh/</a></p>
+            {% else %}
+              <h1>Could not find any data for {{user.destination}}</h1>
+            {% endif %}
+            </div>
+            </div>
       </div>
       <div class="col-md-4 text-center">
-        {% if reports %}
-        <h3>Reports for {{user.destination}}</h3>
-        <table class="styled-table">
-            <thead>
-                <th>Diseases</th>
-                <th>Syndromes</th> 
-                <th>Date</th>
-                <th>Locations</th>
-            </thead>
-            <tbody>
-                
-                {% for report in reports %}
-                    <tr>
-                        <td> {{ report.l_diseases }} </td>
-                        <td> {{ report.syndrome }} </td>
-                        <td> {{report.eventDate }} </td> 
-                        <td> {{ report.l_locations }} </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% endif %}
+        <div class="card mx-auto" style="width: 85%">
+          <div class="card-body overflow-auto">    
+          {% if reports %}
+          <h3>Reports for {{user.destination}}</h3>
+          <table class="styled-table mx-auto">
+              <thead>
+                  <th>Diseases</th>
+                  <th>Date</th>
+                  <th>Locations</th>
+              </thead>
+              <tbody>
+                  
+                  {% for report in reports %}
+                      <tr>
+                          <td> {{ report.l_diseases }} </td>
+                          <td> {{report.eventDate }} </td> 
+                          <td> {{ report.l_locations }} </td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          {% endif %}
+          </div>
+          </div>
       </div>
       <div class="col-md-4">
-        <form role="form">
-          <hr>
-          <div class="form-group text-center">
-             <h2>Any Problems with Your Booking?</h2>
-             <h3>Message your travel agency for any questions</h3>
-             <hr>
-            <label for="problem">
-              Select an issue to report
-            </label>
-            <select id="problem" name="problem">
-              <option value="fly">Flight</option>
-              <option value="house">Accommodation</option>
-            </select>
+        <div class="card mx-auto" style="width: 85%">
+          <div class="card-body">    
+          <form role="form">
+            <hr>
+            <div class="form-group text-center">
+              <h2>Any Problems with Your Booking?</h2>
+              <h3>Message your travel agency for any questions</h3>
+              <hr>
+              <label for="problem">
+                Select an issue to report
+              </label>
+              <select id="problem" name="problem">
+                <option value="fly">Flight</option>
+                <option value="house">Accommodation</option>
+              </select>
+            </div>
+            <div class="form-group">
+              
+              <label for="message">
+                Message
+              </label>
+              <input type="text" class="form-control" id="message" />
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" /> I agree to the Terms and Conditions of EpidemicEagle.
+              </label>
+            </div> 
+            <hr>
+            <button type="submit" class="btn btn-success">
+              Submit
+            </button>
+          </form>
           </div>
-          <div class="form-group">
-             
-            <label for="message">
-              Message
-            </label>
-            <input type="text" class="form-control" id="message" />
           </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" /> I agree to the Terms and Conditions of EpidemicEagle.
-            </label>
-          </div> 
-          <hr>
-          <button type="submit" class="btn btn-success">
-            Submit
-          </button>
-        </form>
       </div>
     </div>
     <hr>
