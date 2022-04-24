@@ -59,10 +59,13 @@
 </style>
 <div class="container login-container">
     <div class="row">
-        <div class="col-md-6 login-form-1">
+        <div class="col-md-12 text-center">
             {% if wrong_user %}
-            <h3 style="color:red">Incorrect Login. Try Again.</h3>
+            <h3 style="color: red">Incorrect Login. Try Again.</h3>
+            <hr>
             {% endif %}
+        </div>
+        <div class="col-md-6 login-form-1">
             <h3>Login as a Traveller</h3>
             <form action="/traveller" method="post">
                 <div class="form-group">
@@ -81,11 +84,8 @@
             </form>
         </div>
         <div class="col-md-6 login-form-2">
-            {% if wrong_agency %}
-            <h3 style="color: red">Incorrect Login. Try Again.</h3>
-            {% endif %}
             <h3>Login as an Agency</h3>
-            <form action="/agency" method="post">
+            <form action="/travelagency" method="post">
                 <div class="form-group">
                     <input name="email" type="text" class="form-control" placeholder="Your Email *" value="" />
                 </div>

@@ -61,7 +61,6 @@
   <div class="shadow header" style="height: 240px;">
     <div style="padding-left: 1.5em;">
       <a class="navbar-brand logo-image" href="index.html" style="padding-left: 20px;"><img src="images/crop_logo.svg" alt="alternative" style="width:150px;height:150px;"></a>
-      <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
     </div>
   </div>
   <hr>
@@ -73,14 +72,8 @@
           Welcome, {{user.name}}.
         </h1>
       </div>
-      <div class="col-md-2 text-center">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-          Edit
-        </button>
-        <button type="button" class="btn btn-outline-success">
-          Logout
-        </button>
+      <div class="col-md-2 text-center">    
+        <a class="btn-solid-lg" href='/'>Logout</a>
       </div>
     </div>
     <hr>
@@ -118,8 +111,6 @@
             </div>
       </div>
       <div class="col-md-4 text-center">
-        <div class="card mx-auto" style="width: 85%">
-          <div class="card-body overflow-auto">    
           {% if reports %}
           <h3>Reports for {{user.destination}}</h3>
           <table class="styled-table mx-auto">
@@ -140,13 +131,12 @@
               </tbody>
           </table>
           {% endif %}
-          </div>
-          </div>
+          <!-- Risk Level -->
       </div>
       <div class="col-md-4">
         <div class="card mx-auto" style="width: 85%">
           <div class="card-body">    
-          <form role="form">
+          <form role="form" action="/inquiry" method="post">
             <hr>
             <div class="form-group text-center">
               <h2>Any Problems with Your Booking?</h2>
@@ -161,11 +151,12 @@
               </select>
             </div>
             <div class="form-group">
-              
               <label for="message">
                 Message
               </label>
-              <input type="text" class="form-control" id="message" />
+              <input type="text" class="form-control" name="message" />
+              <input type="hidden" id="email" name="email" value={{user.email}}>
+              <input type="hidden" name="name" value={{user.name}}>
             </div>
             <div class="checkbox">
               <label>

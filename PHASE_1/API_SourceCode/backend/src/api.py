@@ -191,30 +191,16 @@ async def q(request: Request,
                 })
     return RedirectResponse("/login") 
 
-# @app.post("/login", response_class=HTMLResponse)
-# async def index(request: Request,
-#     email: Optional[str] = Form(...),
-#     password: Optional[str] = Form(...),
-#     type: Optional[str] = Form(...),
-#     ):
-#     # print(email, password, type)
-#     f = open('users.json', 'r+')
-#     data = json.load(f)
-#     # print(data)
-#     users = data['travellers']
-#     if type == 'user':
-#         users = data['travellers']
-#         for user in users:
-#             if user['email'] == email and user['password'] == password:
-#                 return RedirectResponse("/traveller") 
-#         return templates.TemplateResponse("login.html", {"request": request, "wrong_user" : True})
-#     else:
-#         agencies = data['agencies']
-#         for agency in agencies:
-#             if agency['email'] == email and agency['password'] == password:
-#                 return templates.TemplateResponse("agency.html", {"request": request, "user": user})
-#         return templates.TemplateResponse("login.html", {"request": request, "wrong_agency" : True})
-
+@app.post("/inquiry", response_class=HTMLResponse)
+async def q(request: Request,
+    message: str = Form(...),
+    problem: str = Form(...),
+    email: str = Form(...),
+    name: str = Form(...)
+    ): 
+    print(message,problem, email, name)
+    # change the json to include the request
+    return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/agency", response_class=HTMLResponse)
 async def index(request: Request):
@@ -374,35 +360,6 @@ async def id_articles(request: Request, id):
     # report = data[int(id)]    
     return templates.TemplateResponse("entry.html", {"request": request, "id": id})
 
-
-# traveller get
-@app.get("/traveller", response_class=HTMLResponse)
-async def traveller(request: Request):
-    try:
-        user
-    except:
-        print('no user')
-        return templates.TemplateResponse("person.html", {"request": request})
-
-    return templates.TemplateResponse("person.html", {
-        "request": request, 
-        "user": user, 
-        "covid_data" : covid_api(user['destination']),
-        "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), user['destination'])
-    })
-
-# traveller post
-@app.post("/traveller", response_class=HTMLResponse)
-async def traveller_dash(request: Request):
-    return templates.TemplateResponse("person.html", {
-    "request": request, 
-    "user": user, 
-    "covid_data" : covid_api(user['destination']),
-    "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), user['destination'])
-})
-
-
-
 # traveller get
 @app.get("/edit", response_class=HTMLResponse)
 async def traveller_edit(request: Request):
@@ -504,34 +461,51 @@ async def travelagency(request: Request):
     return templates.TemplateResponse("travelagency.html", {"request": request})
 
 
-# travel agency post
 @app.post("/travelagency", response_class=HTMLResponse)
-async def travelagency_dash(request: Request):
-    # sample agency
-    agency = {
-        "id": 1,
-        "name": "Bob's Agency",
-        "users": [
-            {"name" : "Stanley Parks","email" : "stanleyparks@gmail.com", "phone": "083 555 6733", "location" : "Sydney, Australia","destination" : "Bangkok, Thailand"}, 
-            {"name" : "Edgar Wright","email" : "ewright@gmail.com", "phone": "074 555 1491", "location" : "Birmingham, England","destination" : "Swansea, Wales"},
-            {"name" : "Maria de Souza","email" : "mdsouza@gmail.com", "phone": "073 555 3921", "location" : "Toronto, Canada","destination" : "Washington, USA"},
-            {"name" : "Jon Jones","email" : "jjones@gmail.com", "phone": "084 555 4143", "location" : "Manchester, England","destination" : "Durban, South Africa"},
-            {"name" : "Sibusiso Jacob","email" : "sjakes@gmail.com", "phone": "074 555 8127", "location" : "Cape Town, South Africa","destination" : "Windhoek, Namibia"}
-        ],
-        "phone": "555-5555-555",
-        "locations": ["Sydney"],
-        "email" : "bobsagency@gmail.com",
-        "password" : "abc123",
-        "new_requests" : [
-            {"email": "garrysmith@gmail.com", "message": "I need help booking a family vacation to the Caribbean."},
-            {"email": "jamesdaniels@gmail.com", "message": "I would like to travel to Amsterdam from Manchester"}
-        ],
-        "current_requests": [
-            {"name": "Stanley Parks", "message": "The hotel room was not booked. I need a new room."},
-            {"name": "Jon Jones", "message": "Could you please postpone my flight by two weeks?"}
-        ]
-    }
-    return templates.TemplateResponse("travelagency.html", {"request": request, "agency": agency})
+async def q(request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
+    ):
+    print(email, password)
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    users = data['agencies']
+    for agency in users:
+        if agency['email'] == email and agency['password'] == password:
+            return templates.TemplateResponse("travelagency.html", {
+                "request": request, 
+                "agency": agency
+                })
+    return RedirectResponse("/login") 
+
+# travel agency post
+# @app.post("/travelagency", response_class=HTMLResponse)
+# async def travelagency_dash(request: Request):
+#     # sample agency
+#     agency = {
+#         "id": 1,
+#         "name": "Bob's Agency",
+#         "users": [
+#             {"name" : "Stanley Parks","email" : "stanleyparks@gmail.com", "phone": "083 555 6733", "location" : "Sydney, Australia","destination" : "Bangkok, Thailand"}, 
+#             {"name" : "Edgar Wright","email" : "ewright@gmail.com", "phone": "074 555 1491", "location" : "Birmingham, England","destination" : "Swansea, Wales"},
+#             {"name" : "Maria de Souza","email" : "mdsouza@gmail.com", "phone": "073 555 3921", "location" : "Toronto, Canada","destination" : "Washington, USA"},
+#             {"name" : "Jon Jones","email" : "jjones@gmail.com", "phone": "084 555 4143", "location" : "Manchester, England","destination" : "Durban, South Africa"},
+#             {"name" : "Sibusiso Jacob","email" : "sjakes@gmail.com", "phone": "074 555 8127", "location" : "Cape Town, South Africa","destination" : "Windhoek, Namibia"}
+#         ],
+#         "phone": "555-5555-555",
+#         "locations": ["Sydney"],
+#         "email" : "bobsagency@gmail.com",
+#         "password" : "abc123",
+#         "new_requests" : [
+#             {"email": "garrysmith@gmail.com", "message": "I need help booking a family vacation to the Caribbean."},
+#             {"email": "jamesdaniels@gmail.com", "message": "I would like to travel to Amsterdam from Manchester"}
+#         ],
+#         "current_requests": [
+#             {"name": "Stanley Parks", "message": "The hotel room was not booked. I need a new room."},
+#             {"name": "Jon Jones", "message": "Could you please postpone my flight by two weeks?"}
+#         ]
+#     }
+#     return templates.TemplateResponse("travelagency.html", {"request": request, "agency": agency})
 
 ## API functions
 
