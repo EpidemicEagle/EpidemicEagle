@@ -124,6 +124,29 @@ async def index(request: Request):
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
+@app.post("/", response_class=HTMLResponse)
+async def index(request: Request,
+    rname: str = Form(...),
+    remail: str = Form(...),
+    rphone: str = Form(...),
+    rmessage: str = Form(...)
+):
+    print(rname, remail, rphone, rmessage)
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    f.close()
+    # print(data)
+    agencies = data['agencies']   
+    for agency in agencies:
+        agency['new_requests'].append({'email': remail,'message':rmessage, 'name': rname, 'phone':rphone})
+
+    jsonFile = open("users.json", "w+")
+    jsonFile.write(json.dumps(data, indent=2))
+    jsonFile.close()
+
+    return templates.TemplateResponse("index.html", {"request": request, 'success':True})
+
 @app.get("/login", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
@@ -200,7 +223,26 @@ async def q(request: Request,
     ): 
     print(message,problem, email, name)
     # change the json to include the request
-    return templates.TemplateResponse("index.html", {"request": request})
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    f.close()
+    # print(data)
+    agencies = data['agencies']   
+    for agency in agencies:
+        d = agency['users']
+        for user in d:
+            if user['email'] == email and user['name'] == name:
+                print('hi')
+                agency['current_requests'].append({'name': name,'message':message})
+                print(agency)
+                print(data)
+                jsonFile = open("users.json", "w+")
+                jsonFile.write(json.dumps(data, indent=2))
+                jsonFile.close()
+                break
+
+    return templates.TemplateResponse("index.html", {"request": request, "success": True})
+    # return templates.TemplateResponse("index.html", {"request": request})
 
 @app.get("/agency", response_class=HTMLResponse)
 async def index(request: Request):
@@ -297,7 +339,6 @@ async def search(request: Request):
 # search post
 @app.post("/completesearch", response_class=HTMLResponse)
 async def search_post(request: Request,
-    key_terms: str = Form(...),
     disease: str = Form(...),
     location: str = Form(...),
     start_date: datetime  = Form(...),
@@ -336,7 +377,6 @@ async def search_post(request: Request,
 
     return templates.TemplateResponse("completesearch.html", 
     {
-        "key_terms": key_terms,
         "disease": disease,
         "location": location,
         "start_date": start_date,
@@ -347,18 +387,35 @@ async def search_post(request: Request,
     }
     )
 
+from bs4 import BeautifulSoup as bs
+import requests as rq
+def getsoup(url):
+    res = rq.get(url)
+    soup = bs(res.content, features="lxml")
+    paras = []
+    i = 0
+    for link in soup.findAll('p'):
+        if link != 'None' or link != "":
+            paras.append({"string":link.string,
+            "id":"para"+str(i)})
+            i += 1
+    return paras
 # articles id get
-@app.get("/articles/{id}", response_class=HTMLResponse)
-async def id_articles(request: Request, id):
-    # f = open("articles.json")
-    # data = json.load(f)['articles']
-    # length = len(data)
+@app.post("/article", response_class=HTMLResponse)
+async def id_articles(request: Request,
+id: str = Form(...)):
+    print(id)
+    f = open("articles.json")
+    data = json.load(f)['articles']
+    length = len(data)
 
     # return 'no articles found if greater than num of articles"
-    # if int(id) > length or int(id) < 0:
-    #     return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
-    # report = data[int(id)]    
-    return templates.TemplateResponse("entry.html", {"request": request, "id": id})
+    if int(id) > length or int(id) < 0:
+        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
+    article = data[int(id)]    
+    paras = getsoup(article['url'])
+
+    return templates.TemplateResponse("entry.html", {"request": request, "id": id, "article": article, 'paras': paras})
 
 # traveller get
 @app.get("/edit", response_class=HTMLResponse)

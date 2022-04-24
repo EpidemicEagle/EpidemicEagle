@@ -1,53 +1,111 @@
 {
-    "agencies": [
+  "agencies": [
+    {
+      "id": 1,
+      "name": "Bob's Agency",
+      "users": [
         {
-            "id": 1,
-            "name": "Bob's Agency",
-            "users": [
-                {"name" : "Stanley Parks","email" : "stanleyparks@gmail.com", "phone": "083 555 6733", "location" : "Sydney, Australia","destination" : "Bangkok, Thailand"}, 
-                {"name" : "Edgar Wright","email" : "ewright@gmail.com", "phone": "074 555 1491", "location" : "Birmingham, England","destination" : "Swansea, Wales"},
-                {"name" : "Maria de Souza","email" : "mdsouza@gmail.com", "phone": "073 555 3921", "location" : "Toronto, Canada","destination" : "Washington, USA"},
-                {"name" : "Jon Jones","email" : "jjones@gmail.com", "phone": "084 555 4143", "location" : "Manchester, England","destination" : "Durban, South Africa"},
-                {"name" : "Sibusiso Jacob","email" : "sjakes@gmail.com", "phone": "074 555 8127", "location" : "Cape Town, South Africa","destination" : "Windhoek, Namibia"}
-            ],
-            "phone": "555-5555-555",
-            "locations": ["Sydney"],
-            "email" : "bobsagency@gmail.com",
-            "password" : "abc123",
-            "new_requests" : [
-                {"email": "garrysmith@gmail.com", "message": "I need help booking a family vacation to the Caribbean."},
-                {"email": "jamesdaniels@gmail.com", "message": "I would like to travel to Amsterdam from Manchester"}
-            ],
-            "current_requests": [
-                {"name": "Stanley Parks", "message": "The hotel room was not booked. I need a new room."},
-                {"name": "Jon Jones", "message": "Could you please postpone my flight by two weeks?"}
-            ]
-        }
-    ],
-    "travellers": [
-        {
-            "agency": 0,
-            "destination": "Thailand",
-            "email": "stanleyparks@gmail.com",
-            "end_date": "2022-10-10",
-            "location": "Australia",
-            "name": "Stanley Parks",
-            "password": "abc123",
-            "phone": "2022-2022-2022",
-            "start_date": "2020-01-01",
-            "u_id": 1
+          "name": "Stanley Parks",
+          "email": "stanleyparks@gmail.com",
+          "phone": "083 555 6733",
+          "location": "Sydney, Australia",
+          "destination": "Bangkok, Thailand"
         },
         {
-            "agency": 0,
-            "destination": "aaa",
-            "email": "stanleyparks@gmail.com",
-            "end_date": "2022-04-19",
-            "location": "Aaa",
-            "name": "Stanley Parks",
-            "password": "abc123",
-            "phone": "2022-2022-2022",
-            "start_date": "2022-03-28",
-            "u_id": "1"
+          "name": "Edgar Wright",
+          "email": "ewright@gmail.com",
+          "phone": "074 555 1491",
+          "location": "Birmingham, England",
+          "destination": "Swansea, Wales"
+        },
+        {
+          "name": "Maria de Souza",
+          "email": "mdsouza@gmail.com",
+          "phone": "073 555 3921",
+          "location": "Toronto, Canada",
+          "destination": "Washington, USA"
+        },
+        {
+          "name": "Jon Jones",
+          "email": "jjones@gmail.com",
+          "phone": "084 555 4143",
+          "location": "Manchester, England",
+          "destination": "Durban, South Africa"
+        },
+        {
+          "name": "Sibusiso Jacob",
+          "email": "sjakes@gmail.com",
+          "phone": "074 555 8127",
+          "location": "Cape Town, South Africa",
+          "destination": "Windhoek, Namibia"
         }
-    ]
+      ],
+      "phone": "555-5555-555",
+      "locations": [
+        "Sydney"
+      ],
+      "email": "bobsagency@gmail.com",
+      "password": "abc123",
+      "new_requests": [
+        {
+          "email": "garrysmith@gmail.com",
+          "message": "I need help booking a family vacation to the Caribbean.",
+          "name": "Garry",
+          "phone": "090909090"
+        },
+        {
+          "email": "jamesdaniels@gmail.com",
+          "message": "I would like to travel to Amsterdam from Manchester",
+          "name": "James",
+          "phone": "098989898"
+        },
+        {
+          "email": "aaa@gmail.com",
+          "message": "I want to go ot THailand",
+          "name": "John",
+          "phone": "0489219128"
+        }
+      ],
+      "current_requests": [
+        {
+          "name": "Stanley Parks",
+          "message": "The hotel room was not booked. I need a new room."
+        },
+        {
+          "name": "Jon Jones",
+          "message": "Could you please postpone my flight by two weeks?"
+        },
+        {
+          "email": "stanleyparks@gmail.com",
+          "message": "I need money"
+        }
+      ]
+    }
+  ],
+  "travellers": [
+    {
+      "agency": 1,
+      "destination": "Thailand",
+      "email": "stanleyparks@gmail.com",
+      "end_date": "2022-10-10",
+      "location": "Australia",
+      "name": "Stanley Parks",
+      "password": "abc123",
+      "phone": "2022-2022-2022",
+      "start_date": "2020-01-01",
+      "u_id": 1
+    },
+    {
+      "agency": 0,
+      "destination": "aaa",
+      "email": "ryanreynolds@gmail.com",
+      "end_date": "2022-04-19",
+      "location": "Aaa",
+      "name": "Stanley Parks",
+      "password": "iii",
+      "phone": "2022-2022-2022",
+      "start_date": "2022-03-28",
+      "u_id": "1"
+    }
+  ]
 }

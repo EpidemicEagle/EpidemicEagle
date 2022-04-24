@@ -61,7 +61,9 @@
     <div class="row">
         <div class="col-md-12 text-center">
             {% if wrong_user %}
-            <h3 style="color: red">Incorrect Login. Try Again.</h3>
+            <div class="alert alert-danger" role="alert">
+                Incorrect Login. Please try again.
+              </div>
             <hr>
             {% endif %}
         </div>

@@ -80,14 +80,18 @@
               <table class="styled-table">
                 <caption style="caption-side:top; text-align:center" font-size="1.9rem">New Requests</caption> 
                 <thead>
+                      <th>Name</th>
+                      <th>Phone</th>
                       <th>User Email</th>
                       <th>Request</th>
                   </thead>
                   <tbody>
                       {% for request in agency.new_requests %}
                           <tr>
-                              <td> {{ request.email }} </td>
-                              <td> {{ request.message }} </td>
+                            <td> {{ request.name }} </td>
+                            <td> {{ request.phone }} </td>
+                            <td> {{ request.email }} </td>
+                            <td> {{ request.message }} </td>
                           </tr>
                       {% endfor %}
                   </tbody>
@@ -97,12 +101,19 @@
                 <thead>
                       <th>Client Name</th>
                       <th>Issue</th>
+                      <th>End Request</th>
                   </thead>
                   <tbody>
                       {% for issue in agency.current_requests %}
                           <tr>
                               <td> {{ issue.name }} </td>
                               <td> {{ issue.message }} </td>
+                              <td>
+                              <form name="f2" action="/" >
+                                <input type=hidden name="issue" value="{{issue.name}}">
+                                <input id="edit" type="submit" name="edit" value="Remove" />
+                               </form>
+                              </td>
                           </tr>
                       {% endfor %}
                   </tbody>
@@ -133,8 +144,8 @@
               <form role="form">
                 <hr>
                 <div class="form-group text-center">
-                  <h2>Any Problems with Your Booking?</h2>
-                  <h3>Message your travel agency for any questions</h3>
+                  <h2>Add a new client</h2>
+                  <h3></h3>
                   <hr>
                   <label for="problem">
                     Select an issue to report
@@ -172,12 +183,6 @@
     <h3 style="padding-left: 1em;">Please try logging in or signing up</h3>
   {% endif %}
   <hr>
-  <form class="form-inline" action="/travelagency" method="post">
-    
-    <div style="padding-left: 20px;">
-      <h3>Post</h3>
-        <input type="submit" placeholder="Emulate Login">
-    </div>
-  </form>
+
 </body>
 </html>

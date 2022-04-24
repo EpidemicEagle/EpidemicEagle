@@ -77,11 +77,15 @@
     </nav> <!-- end of navbar -->
     <!-- end of navigation -->
 
-
     <!-- Header -->
     <header id="header" class="header">
         <div class="header-content">
             <div class="container">
+                {% if success %}
+                <div class="alert alert-success" role="alert">
+                    Successfully submitted an inquiry, please check your email in at minimum 2 days.
+                </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="text-container">
@@ -138,7 +142,7 @@
                         <img class="card-image" src="images/crown.png" alt="alternative">
                         <div class="card-body">
                             <h4 class="card-title">Premium Features</h4>
-                            <p>. Our website has premium features that is provided exclusively to your experience, such as quick-copying and quick-searching articles.</p>
+                            <p><b>Create an account to access premium features.</b> Signup or quote a travel agency to gain access to premium features and personal dashboard.</p>
                         </div>
                     </div>
                     <!-- end of card -->
@@ -381,7 +385,55 @@
         </div> <!-- end of container -->
     </div> <!-- end of form-1 -->
     <!-- end of request -->
+    <div id="request" class="form-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="text-container">
+                        <h2>Signup To A Travel Agency</h2>
+                        <p style="text-align: center">Ready to go to your destination, but still not sure what to visit?<br> Automatically message all travel agencies nearby for a quote including tourist attractions or accommodation.</p>
+                    </div> <!-- end of text-container -->
+                </div> <!-- end of col -->
+                <div class="col-lg-6">
+                    <!-- Request Form -->
+                    <div class="form-container">
+                        <form id="requestForm" data-toggle="validator" data-focus="false" method="post" href="/">
+                            <div class="form-group">
+                                <input type="text" class="form-control-input" id="rname" name="rname" required>
+                                <label class="label-control" for="rname">Full name</label>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-control-input" id="remail" name="remail" required>
+                                <label class="label-control" for="remail">Email</label>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control-input" id="rphone" name="rphone" required>
+                                <label class="label-control" for="rphone">Phone</label>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control-input" id="rphone" name="rmessage" required>
+                                <label class="label-control" for="rphone">Message</label>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control-submit-button">REQUEST</button>
+                            </div>
+                            <div class="form-message">
+                                <div id="rmsgSubmit" class="h3 text-center hidden"></div>
+                            </div>
+                        </form>
+                    </div> <!-- end of form-container -->
+                    <!-- end of request form -->
 
+                </div> <!-- end of col -->
+            </div> <!-- end of row -->
+        </div> <!-- end of container -->
+    </div>
+
+    
     <!-- Copyright -->
     <div class="copyright">
         <div class="container">
