@@ -395,6 +395,7 @@ def getsoup(url):
     paras = []
     i = 0
     for link in soup.findAll('p'):
+        # print(link)
         if link != 'None' or link != "":
             paras.append({"string":link.string,
             "id":"para"+str(i)})
@@ -404,7 +405,6 @@ def getsoup(url):
 @app.post("/article", response_class=HTMLResponse)
 async def id_articles(request: Request,
 id: str = Form(...)):
-    print(id)
     f = open("articles.json")
     data = json.load(f)['articles']
     length = len(data)
@@ -467,50 +467,111 @@ async def traveller_dash_edit(request: Request):
 
 # traveller get
 @app.get("/traveller_edit", response_class=HTMLResponse)
-async def traveller_edit(request: Request):
-    return templates.TemplateResponse("edit.html", {"request": request})
+async def traveller_edit(request: Request,
+    name: str,
+    email: str,
+    phone: str,
+    destination: str,
+    location: str,
+    type: str,
+):
+    if type =='edit':
+        return templates.TemplateResponse("edit.html", {"request": request,
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'destination': destination,
+        'location': location
+        })
+    elif type == 'new':
+        # change the json 
+        f = open('users.json', 'r+')
+        data = json.load(f)
+        f.close()
+        # print(data)
+        ln = len(data['travellers']) + 2
+        user = {
+            'name': name,
+            'email': email,
+            'phone': phone,
+            'destination': destination,
+            'location': location,
+            'u_id':str(ln)
+        }
+        agencies = data['agencies'][0]
+        agencies['users'].append(ln)
+        data['travellers'].append(user)
+
+        with open('users.json', 'w') as fp:
+            fp.write(json.dumps(data, indent=2, sort_keys=True, default=str))
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "edit": True
+        })
 
 
 # /traveller_edit
 @app.post("/traveller_edit", response_class=HTMLResponse)
 async def traveller_edit(request: Request,
-    u_id: str = Form(...),
-    location: str = Form(...),
+    phone: str = Form(...),
     destination: str = Form(...),
-    start_date: date = Form(...),
-    end_date: date = Form(...), 
+    location: str = Form(...),
+    name: str = Form(...),
+
 ):
-
-    print(u_id, location, destination, start_date, end_date)
-
-
+    print(phone,destination,location, name)
     f = open('users.json', 'r+')
     data = json.load(f)
     f.close() 
     for traveller in data['travellers']:
-        
-        if traveller['u_id'] == u_id:
+        if traveller['name'] == name:
             # change if not null
             print("Matched")
             if location != "":
                 traveller.update(location=location)
             if destination != "":
-                traveller.update(destination=destination)            
-            if start_date != "":
-                traveller.update(start_date=start_date)            
-            if end_date != "":
-                traveller.update(end_date=end_date)
+                traveller.update(destination=destination)
+            if phone != "":
+                traveller.update(phone=phone)   
             break
     
     with open('users.json', 'w') as fp:
-        fp.write(json.dumps(data, indent=4, sort_keys=True, default=str))
+        fp.write(json.dumps(data, indent=2, sort_keys=True, default=str))
         
-    return templates.TemplateResponse("person.html", {
-        "request": request, 
-        "user": traveller, 
-        "covid_data" : covid_api(traveller['destination']),
-        "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), traveller['destination'])
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "edit": True
         })
+
+@app.get("/remove", response_class=HTMLResponse)
+async def traveller_edit(request: Request,
+    name: str,
+    msg: str, 
+    type: str
+):
+
+
+    # change the json
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    f.close() 
+    if type == "cur":
+        t = {'name':name, 'message':msg}
+        for i in data['agencies']:
+            if t in i['current_requests']:
+                i['current_requests'].remove(t)
+    elif type == 'new':
+        for i in data['agencies']:
+            for k in i['new_requests']:
+                if k['name'] == name and k['message'] == msg:
+                    i['new_requests'].remove(k)
+    with open('users.json', 'w') as fp:
+        fp.write(json.dumps(data, indent=2, sort_keys=True, default=str))
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "removed": True
+    })
+
 
 # travel agency get
 @app.get("/travelagency", response_class=HTMLResponse)
@@ -518,51 +579,34 @@ async def travelagency(request: Request):
     return templates.TemplateResponse("travelagency.html", {"request": request})
 
 
+def getusers(l):
+    l = [str(_) for _ in l]
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    users = data['travellers']
+    things = []
+    for u in users:
+        if u['u_id'] in l:
+            things.append(u)
+    return things     
+
 @app.post("/travelagency", response_class=HTMLResponse)
 async def q(request: Request,
     email: str = Form(...),
     password: str = Form(...),
     ):
-    print(email, password)
     f = open('users.json', 'r+')
     data = json.load(f)
     users = data['agencies']
+    f.close()
     for agency in users:
         if agency['email'] == email and agency['password'] == password:
             return templates.TemplateResponse("travelagency.html", {
                 "request": request, 
-                "agency": agency
+                "agency": agency,
+                "users": getusers(agency['users'])
                 })
     return RedirectResponse("/login") 
-
-# travel agency post
-# @app.post("/travelagency", response_class=HTMLResponse)
-# async def travelagency_dash(request: Request):
-#     # sample agency
-#     agency = {
-#         "id": 1,
-#         "name": "Bob's Agency",
-#         "users": [
-#             {"name" : "Stanley Parks","email" : "stanleyparks@gmail.com", "phone": "083 555 6733", "location" : "Sydney, Australia","destination" : "Bangkok, Thailand"}, 
-#             {"name" : "Edgar Wright","email" : "ewright@gmail.com", "phone": "074 555 1491", "location" : "Birmingham, England","destination" : "Swansea, Wales"},
-#             {"name" : "Maria de Souza","email" : "mdsouza@gmail.com", "phone": "073 555 3921", "location" : "Toronto, Canada","destination" : "Washington, USA"},
-#             {"name" : "Jon Jones","email" : "jjones@gmail.com", "phone": "084 555 4143", "location" : "Manchester, England","destination" : "Durban, South Africa"},
-#             {"name" : "Sibusiso Jacob","email" : "sjakes@gmail.com", "phone": "074 555 8127", "location" : "Cape Town, South Africa","destination" : "Windhoek, Namibia"}
-#         ],
-#         "phone": "555-5555-555",
-#         "locations": ["Sydney"],
-#         "email" : "bobsagency@gmail.com",
-#         "password" : "abc123",
-#         "new_requests" : [
-#             {"email": "garrysmith@gmail.com", "message": "I need help booking a family vacation to the Caribbean."},
-#             {"email": "jamesdaniels@gmail.com", "message": "I would like to travel to Amsterdam from Manchester"}
-#         ],
-#         "current_requests": [
-#             {"name": "Stanley Parks", "message": "The hotel room was not booked. I need a new room."},
-#             {"name": "Jon Jones", "message": "Could you please postpone my flight by two weeks?"}
-#         ]
-#     }
-#     return templates.TemplateResponse("travelagency.html", {"request": request, "agency": agency})
 
 ## API functions
 

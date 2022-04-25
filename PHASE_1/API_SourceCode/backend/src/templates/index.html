@@ -86,6 +86,16 @@
                     Successfully submitted an inquiry, please check your email in at minimum 2 days.
                 </div>
                 {% endif %}
+                {% if removed %}
+                <div class="alert alert-success" role="alert">
+                    Successfully removed request, please login again to view the updated requests.
+                </div>
+                {% endif %}
+                {% if edit %}
+                <div class="alert alert-success" role="alert">
+                    Successfully edited, please login again to view the updated edit.
+                </div>
+                {% endif %}
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="text-container">

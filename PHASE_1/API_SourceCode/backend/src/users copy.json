@@ -9,7 +9,12 @@
         "email" : "bobsagency@gmail.com",
         "password" : "abc123",
         "new_requests" : [{"email": "garrysmith@gmail.com", "message": "I want to go to New York."}],
-        "current_requests": [{"u_id": 1, "message": "The hotel room was not booked. I need a new room."}]
+        "current_requests": [
+            {
+              "message": "I have an issue with my hotel in Thailand.",
+              "name": "Stanley Parks"
+            }
+          ]
     }
 ],
 "travellers" : [

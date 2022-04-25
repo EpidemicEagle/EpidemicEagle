@@ -84,6 +84,7 @@
                       <th>Phone</th>
                       <th>User Email</th>
                       <th>Request</th>
+                      <th>End Request</th>
                   </thead>
                   <tbody>
                       {% for request in agency.new_requests %}
@@ -92,6 +93,14 @@
                             <td> {{ request.phone }} </td>
                             <td> {{ request.email }} </td>
                             <td> {{ request.message }} </td>
+                            <td>                            
+                              <form name="f2" action="/remove" >
+                              <input type=hidden name="name" value="{{request.name}}">
+                              <input type=hidden name="msg" value="{{request.message}}">
+                              <input type=hidden name="type" value="new">
+                              <button type="submit" class="btn btn-info">Remove</button>
+                             </form>
+                            </td>
                           </tr>
                       {% endfor %}
                   </tbody>
@@ -109,9 +118,11 @@
                               <td> {{ issue.name }} </td>
                               <td> {{ issue.message }} </td>
                               <td>
-                              <form name="f2" action="/" >
-                                <input type=hidden name="issue" value="{{issue.name}}">
-                                <input id="edit" type="submit" name="edit" value="Remove" />
+                              <form name="f2" action="/remove" >
+                                <input type=hidden name="name" value="{{issue.name}}">
+                                <input type=hidden name="msg" value="{{issue.message}}">
+                                <input type=hidden name="type" value="cur">
+                                <button type="submit" class="btn btn-info">Remove</button>
                                </form>
                               </td>
                           </tr>
@@ -128,51 +139,60 @@
                       <th>Phone Number</th>
                       <th>Destination</th>
                       <th>Location</th>
+                      <th>Edit</th>
                   </thead>
                   <tbody>
-                      {% for user in agency.users %}
+                      {% for user in users %}
                           <tr>
                               <td> {{ user.name }} </td>
                               <td> {{ user.email }} </td>
                               <td> {{ user.phone }} </td>
                               <td> {{ user.destination }} </td>
                               <td> {{ user.location }} </td>
+                              <td> 
+                                <form name="f2" action="/traveller_edit" >
+                                  <input type=hidden name="name" value="{{user.name}}">
+                                  <input type=hidden name="email" value="{{user.email}}">
+                                  <input type=hidden name="phone" value="{{user.phone}}">
+                                  <input type=hidden name="destination" value="{{user.destination}}">
+                                  <input type=hidden name="location" value="{{user.location}}">
+                                  <input type=hidden name="type" value="edit">
+                                  <button type="submit" class="btn btn-info">Edit Traveller</button>
+                                 </form>
+                              </td>
                           </tr>
+
                       {% endfor %}
                   </tbody>
               </table>
-              <form role="form">
-                <hr>
-                <div class="form-group text-center">
-                  <h2>Add a new client</h2>
-                  <h3></h3>
+              <div class="card mx-auto">
                   <hr>
-                  <label for="problem">
-                    Select an issue to report
-                  </label>
-                  <select id="problem" name="problem">
-                    <option value="fly">Flight</option>
-                    <option value="house">Accommodation</option>
-                  </select>
+                  <h1 style="text-align:center">Add a New Traveller</h1>
+                  <form name="f2" action="/traveller_edit" >
+                    <div class="form-group text-center">
+                      <hr>
+                        <h5>Name</h5>
+                      <input type="text" name="name">
+                      <hr>
+                          <h5>Email</h5>
+                      <input type="text" name="email">
+                      <hr>
+                          <h5>Phone</h5>
+                      <input type="text" name="phone">
+                      <hr>
+                          <h5>Destination</h5>
+                      <input type="text" name="destination">
+                      <hr>
+                          <h5>Location</h5>
+                      <input type="text" name="location">
+                      <hr>
+                      <input type="hidden" name="type" value="new">
+                      <button type="submit" class="btn btn-info">Add Traveller</button>
+                    </div>
+                    </div>
+                  </form>
                 </div>
-                <div class="form-group">
-                  
-                  <label for="message">
-                    Message
-                  </label>
-                  <input type="text" class="form-control" id="message" />
                 </div>
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" /> I agree to the Terms and Conditions of EpidemicEagle.
-                  </label>
-                </div> 
-                <hr>
-                <button type="submit" class="btn btn-success">
-                  Submit
-                </button>
-              </form>
-            </div>
         {% else %}
             <h3 style="padding-left: 1.5em;">No clients currently</h3>
         {% endif %}
