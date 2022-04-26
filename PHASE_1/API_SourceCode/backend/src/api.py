@@ -210,7 +210,7 @@ async def q(request: Request,
                 "user": user, 
                 "covid_data" : covid_api(user['destination']),
                 "risk_level" : risk_level(user['destination']),
-                "reports": report_find(datetime.now() - timedelta(days=90), datetime.now(), user['destination'])
+                "reports": report_find(datetime.now() - timedelta(days=180), datetime.now(), user['destination'])
                 })
     return RedirectResponse("/login") 
 
@@ -496,7 +496,8 @@ async def traveller_edit(request: Request,
             'phone': phone,
             'destination': destination,
             'location': location,
-            'u_id':str(ln)
+            'u_id':str(ln),
+            'password': 'abc123'
         }
         agencies = data['agencies'][0]
         agencies['users'].append(ln)

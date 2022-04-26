@@ -90,7 +90,7 @@
         <div class="card mx-auto" style="width: 85%">
           <div class="card-body">           
               <!-- If cases then show them, else show no data found for  -->
-              {% if covid_data %}
+              {% if covid_data.todayCases %}
               <h2>Showing data for COVID</h2>
               <hr>
               <p>New Cases: {{covid_data.todayCases}}</p>
@@ -105,7 +105,7 @@
               <hr>    
               <p style="font-size:12px;">Source: <a href="https://disease.sh/">https://disease.sh/</a></p>
             {% else %}
-              <h1>Could not find any data for {{user.destination}}</h1>
+              <h5>Could not find any data for {{user.destination}}</h5>
             {% endif %}
             </div>
             </div>
@@ -130,7 +130,14 @@
                   {% endfor %}
               </tbody>
           </table>
+          {% else %}
+          <div class="card mx-auto" style="width: 85%">
+            <div class="card-body">     
+            <h5>Could not find any reports for {{user.destination}}</h5>
+          </div>
+          </div>
           {% endif %}
+
           <!-- Risk Level -->
       </div>
       <div class="col-md-4">

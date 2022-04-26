@@ -19,6 +19,12 @@
           "message": "jjj",
           "name": "John Smith",
           "phone": "049892899"
+        },
+        {
+          "email": "john@gmail.com",
+          "message": "I want to go to Ghana with 4 people.",
+          "name": "John Appleton",
+          "phone": "0908181898"
         }
       ],
       "password": "abc123",
@@ -30,27 +36,29 @@
         5,
         6,
         7,
-        8
+        8,
+        9,
+        10
       ]
     }
   ],
   "travellers": [
     {
-      "destination": "Phuket, Thailand",
+      "destination": "Thailand",
       "email": "stanleyparks@gmail.com",
       "end_date": "2022-10-10",
-      "location": "Sydney, Australia",
+      "location": "Australia",
       "name": "Stanley Parks",
       "password": "abc123",
-      "phone": "083 555 67331",
+      "phone": "083 555 1919",
       "start_date": "2020-01-01",
       "u_id": "2"
     },
     {
-      "destination": "Swansea, Wales",
+      "destination": "England",
       "email": "ewright@gmail.com",
       "end_date": "2022-10-10",
-      "location": "Birmingham, England",
+      "location": "England",
       "name": "Edgar Wright",
       "password": "abc123",
       "phone": "074 555 1491",
@@ -58,10 +66,10 @@
       "u_id": "3"
     },
     {
-      "destination": "Washington, USA",
+      "destination": "USA",
       "email": "mdsouza@gmail.com",
       "end_date": "2022-10-10",
-      "location": "Toronto, Canada",
+      "location": "Canada",
       "name": "Maria de Souza",
       "password": "abc123",
       "phone": "073 555 3921",
@@ -69,10 +77,10 @@
       "u_id": "4"
     },
     {
-      "destination": "Durban, South Africa",
+      "destination": "South Africa",
       "email": "jjones@gmail.com",
       "end_date": "2022-10-10",
-      "location": "Manchester, England",
+      "location": "England",
       "name": "Jon Jones",
       "password": "abc123",
       "phone": "084 555 4143",
@@ -80,10 +88,10 @@
       "u_id": "5"
     },
     {
-      "destination": "Windhoek, Namibia",
+      "destination": "Namibia",
       "email": "sjakes@gmail.com",
       "end_date": "2022-10-10",
-      "location": "Cape Town, South Africa",
+      "location": "South Africa",
       "name": "Sibusiso Jacob",
       "password": "abc123",
       "phone": "074 555 8127",
@@ -91,20 +99,21 @@
       "u_id": "6"
     },
     {
-      "destination": "hihi",
-      "email": "aaa@gmail.com",
-      "location": "ooo",
-      "name": "Raymond",
-      "phone": "02993939908098",
-      "u_id": "7"
-    },
-    {
       "destination": "South Korea",
       "email": "ryan@gmail.com",
-      "location": "Sydney, Australia",
+      "location": "Australia",
       "name": "Raymond",
       "phone": "02939393939",
       "u_id": "8"
+    },
+    {
+      "destination": "Nigeria",
+      "email": "dog@gmail.com",
+      "location": "Australia",
+      "name": "DogMan",
+      "password": "abc123",
+      "phone": "044444444",
+      "u_id": "10"
     }
   ]
 }
