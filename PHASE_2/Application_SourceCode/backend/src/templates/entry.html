@@ -16,44 +16,6 @@
 <!-- Favicon  -->
 <link rel="icon" href="images/favicon.png">
 <style>
-
-  /* https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */
-  .styled-table {
-  border-collapse: collapse;
-  margin: 25px 0;
-  font-size: 0.9em;
-  font-family: "Raleway", sans-serif;
-  min-width: 400px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-  padding-left: 20px;
-  }
-
-  .styled-table thead tr {
-  background-color: #009879;
-  color: #ffffff;
-  text-align: left;
-  }
-  .styled-table th,
-  .styled-table td {
-  padding: 12px 15px;
-  }
-  .styled-table tbody tr {
-  border-bottom: 1px solid #dddddd;
-  }
-
-  .styled-table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
-  }
-
-  .styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
-  }
-  .styled-table tbody tr.active-row {
-  font-weight: bold;
-  color: #009879;
-  }
-
-
 </style>
 </head>
 <body>
@@ -64,22 +26,30 @@
       <h3><a class="btn-solid-lg page-scroll" href='index.html'>Back to Main Page</a></h3>
     </div>
   </div>
-  <h1>Welcome to article with id {{id}}</h1>
-  <p>From 15 October to 27 November 2021, 202 suspected cases of Yellow Fever (YF) including 70 confirmed cases and 35 deaths [Case Fatality Ratio (CFR): 17%] have been reported in four regions in Ghana (Savannah, Upper West, Bono and Oti regions). YF is endemic in Ghana and is associated with severe disease in approximately 15% of cases and a high CFR. YF cases were reported mostly from nomadic populations who had moved from Nigeria into a forest reserve in Ghana’s Savannah region which is visited by tourists. The region shares porous borders with Cote d’lvoire and Burkina Faso, highlighting the potential for spread outside of Ghana. The cases, age ranging from 4 months to 70 years, presented with symptoms of body pain, fever, abdominal pain, vomiting, jaundice and bleeding from the gums. Females accounted for 52% (105/202) of the cases. A YF outbreak was confirmed after three samples tested positive for YF by PCR (negative for Ebola virus disease, dengue and other viral hemorrhagic fevers) at Institute Pasteur Dakar in Senegal, the regional reference laboratory. As of 27 November, 70 out of 196 samples collected have tested positive for YF by IgM and/or polymerase chain reaction (PCR), and results are pending for 68 samples. Plaque reduction neutralization testing was positive in 5 samples at the regional reference laboratory.
-
-    Although there is high overall population immunity against YF in Ghana (88% in 2020 according to WHO-UNICEF estimates), pockets of the population, including unvaccinated nomadic people, remain at risk for YF which could result in continued YF transmission. The current outbreak investigation found settlements of newcomer populations who had arrived after the last mass campaign and were largely unvaccinated.</p>
-  <input type="hidden" value="From 15 October to 27 November 2021, 202 suspected cases of Yellow Fever (YF) including 70 confirmed cases and 35 deaths [Case Fatality Ratio (CFR): 17%] have been reported in four regions in Ghana (Savannah, Upper West, Bono and Oti regions). YF is endemic in Ghana and is associated with severe disease in approximately 15% of cases and a high CFR. YF cases were reported mostly from nomadic populations who had moved from Nigeria into a forest reserve in Ghana’s Savannah region which is visited by tourists. The region shares porous borders with Cote d’lvoire and Burkina Faso, highlighting the potential for spread outside of Ghana. The cases, age ranging from 4 months to 70 years, presented with symptoms of body pain, fever, abdominal pain, vomiting, jaundice and bleeding from the gums. Females accounted for 52% (105/202) of the cases. A YF outbreak was confirmed after three samples tested positive for YF by PCR (negative for Ebola virus disease, dengue and other viral hemorrhagic fevers) at Institute Pasteur Dakar in Senegal, the regional reference laboratory. As of 27 November, 70 out of 196 samples collected have tested positive for YF by IgM and/or polymerase chain reaction (PCR), and results are pending for 68 samples. Plaque reduction neutralization testing was positive in 5 samples at the regional reference laboratory.
-
-  Although there is high overall population immunity against YF in Ghana (88% in 2020 according to WHO-UNICEF estimates), pockets of the population, including unvaccinated nomadic people, remain at risk for YF which could result in continued YF transmission. The current outbreak investigation found settlements of newcomer populations who had arrived after the last mass campaign and were largely unvaccinated." id="myInput">
-  <button onclick="copyToClip()">Copy text</button>
+  <hr>
+  <h1 style="text-align: center;">{{article.headline}}</h1>
+  <hr>
+  <div class="card mx-auto" style="width: 75%">
+    <div class="card-body">
+  {% if paras %}
+    {% for para in paras %}
+      <h5>{{ para.string }}</h5>
+      <input type="hidden" id="{{para.id}}" value="{{para.string}}">
+      <button onclick="copyToClip( '{{para.id}}' )" style="float: right;">Copy text</button>
+      <hr>
+      <hr>
+    {% endfor %}
+  {% endif %}
+      </div>
+      </div>
 </body>
 </html>
 
 
 <script>
-    function copyToClip() {
+    function copyToClip(cid) {
         /* Get the text field */
-        var copyText = document.getElementById("myInput");
+        var copyText = document.getElementById(cid);
         copyText.type = 'text';
         /* Select the text field */
         copyText.select();

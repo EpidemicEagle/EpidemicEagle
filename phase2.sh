@@ -1,0 +1,1 @@
+cd PHASE_2/Application_SourceCode/backend/src && uvicorn api:app --reload

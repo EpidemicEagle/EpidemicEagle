@@ -1,0 +1,51 @@
+<html>
+<head>
+<link href="css/fontawesome-all.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">    
+<!-- Website Title -->
+<title>Epidemic Eagle</title>
+
+<!-- Styles -->
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,400i,600,700,700i&amp;subset=latin-ext" rel="stylesheet">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/fontawesome-all.css" rel="stylesheet">
+<link href="css/swiper.css" rel="stylesheet">
+<link href="css/magnific-popup.css" rel="stylesheet">
+<link href="css/styles.css" rel="stylesheet">
+
+<!-- Favicon  -->
+<link rel="icon" href="images/favicon.png">
+
+</head>
+<body>
+    <div class="container">
+      <div class="row align-items-center vh-100">
+          <div class="col-6 mx-auto">
+              <div class="card shadow border">
+                  <div class="card-body d-flex flex-column align-items-center">
+                    <h1>Editing {{name}}</h1>
+                    <br>
+                    <form class="form-inline" action="/traveller_edit" method="post" style="padding-left: 20px;" autocomplete="off">
+                      
+                      <div class= "col-12">
+                        <hr>
+                        <h5>Location</h5>
+                        <input type="text" name="location" placeholder="Country" value="{{location}}">
+                        <hr>
+                        <h5>Destination</h5>
+                        <input type="text" name="destination" placeholder="Dest" value="{{destination}}">
+                        <hr>
+                        <h5>Phone</h5>
+                        <input type="text" name="phone" placeholder="Dest" value="{{phone}}">
+                        <hr>
+                        <input type="hidden" name="name" value="{{name}}">
+                        <input type="submit">
+                      </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</body>
+</html>

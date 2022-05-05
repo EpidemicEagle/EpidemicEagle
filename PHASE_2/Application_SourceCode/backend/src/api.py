@@ -1,4 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
+from resource import RLIMIT_CPU
 from fastapi import FastAPI, HTTPException, Query, Request, Form
 from fastapi.openapi.utils import get_openapi
 from typing import List,Optional
@@ -6,9 +7,11 @@ from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+import requests
+from starlette.responses import PlainTextResponse, RedirectResponse
 import json
 
-app = FastAPI(openapi_url="/api/v2/openapi.json")
+app = FastAPI(openapi_url="/api/v1/openapi.json")
 # add stylesheet
 app.mount("/css", StaticFiles(directory="templates/css"), name="css")
 app.mount("/js", StaticFiles(directory="templates/js"), name="js")
@@ -91,15 +94,7 @@ responses = {
     404: {"description": "Item not found"}
 }
 
-################################
-#
-# FAKE FUNCTIONS
-#
-################################
-
-# @app.get("/dummy", response_class=HTMLResponse, tags=['html'])
-# async def get(request: Request):
-#     return templates.TemplateResponse("completesearch.html", {"request": request})
+users = []
 
 ################################
 #
@@ -111,75 +106,47 @@ def parse_report_info(keyword, article):
     return set([_ for _ in [_[keyword] for _ in article['reports']] for _ in _])
 
 # unify index calls
-@app.get("/", response_class=HTMLResponse, tags=['html'])
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/index.html", response_class=HTMLResponse, tags=['html'])
+@app.get("/index.html", response_class=HTMLResponse, include_in_schema=False)
 async def index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-# QUICK SEARCH
-# qsearch search box
-@app.get("/qsearch", response_class=HTMLResponse, tags=['html'])
-async def q(request: Request):
-    return templates.TemplateResponse("qsearch.html", {"request": request})
 
-# qsearch table
-@app.post("/qsearch", response_class=HTMLResponse, tags=['html'])
-async def q(request: Request,
-    location: Optional[str] = Form(...),
+@app.post("/", response_class=HTMLResponse, include_in_schema=False)
+async def index(request: Request,
+    rname: str = Form(...),
+    remail: str = Form(...),
+    rphone: str = Form(...),
+    rmessage: str = Form(...)
 ):
-    f = open('sample_file.json')
-    data= json.load(f)['articles']
+    print(rname, remail, rphone, rmessage)
+    f = open('users.json', 'r+')
+    data = json.load(f)
     f.close()
-    searches = []
-    count = 0
-    start_date = datetime.now() - timedelta(days=90)
-    end_date = datetime.now()
+    # print(data)
+    agencies = data['agencies']   
+    for agency in agencies:
+        agency['new_requests'].append({'email': remail,'message':rmessage, 'name': rname, 'phone':rphone})
 
-    # average time is 3000 ms (3 seconds)
-    for article in data:
-        if count == 10:
-            break
-        # exclude and pagination
-        date = datetime.strptime(article['dateOfPublication'], '%d %B %Y')
+    jsonFile = open("users.json", "w+")
+    jsonFile.write(json.dumps(data, indent=2))
+    jsonFile.close()
 
-        if start_date < date and date < end_date:
-            locations = parse_report_info('locations', article)
-            if location in locations:
-                searches.append(article)
-                count += 1
-        count += 1
-    
-        
-    print(searches)
+    return templates.TemplateResponse("index.html", {"request": request, 'success':True})
 
-    return templates.TemplateResponse("qsearch.html", 
-    {
-        "location": location,
-        "start_date": start_date,
-        "end_date": end_date,
-        "request": request,
-        "searches": searches,
-    }
-    )
+@app.get("/login", response_class=HTMLResponse, include_in_schema=False)
+async def index(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
 
-# REPORT SEARCH
-# reports get
-@app.get("/reports", response_class=HTMLResponse, tags=['html'])
-async def reports(request: Request):
-    return templates.TemplateResponse("reports.html", {"request": request})
+def covid_api(dest):
+    url = "https://disease.sh/v3/covid-19/countries/" + dest + "?strict=true"
+    response = requests.get(url)
+    return response.json()
 
-# reports post
-@app.post("/reports", response_class=HTMLResponse, tags=['html'])
-async def reports(request: Request,
-    location: str = Form(...),
-    start_date: datetime = Form(...),
-    end_date: datetime = Form(...),
-    # page_number: Optional[int] = None  
-):
-
+def report_find(start_date, end_date, location):
     f = open('reports_file_v2.json')
     data = json.load(f)['reports']
     f.close()
@@ -207,6 +174,140 @@ async def reports(request: Request,
                     count += 1
                     # can stop checking report locations
                     break
+    return reports
+
+@app.get("/login", response_class=HTMLResponse, include_in_schema=False)
+async def q(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+@app.post("/login", response_class=HTMLResponse, include_in_schema=False)
+async def q(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request, "wrong_user": True})
+
+@app.post("/traveller", response_class=HTMLResponse, include_in_schema=False)
+async def q(request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
+    ):
+    print(email, password)
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    users = data['travellers']
+    for user in users:
+        if user['email'] == email and user['password'] == password:
+            return templates.TemplateResponse("person.html", {
+                "request": request, 
+                "user": user, 
+                "covid_data" : covid_api(user['destination']),
+                "risk_level" : risk_level(user['destination']),
+                "reports": report_find(datetime.now() - timedelta(days=180), datetime.now(), user['destination'])
+                })
+    return RedirectResponse("/login") 
+
+@app.post("/inquiry", response_class=HTMLResponse, include_in_schema=False)
+async def q(request: Request,
+    message: str = Form(...),
+    problem: str = Form(...),
+    email: str = Form(...),
+    name: str = Form(...)
+    ): 
+    print(message,problem, email, name)
+    # change the json to include the request
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    f.close()
+    # print(data)
+    agencies = data['agencies']   
+    for agency in agencies:
+        d = agency['users']
+        for user in d:
+            if user['email'] == email and user['name'] == name:
+                print('hi')
+                agency['current_requests'].append({'name': name,'message':message})
+                print(agency)
+                print(data)
+                jsonFile = open("users.json", "w+")
+                jsonFile.write(json.dumps(data, indent=2))
+                jsonFile.close()
+                break
+
+    return templates.TemplateResponse("index.html", {"request": request, "success": True})
+    # return templates.TemplateResponse("index.html", {"request": request})
+
+@app.get("/agency", response_class=HTMLResponse, include_in_schema=False)
+async def index(request: Request):
+    return templates.TemplateResponse("agency.html", {"request": request})
+
+# QUICK SEARCH
+# qsearch search box
+@app.get("/qsearch", response_class=HTMLResponse, include_in_schema=False)
+async def q(request: Request):
+    return templates.TemplateResponse("qsearch.html", {"request": request})
+
+def risk_level(location):
+    f = open("country_codes.json", 'r')
+    data = json.load(f)
+    code = data.get(location, "not found")
+    if code == 'not found':
+        return "No risk data detected."
+    else:
+        response = requests.get('https://www.travel-advisory.info/api')
+        a = response.json()['data'][code]['advisory']
+    return a
+
+
+# qsearch table
+@app.post("/qsearch", response_class=HTMLResponse, include_in_schema=False)
+async def q(request: Request,
+    location: Optional[str] = Form(...),
+):
+    f = open('sample_file.json')
+    data= json.load(f)['articles']
+    f.close()
+    searches = []
+    count = 0
+    start_date = datetime.now() - timedelta(days=90)
+    end_date = datetime.now()
+
+    # average time is 3000 ms (3 seconds)
+    for article in data:
+        if count == 10:
+            break
+        # exclude and pagination
+        date = datetime.strptime(article['dateOfPublication'], '%d %B %Y')
+
+        if start_date < date and date < end_date:
+            locations = parse_report_info('locations', article)
+            if location in locations:
+                searches.append(article)
+                count += 1
+        count += 1
+    
+    rl = risk_level(location)
+    # print(rl)
+    return templates.TemplateResponse("qsearch.html", 
+    {
+        "location": location,
+        "request": request,
+        "searches": searches,
+        "risk_level": rl
+    }
+    )
+
+# REPORT SEARCH
+# reports get
+@app.get("/reports", response_class=HTMLResponse, include_in_schema=False)
+async def reports(request: Request):
+    return templates.TemplateResponse("reports.html", {"request": request})
+
+# reports post
+@app.post("/reports", response_class=HTMLResponse, include_in_schema=False)
+async def reports(request: Request,
+    location: str = Form(...),
+    start_date: datetime = Form(...),
+    end_date: datetime = Form(...),
+    # page_number: Optional[int] = None  
+):
     return templates.TemplateResponse("reports.html", 
     {
         "location": location,
@@ -214,21 +315,20 @@ async def reports(request: Request,
         "end_date": end_date,
         # "page_number": page_number,
         "request": request,
-        "reports": reports,
+        "reports": report_find(start_date, end_date, location),
     }
     )
 
 
 # COMPLETE SEARCH
 # search get
-@app.get("/completesearch", response_class=HTMLResponse, tags=['html'])
+@app.get("/completesearch", response_class=HTMLResponse, include_in_schema=False)
 async def search(request: Request):
     return templates.TemplateResponse("completesearch.html", {"request": request})
 
 # search post
-@app.post("/completesearch", response_class=HTMLResponse, tags=['html'])
+@app.post("/completesearch", response_class=HTMLResponse, include_in_schema=False)
 async def search_post(request: Request,
-    key_terms: str = Form(...),
     disease: str = Form(...),
     location: str = Form(...),
     start_date: datetime  = Form(...),
@@ -267,7 +367,6 @@ async def search_post(request: Request,
 
     return templates.TemplateResponse("completesearch.html", 
     {
-        "key_terms": key_terms,
         "disease": disease,
         "location": location,
         "start_date": start_date,
@@ -278,19 +377,229 @@ async def search_post(request: Request,
     }
     )
 
+from bs4 import BeautifulSoup as bs
+import requests as rq
+def getsoup(url):
+    res = rq.get(url)
+    soup = bs(res.content, features="lxml")
+    paras = []
+    i = 0
+    for link in soup.findAll('p'):
+        # print(link)
+        if link != 'None' or link != "":
+            paras.append({"string":link.string,
+            "id":"para"+str(i)})
+            i += 1
+    return paras
 # articles id get
-@app.get("/articles/{id}", response_class=HTMLResponse, tags=['html'])
-async def id_articles(request: Request, id):
-    # f = open("articles.json")
-    # data = json.load(f)['articles']
-    # length = len(data)
+@app.post("/article", response_class=HTMLResponse, include_in_schema=False)
+async def id_articles(request: Request,
+id: str = Form(...)):
+    f = open("articles.json")
+    data = json.load(f)['articles']
+    length = len(data)
 
     # return 'no articles found if greater than num of articles"
-    # if int(id) > length or int(id) < 0:
-    #     return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
-    # report = data[int(id)]    
-    return templates.TemplateResponse("entry.html", {"request": request, "id": id})
+    if int(id) > length or int(id) < 0:
+        return templates.TemplateResponse("entry_article.html", {"request": request, "id": id})
+    article = data[int(id)]    
+    paras = getsoup(article['url'])
 
+    return templates.TemplateResponse("entry.html", {"request": request, "id": id, "article": article, 'paras': paras})
+
+# traveller get
+@app.get("/edit", response_class=HTMLResponse, include_in_schema=False)
+async def traveller_edit(request: Request):
+    return templates.TemplateResponse("traveller_edit.html", {"request": request})
+
+
+# traveller post
+@app.post("/edit", response_class=HTMLResponse, include_in_schema=False)
+async def traveller_dash_edit(request: Request):
+    found_user = None
+    for user in users:
+        if user["id"] == id:
+            found_user = user
+            break
+    found_user = {
+        "name": "testing",
+    }
+    if found_user: 
+        """
+            "traveller": request,
+            "start_loc": start_loc,
+            "end_loc": end_loc,
+            "start_date": start_date,
+            "end_date": end_date,
+            "reports": reports,
+        """
+        return templates.TemplateResponse("traveller_edit.html", 
+        {
+            
+            "user": found_user,
+            "request": request,
+            
+        }
+        
+
+    
+        )
+    else:
+        # user not found, try again
+        return templates.TemplateResponse("traveller_edit.html", 
+        {
+            
+            "request": request,
+        }
+        )
+
+
+
+# traveller get
+@app.get("/traveller_edit", response_class=HTMLResponse, include_in_schema=False)
+async def traveller_edit(request: Request,
+    name: str,
+    email: str,
+    phone: str,
+    destination: str,
+    location: str,
+    type: str,
+):
+    if type =='edit':
+        return templates.TemplateResponse("edit.html", {"request": request,
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'destination': destination,
+        'location': location
+        })
+    elif type == 'new':
+        # change the json 
+        f = open('users.json', 'r+')
+        data = json.load(f)
+        f.close()
+        # print(data)
+        ln = len(data['travellers']) + 2
+        user = {
+            'name': name,
+            'email': email,
+            'phone': phone,
+            'destination': destination,
+            'location': location,
+            'u_id':str(ln),
+            'password': 'abc123'
+        }
+        agencies = data['agencies'][0]
+        agencies['users'].append(ln)
+        data['travellers'].append(user)
+
+        with open('users.json', 'w') as fp:
+            fp.write(json.dumps(data, indent=2, sort_keys=True, default=str))
+        return templates.TemplateResponse("index.html", {
+            "request": request,
+            "edit": True
+        })
+
+
+# /traveller_edit
+@app.post("/traveller_edit", response_class=HTMLResponse, include_in_schema=False)
+async def traveller_edit(request: Request,
+    phone: str = Form(...),
+    destination: str = Form(...),
+    location: str = Form(...),
+    name: str = Form(...),
+
+):
+    print(phone,destination,location, name)
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    f.close() 
+    for traveller in data['travellers']:
+        if traveller['name'] == name:
+            # change if not null
+            print("Matched")
+            if location != "":
+                traveller.update(location=location)
+            if destination != "":
+                traveller.update(destination=destination)
+            if phone != "":
+                traveller.update(phone=phone)   
+            break
+    
+    with open('users.json', 'w') as fp:
+        fp.write(json.dumps(data, indent=2, sort_keys=True, default=str))
+        
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "edit": True
+        })
+
+@app.get("/remove", response_class=HTMLResponse, include_in_schema=False)
+async def traveller_edit(request: Request,
+    name: str,
+    msg: str, 
+    type: str
+):
+
+
+    # change the json
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    f.close() 
+    if type == "cur":
+        t = {'name':name, 'message':msg}
+        for i in data['agencies']:
+            if t in i['current_requests']:
+                i['current_requests'].remove(t)
+    elif type == 'new':
+        for i in data['agencies']:
+            for k in i['new_requests']:
+                if k['name'] == name and k['message'] == msg:
+                    i['new_requests'].remove(k)
+    with open('users.json', 'w') as fp:
+        fp.write(json.dumps(data, indent=2, sort_keys=True, default=str))
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "removed": True
+    })
+
+
+# travel agency get
+@app.get("/travelagency", response_class=HTMLResponse, include_in_schema=False)
+async def travelagency(request: Request):
+    return templates.TemplateResponse("travelagency.html", {"request": request})
+
+
+def getusers(l):
+    l = [str(_) for _ in l]
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    users = data['travellers']
+    things = []
+    for u in users:
+        if u['u_id'] in l:
+            things.append(u)
+    return things     
+
+@app.post("/travelagency", response_class=HTMLResponse, include_in_schema=False)
+async def q(request: Request,
+    email: str = Form(...),
+    password: str = Form(...),
+    ):
+    f = open('users.json', 'r+')
+    data = json.load(f)
+    users = data['agencies']
+    f.close()
+    for agency in users:
+        if agency['email'] == email and agency['password'] == password:
+            return templates.TemplateResponse("travelagency.html", {
+                "request": request, 
+                "agency": agency,
+                "users": getusers(agency['users'])
+                })
+    return RedirectResponse("/login") 
+
+## API functions
 ## API functions
 @app.get("/api/v2/articles", response_model=ListArticle, tags=["v2"])
 def list_all_articles_with_params(

@@ -1,0 +1,119 @@
+{
+  "agencies": [
+    {
+      "current_requests": [
+        {
+          "message": "I have an issue with my hotel in Thailand.",
+          "name": "Stanley Parks"
+        }
+      ],
+      "email": "bobsagency@gmail.com",
+      "id": 1,
+      "locations": [
+        "Sydney"
+      ],
+      "name": "Bob's Agency",
+      "new_requests": [
+        {
+          "email": "aaa@gmail.com",
+          "message": "jjj",
+          "name": "John Smith",
+          "phone": "049892899"
+        },
+        {
+          "email": "john@gmail.com",
+          "message": "I want to go to Ghana with 4 people.",
+          "name": "John Appleton",
+          "phone": "0908181898"
+        }
+      ],
+      "password": "abc123",
+      "phone": "555-5555-555",
+      "users": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    }
+  ],
+  "travellers": [
+    {
+      "destination": "Thailand",
+      "email": "stanleyparks@gmail.com",
+      "end_date": "2022-10-10",
+      "location": "Australia",
+      "name": "Stanley Parks",
+      "password": "abc123",
+      "phone": "083 555 1919",
+      "start_date": "2020-01-01",
+      "u_id": "2"
+    },
+    {
+      "destination": "England",
+      "email": "ewright@gmail.com",
+      "end_date": "2022-10-10",
+      "location": "England",
+      "name": "Edgar Wright",
+      "password": "abc123",
+      "phone": "074 555 1491",
+      "start_date": "2020-01-01",
+      "u_id": "3"
+    },
+    {
+      "destination": "USA",
+      "email": "mdsouza@gmail.com",
+      "end_date": "2022-10-10",
+      "location": "Canada",
+      "name": "Maria de Souza",
+      "password": "abc123",
+      "phone": "073 555 3921",
+      "start_date": "2020-01-01",
+      "u_id": "4"
+    },
+    {
+      "destination": "South Africa",
+      "email": "jjones@gmail.com",
+      "end_date": "2022-10-10",
+      "location": "England",
+      "name": "Jon Jones",
+      "password": "abc123",
+      "phone": "084 555 4143",
+      "start_date": "2020-01-01",
+      "u_id": "5"
+    },
+    {
+      "destination": "Namibia",
+      "email": "sjakes@gmail.com",
+      "end_date": "2022-10-10",
+      "location": "South Africa",
+      "name": "Sibusiso Jacob",
+      "password": "abc123",
+      "phone": "074 555 8127",
+      "start_date": "2020-01-01",
+      "u_id": "6"
+    },
+    {
+      "destination": "South Korea",
+      "email": "ryan@gmail.com",
+      "location": "Australia",
+      "name": "Raymond",
+      "phone": "02939393939",
+      "u_id": "8"
+    },
+    {
+      "destination": "Nigeria",
+      "email": "dog@gmail.com",
+      "location": "Australia",
+      "name": "DogMan",
+      "password": "abc123",
+      "phone": "044444444",
+      "u_id": "10"
+    }
+  ]
+}
